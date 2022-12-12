@@ -1,17 +1,17 @@
 import Phaser from './lib/phaser.js'
-
 import GameScene from './scenes/Game.js'
 import StartScene from './scenes/Start.js'
+import { screenSize , gravity } from './config/config.js'
 
 export default new Phaser.Game({
 	type: Phaser.AUTO,
-	width: 1080,
-	height: 640,
-	scene: [GameScene, StartScene],
+	width: screenSize.width,
+	height: screenSize.height,
+	scene: [StartScene, GameScene],
 	physics: {
 		default: 'arcade',
 		arcade: {
-			gravity: { y: 10 },
+			gravity: gravity,
 			debug: true
 		}
 	}
