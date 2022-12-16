@@ -45,8 +45,8 @@ export default class StartScene extends Phaser.Scene {
 
 	updateImage() {
 		var [x, y] = randomPosition();
-		this.bubble.destroy();
-		this.bubble = this.add.image(x, y, 'where_bubble').setOrigin(0.5,0.5);
+		this.bubble.x = x;
+		this.bubble.y = y;
 	}
 	
 }
