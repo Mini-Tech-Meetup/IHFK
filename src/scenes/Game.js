@@ -4,7 +4,7 @@ export default class GameScene extends Phaser.Scene
 {
 	constructor()
 	{
-		super('game')
+		super({key: 'GameScene'});
 	}
 
 	init()
