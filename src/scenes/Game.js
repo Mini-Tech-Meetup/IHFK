@@ -13,9 +13,9 @@ export default class GameScene extends Phaser.Scene
 
 	preload()
 	{
-		this.load.image('sky', 'assets/game_scene/sample_background.png');
-		this.load.image('ground', 'assets/game_scene/sample_ground.png');
-		this.load.spritesheet('character', 'assets/game_scene/sample_character.png', { frameWidth: 72, frameHeight: 96 });
+		this.load.image('sky', 'assets/game_scene/background.png');
+		this.load.image('ground', 'assets/game_scene/ground.png');
+		this.load.spritesheet('character', 'assets/game_scene/character.png', { frameWidth: 72, frameHeight: 96 });
 	}
 
 	create()
