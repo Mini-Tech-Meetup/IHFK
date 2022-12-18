@@ -27,12 +27,19 @@ export default class StartScene extends Phaser.Scene {
 			callbackScope: this,
 			loop: true
 		});
+
+		this.credits = [
+			{ pos: {x: 550, y:100}, name: 'jhb', image: 'credit_0', link: 'https://github.com/JHyunB' },
+			{ pos: {x: 550, y:250}, name: 'wjl', image: 'credit_1', link: 'https://github.com/Lee-WonJun' }
+		];
 	}
 
 	preload() {
 		this.load.image('where_bubble', 'assets/speech_bubble/where.png');
 		this.load.image('start_button', 'assets/button/start_button.png');
 		this.load.image('credit_button', 'assets/button/credit_button.png');
+		this.load.image('credit_0', 'assets/credit/jhb.png');
+		this.load.image('credit_1', 'assets/credit/wjl.png');
 	}
 
 	create() {
@@ -42,6 +49,15 @@ export default class StartScene extends Phaser.Scene {
 
 		this.creditButton.setInteractive();
 		this.creditButton.on('pointerdown', () => {
+			// show credit
+			this.credits.forEach(credit => {
+				let creditButton = this.add.image(credit.pos.x, credit.pos.y, credit.image).setOrigin(0.5, 0.5);
+				creditButton.setInteractive();
+				creditButton.on('pointerdown', () => {
+					window.open(credit.link, '_blank');
+				});
+
+			});
 			// show start button
 			this.startButton = this.add.image(550, 500, 'start_button').setOrigin(0.5, 0.5);
 			this.startButton.setInteractive();
