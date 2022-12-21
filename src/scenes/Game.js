@@ -73,7 +73,12 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	update(time, delta) {
-		if (this.cursors.left.isDown) {
+		if (this.cursors.space.isDown) {
+			this.player.setVelocityX(0);
+		
+			this.player.anims.play('attack', true);
+		}
+		else if (this.cursors.left.isDown) {
 			this.player.setVelocityX(-200);
 
 			this.player.anims.play('move', true);
@@ -83,12 +88,7 @@ export default class GameScene extends Phaser.Scene {
 
 			this.player.anims.play('move', true);
 		}
-		else if (this.cursors.space.isDown) {
-			this.player.setVelocityX(0);
 		
-			this.player.anims.play('attack', true);
-		}
-
 		else {
 			this.player.setVelocityX(0);
 
