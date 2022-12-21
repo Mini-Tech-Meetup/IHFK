@@ -7,7 +7,8 @@ export default new Phaser.Game({
 	type: Phaser.AUTO,
 	width: screenSize.width,
 	height: screenSize.height,
-	scene: [StartScene, GameScene],
+    pixelArt: true,
+	scene: [GameScene,StartScene],
 	physics: {
 		default: 'arcade',
 		arcade: {

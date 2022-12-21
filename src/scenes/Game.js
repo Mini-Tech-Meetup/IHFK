@@ -32,7 +32,7 @@ export default class GameScene extends Phaser.Scene
 
 		// 캐릭터
 		// set scale but not interpolate
-		this.player = this.physics.add.sprite(100, 450, 'character').setBounce(0.2).setCollideWorldBounds(true).setScale(4, 4);
+		this.player = this.physics.add.sprite(100, 450, 'character').setBounce(0.2).setScale(5,5).setCollideWorldBounds(true);
 
 		// 이동 애니
 		this.anims.create({
