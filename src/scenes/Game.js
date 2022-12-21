@@ -59,12 +59,14 @@ export default class GameScene extends Phaser.Scene {
 
 		this.input.keyboard.on('keydown-SPACE', function (event) {
 			console.log('space down');
-		});
+			this.hitbox.setPosition(this.player.x + 30, this.player.y);
+		}, this);
 
 		
 		this.input.keyboard.on('keyup-SPACE', function (event) {
 			console.log('space up');
-		});
+			this.hitbox.setPosition(0,0);
+		},this);
 
 
 
@@ -83,7 +85,7 @@ export default class GameScene extends Phaser.Scene {
 		}
 		else if (this.cursors.space.isDown) {
 			this.player.setVelocityX(0);
-
+		
 			this.player.anims.play('attack', true);
 		}
 
