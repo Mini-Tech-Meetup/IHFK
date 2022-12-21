@@ -16,6 +16,8 @@ export default class GameScene extends Phaser.Scene
 		this.load.image('sky', 'assets/game_scene/background.png');
 		this.load.image('ground', 'assets/game_scene/ground.png');
 		this.load.spritesheet('character', 'assets/game_scene/character.png', { frameWidth: 72, frameHeight: 96 });
+		this.load.spritesheet('character_attack', 'assets/game_scene/character_attack.png', { frameWidth: 72, frameHeight: 96 });
+		
 	}
 
 	create()
@@ -38,7 +40,13 @@ export default class GameScene extends Phaser.Scene
 			frameRate: 10,
 			repeat: -1
 		});
-
+		// 공격 애니
+		this.anims.create({
+			key: 'attack',
+			frames: this.anims.generateFrameNumbers('character_attack', {start: 0, end: 7}),
+			frameRate: 10,
+			repeat: -1
+		});
 
 		this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -63,6 +71,13 @@ export default class GameScene extends Phaser.Scene
 
 			this.player.anims.play('move', true);
 		}
+		else if (this.cursors.space.isDown)
+		{
+			this.player.setVelocityX(0);
+
+			this.player.anims.play('attack', true);
+		}
+		
 		else 
 		{
 			this.player.setVelocityX(0);
