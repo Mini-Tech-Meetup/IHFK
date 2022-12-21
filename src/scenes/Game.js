@@ -15,8 +15,8 @@ export default class GameScene extends Phaser.Scene
 	{
 		this.load.image('sky', 'assets/game_scene/background.png');
 		this.load.image('ground', 'assets/game_scene/ground.png');
-		this.load.spritesheet('character', 'assets/game_scene/character.png', { frameWidth: 72, frameHeight: 96 });
-		this.load.spritesheet('character_attack', 'assets/game_scene/character_attack.png', { frameWidth: 72, frameHeight: 96 });
+		this.load.spritesheet('character', 'assets/game_scene/Strong_Guy_Rung_SpriteSheet.png', { frameWidth: 18, frameHeight: 24 });
+		this.load.spritesheet('character_attack', 'assets/game_scene/Strong_Guy_Attacks_SpriteSheet.png', { frameWidth: 27, frameHeight: 24 });
 		
 	}
 
@@ -31,7 +31,8 @@ export default class GameScene extends Phaser.Scene
 		this.ground.create(400, 590, 'ground').setScale(2).refreshBody();
 
 		// 캐릭터
-		this.player = this.physics.add.sprite(100, 450, 'character').setBounce(0.2).setCollideWorldBounds(true);
+		// set scale but not interpolate
+		this.player = this.physics.add.sprite(100, 450, 'character').setBounce(0.2).setCollideWorldBounds(true).setScale(4, 4);
 
 		// 이동 애니
 		this.anims.create({
