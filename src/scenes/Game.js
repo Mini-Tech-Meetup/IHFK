@@ -38,14 +38,14 @@ export default class GameScene extends Phaser.Scene
 		this.anims.create({
 			key: 'move',
 			frames: this.anims.generateFrameNumbers('character', {start: 0, end: 7}),
-			frameRate: 10,
+			frameRate: 50,
 			repeat: -1
 		});
 		// 공격 애니
 		this.anims.create({
 			key: 'attack',
 			frames: this.anims.generateFrameNumbers('character_attack', {start: 0, end: 7}),
-			frameRate: 10,
+			frameRate: 50,
 			repeat: -1
 		});
 
@@ -53,8 +53,13 @@ export default class GameScene extends Phaser.Scene
 
 		this.physics.add.collider(this.player, this.ground);
 
+		// set hitbox
+		new Phaser.Geom.Circle(100, 100, 32),
+
 		window.body1 = this.player.body;
 		window.physics = this.physics;
+
+		
 	
 	}
 
