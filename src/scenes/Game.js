@@ -59,7 +59,8 @@ export default class GameScene extends Phaser.Scene {
 
 		this.input.keyboard.on('keydown-SPACE', function (event) {
 			console.log('space down');
-			this.hitbox.setPosition(this.player.x + 30, this.player.y);
+			let offset = this.player.flipX ? -30 : 30;
+			this.hitbox.setPosition(this.player.x + offset, this.player.y);
 		}, this);
 
 		
@@ -75,17 +76,16 @@ export default class GameScene extends Phaser.Scene {
 	update(time, delta) {
 		if (this.cursors.space.isDown) {
 			this.player.setVelocityX(0);
-		
 			this.player.anims.play('attack', true);
 		}
 		else if (this.cursors.left.isDown) {
 			this.player.setVelocityX(-200);
-
+			this.player.flipX = true;
 			this.player.anims.play('move', true);
 		}
 		else if (this.cursors.right.isDown) {
 			this.player.setVelocityX(200);
-
+			this.player.flipX = false;
 			this.player.anims.play('move', true);
 		}
 		
