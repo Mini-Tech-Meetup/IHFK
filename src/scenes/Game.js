@@ -11,9 +11,9 @@ export default class GameScene extends Phaser.Scene {
 	preload() {
 		this.load.image('sky', 'assets/game_scene/background.png');
 		this.load.image('ground', 'assets/game_scene/ground.png');
+		this.load.spritesheet('kiosk', 'assets/kiosk/kiosk.gif',{ frameWidth: 256, frameHeight: 256 });
 		this.load.spritesheet('character', 'assets/game_scene/Strong_Guy_Rung_SpriteSheet.png', { frameWidth: 18, frameHeight: 24 });
 		this.load.spritesheet('character_attack', 'assets/game_scene/Strong_Guy_Attacks_SpriteSheet.png', { frameWidth: 27, frameHeight: 24 });
-
 	}
 
 	create() {
@@ -28,6 +28,9 @@ export default class GameScene extends Phaser.Scene {
 		// 캐릭터
 		// set scale but not interpolate
 		this.player = this.physics.add.sprite(100, 450, 'character').setBounce(0.2).setScale(5, 5).setCollideWorldBounds(true);
+
+		// 키오스크
+		this.kiosk = this.add.sprite(500, 430, 'kiosk');
 
 		// 이동 애니
 		this.anims.create({
