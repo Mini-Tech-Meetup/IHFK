@@ -3,11 +3,11 @@ import Phaser from '../lib/phaser.js'
 import { screenSize, gravity } from '../config/config.js'
 
 function randomPosition() {
-	var screenX = screenSize.width
-	var screenY = screenSize.height
-	var randomX = Math.floor(Math.random() * screenX)
-	var randomY = Math.floor(Math.random() * screenY)
-
+	let screenX = screenSize.width
+	let screenY = screenSize.height
+	let randomX = Math.floor(Math.random() * (screenX - 200)) + 100
+	let randomY = Math.floor(Math.random() * (screenY - 200)) + 100
+	
 	return [randomX, randomY]
 }
 
@@ -46,7 +46,7 @@ export default class StartScene extends Phaser.Scene {
 		console.log('StartScene.create()');
 		this.cameras.main.setBackgroundColor('#FFFFFF');
 		this.creditButton = this.add.image(550, 200, 'credit_button').setOrigin(0.5, 0.5);
-
+		this.updateImage()
 		this.creditButton.setInteractive();
 		this.creditButton.on('pointerdown', () => {
 			// show credit
@@ -86,7 +86,7 @@ export default class StartScene extends Phaser.Scene {
 		}
 		else {
 			this.bubble = this.add.image(x, y, 'where_bubble').setOrigin(0.5, 0.5);
-			this.bubble.setDepth(-1);
+			this.bubble.setDepth(1);
 		}
 	}
 
