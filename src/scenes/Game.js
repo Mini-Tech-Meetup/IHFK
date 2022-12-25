@@ -17,6 +17,14 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	create() {
+
+		this.time.addEvent({
+			delay: 5000, 			  // ms
+			callback: this.gnerateKiosk,
+			callbackScope: this,
+			loop: true
+		});
+
 		console.log('GameScene.create()');
 		// 배경
 		this.add.image(0, 0, 'sky').setOrigin(0, 0);
@@ -28,9 +36,7 @@ export default class GameScene extends Phaser.Scene {
 		// 캐릭터
 		this.player = this.physics.add.sprite(100, 450, 'character').setBounce(0.2).setScale(5, 5).setCollideWorldBounds(true);
 
-		// 키오스크
-		this.kiosk = this.physics.add.sprite(500, 300, 'kiosk').setScale(0.5,0.5).setPushable(false);
-
+		
 		// 이동 애니
 		this.anims.create({
 			key: 'move',
@@ -49,8 +55,6 @@ export default class GameScene extends Phaser.Scene {
 		this.cursors = this.input.keyboard.createCursorKeys();
 
 		this.physics.add.collider(this.player, this.ground);
-		this.physics.add.collider(this.kiosk, this.ground);
-		this.physics.add.collider(this.player, this.kiosk);
 
 
 		this.hitbox = this.add.rectangle(0, 0, 64, 64, 0xffffff).setVisible(false);
@@ -75,6 +79,37 @@ export default class GameScene extends Phaser.Scene {
 
 
 
+	}
+
+	gnerateKiosk() {
+		console.log('kiosk');
+		let x = Phaser.Math.Between(100, 700);
+		let kiosk = this.physics.add.sprite(x, 300, 'kiosk').setScale(0.5,0.5).setPushable(false);
+		let uuid = Phaser.Math.RND.uuid();
+		kiosk.setName(uuid);
+		this.physics.add.collider(kiosk, this.ground);
+		this.physics.add.collider(this.player, kiosk);
+		// overlap event
+		this.physics.add.overlap(this.hitbox, kiosk, this.hitKiosk, null, this);
+	}
+
+	// hit count variable
+	hitCount = {	}; 
+
+
+	hitKiosk(player, kiosk) {
+		console.log('hit kiosk');
+		let name = kiosk.name
+		if (this.hitCount[name] === undefined) {
+			this.hitCount[name] = 0;
+		}
+		this.hitCount[name]++;
+		console.log(this.hitCount[name]);
+		console.log(this.hitCount)
+
+		if (this.hitCount[name] >= 100) {
+			kiosk.destroy();
+		}
 	}
 
 	update(time, delta) {
@@ -102,11 +137,6 @@ export default class GameScene extends Phaser.Scene {
 		if (this.cursors.up.isDown && this.player.body.touching.down) {
 			this.player.setVelocityY(-240);
 
-		}
-
-		// hitbox / kisok 충돌
-		if (this.physics.overlap(this.hitbox, this.kiosk)) {
-			console.log('hit');
 		}
 	}
 }
