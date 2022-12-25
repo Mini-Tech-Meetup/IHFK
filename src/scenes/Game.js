@@ -11,7 +11,7 @@ export default class GameScene extends Phaser.Scene {
 	preload() {
 		this.load.image('sky', 'assets/game_scene/background.png');
 		this.load.image('ground', 'assets/game_scene/ground.png');
-		this.load.spritesheet('kiosk', 'assets/kiosk/kiosk.png',{ frameWidth: 256, frameHeight: 256 });
+		this.load.spritesheet('kiosk', 'assets/kiosk/kiosk.png',{ frameWidth: 68, frameHeight: 128 });
 		this.load.spritesheet('character', 'assets/game_scene/Strong_Guy_Rung_SpriteSheet.png', { frameWidth: 18, frameHeight: 24 });
 		this.load.spritesheet('character_attack', 'assets/game_scene/Strong_Guy_Attacks_SpriteSheet.png', { frameWidth: 27, frameHeight: 24 });
 	}
@@ -52,6 +52,20 @@ export default class GameScene extends Phaser.Scene {
 			repeat: -1
 		});
 
+		let kioskAnimFrams = [{ start:1, end:2 }, { start:2, end:3 }, { start:3, end:4 }]
+
+		//foreach
+		kioskAnimFrams.forEach((frame, index) => {
+			this.anims.create({
+				key: `kioskState${index + 1}`,
+				frames: this.anims.generateFrameNumbers('kiosk', frame),
+				frameRate: 10,
+				repeat: -1
+			});
+		});
+			
+
+
 		this.cursors = this.input.keyboard.createCursorKeys();
 
 		this.physics.add.collider(this.player, this.ground);
@@ -84,7 +98,7 @@ export default class GameScene extends Phaser.Scene {
 	gnerateKiosk() {
 		console.log('kiosk');
 		let x = Phaser.Math.Between(100, 700);
-		let kiosk = this.physics.add.sprite(x, 300, 'kiosk').setScale(0.5,0.5).setPushable(false);
+		let kiosk = this.physics.add.sprite(x, 300, 'kiosk').setPushable(false);
 		let uuid = Phaser.Math.RND.uuid();
 		kiosk.setName(uuid);
 		this.physics.add.collider(kiosk, this.ground);
@@ -95,10 +109,13 @@ export default class GameScene extends Phaser.Scene {
 
 	// hit count variable
 	hitCount = {	}; 
+	totalHitCount = 0;
 
 
 	hitKiosk(player, kiosk) {
 		console.log('hit kiosk');
+		this.totalHitCount++;
+
 		let name = kiosk.name
 		if (this.hitCount[name] === undefined) {
 			this.hitCount[name] = 0;
@@ -107,9 +124,29 @@ export default class GameScene extends Phaser.Scene {
 		console.log(this.hitCount[name]);
 		console.log(this.hitCount)
 
+		// anims change
+		let index = this.selectKioskAnimsIndex(this.hitCount[name]);
+		if (index > 0) {
+			kiosk.anims.play(`kioskState${index}`, true);
+		}
+		
 		if (this.hitCount[name] >= 100) {
 			kiosk.destroy();
 		}
+	}
+
+	selectKioskAnimsIndex(hit) {
+		let index = 0;
+		if (hit >= 25) {
+			index = 1;
+		}
+		if (hit >= 50) {
+			index = 2;
+		}
+		if (hit >= 75) {
+			index = 3;
+		}
+		return index;
 	}
 
 	update(time, delta) {
