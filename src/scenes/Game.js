@@ -50,7 +50,6 @@ export default class GameScene extends Phaser.Scene {
 
 		else {
 			this.player.setVelocityX(0);
-
 			this.player.anims.play('move');
 		}
 
@@ -101,7 +100,7 @@ export default class GameScene extends Phaser.Scene {
 		this.ground.create(400, 590, 'ground').setScale(2).refreshBody();
 
 		// 캐릭터
-		this.player = this.physics.add.sprite(100, 450, 'character').setBounce(0.2).setScale(5, 5).setCollideWorldBounds(true);
+		this.player = this.physics.add.sprite(100, 450, 'character').setBounce(0.2).setScale(5, 5).setCollideWorldBounds(true).setDepth(1);
 
 		this.cursors = this.input.keyboard.createCursorKeys();
 
