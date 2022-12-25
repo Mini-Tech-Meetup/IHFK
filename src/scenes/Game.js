@@ -24,9 +24,9 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	create() {
-		this.setupEvents();
 		this.setupAnims();
 		this.setupResources();
+		this.setupEvents();
 
 		this.generateKiosk()
 	}
@@ -112,7 +112,12 @@ export default class GameScene extends Phaser.Scene {
 		this.hitbox.body.setCollideWorldBounds(true);
 		this.hitbox.body.allowGravity = false;
 
-
+		// kiosk collision group
+		this.kioskGroup = this.physics.add.group();
+		this.physics.add.collider(this.kioskGroup, this.ground);
+		this.physics.add.collider(this.player, this.kioskGroup);
+		this.physics.add.collider(this.kioskGroup,this.kioskGroup);
+		this.physics.add.overlap(this.hitbox, this.kioskGroup, this.hitKiosk, null, this);
 		window.body1 = this.player.body;
 		window.physics = this.physics;
 	}
@@ -143,12 +148,9 @@ export default class GameScene extends Phaser.Scene {
 		console.log('kiosk');
 		let x = Phaser.Math.Between(100, 800);
 		let kiosk = this.physics.add.sprite(x, 200, 'kiosk').setPushable(false);
+		this.kioskGroup.add(kiosk);
 		let uuid = Phaser.Math.RND.uuid();
 		kiosk.setName(uuid);
-		this.physics.add.collider(kiosk, this.ground);
-		this.physics.add.collider(this.player, kiosk);
-		// overlap event
-		this.physics.add.overlap(this.hitbox, kiosk, this.hitKiosk, null, this);
 	}
 
 
