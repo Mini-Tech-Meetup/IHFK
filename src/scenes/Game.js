@@ -11,7 +11,7 @@ export default class GameScene extends Phaser.Scene {
 	preload() {
 		this.load.image('sky', 'assets/game_scene/background.png');
 		this.load.image('ground', 'assets/game_scene/ground.png');
-		this.load.spritesheet('kiosk', 'assets/kiosk/kiosk.gif',{ frameWidth: 256, frameHeight: 256 });
+		this.load.spritesheet('kiosk', 'assets/kiosk/kiosk.png',{ frameWidth: 256, frameHeight: 256 });
 		this.load.spritesheet('character', 'assets/game_scene/Strong_Guy_Rung_SpriteSheet.png', { frameWidth: 18, frameHeight: 24 });
 		this.load.spritesheet('character_attack', 'assets/game_scene/Strong_Guy_Attacks_SpriteSheet.png', { frameWidth: 27, frameHeight: 24 });
 	}
@@ -26,11 +26,10 @@ export default class GameScene extends Phaser.Scene {
 		this.ground.create(400, 590, 'ground').setScale(2).refreshBody();
 
 		// 캐릭터
-		// set scale but not interpolate
 		this.player = this.physics.add.sprite(100, 450, 'character').setBounce(0.2).setScale(5, 5).setCollideWorldBounds(true);
 
 		// 키오스크
-		this.kiosk = this.add.sprite(500, 430, 'kiosk');
+		this.kiosk = this.physics.add.sprite(500, 300, 'kiosk').setScale(0.5,0.5).setPushable(false);
 
 		// 이동 애니
 		this.anims.create({
@@ -50,9 +49,11 @@ export default class GameScene extends Phaser.Scene {
 		this.cursors = this.input.keyboard.createCursorKeys();
 
 		this.physics.add.collider(this.player, this.ground);
+		this.physics.add.collider(this.kiosk, this.ground);
+		this.physics.add.collider(this.player, this.kiosk);
 
 
-		this.hitbox = this.add.rectangle(0, 0, 64, 64, 0xffffff);
+		this.hitbox = this.add.rectangle(0, 0, 64, 64, 0xffffff).setVisible(false);
 		this.physics.add.existing(this.hitbox, false);
 		this.hitbox.body.setCollideWorldBounds(true);
 		this.hitbox.body.allowGravity = false;
@@ -101,6 +102,11 @@ export default class GameScene extends Phaser.Scene {
 		if (this.cursors.up.isDown && this.player.body.touching.down) {
 			this.player.setVelocityY(-240);
 
+		}
+
+		// hitbox / kisok 충돌
+		if (this.physics.overlap(this.hitbox, this.kiosk)) {
+			console.log('hit');
 		}
 	}
 }
