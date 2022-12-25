@@ -92,6 +92,12 @@ export default class GameScene extends Phaser.Scene {
 		// 배경
 		this.add.image(0, 0, 'sky').setOrigin(0, 0);
 
+		// 점수판
+		this.score = this.add.text(850, 0, 'Score : ' + this.breakedKioskNumber,{
+			font: '48px Arial',
+			fill: '#000000'
+		});
+
 		// 샵
 		this.add.image(800, 410, 'shop').setScale(1.5, 1.5);
 
@@ -174,6 +180,7 @@ export default class GameScene extends Phaser.Scene {
 		if (this.hitCount[name] >= 100) {
 			kiosk.destroy();
 			this.breakedKioskNumber++;
+			this.score.setText('Score : ' + this.breakedKioskNumber);
 		}
 	}
 
