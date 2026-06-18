@@ -1,5 +1,6 @@
 # IHFK
-<img width="386" alt="image" src="https://user-images.githubusercontent.com/10369528/219254939-a0d01bd7-45fd-4b1a-9079-5fb45406229c.png">
+https://github.com/user-attachments/assets/3b12e4bf-b520-447f-82f8-a4da07bd840b
+
 
 "I Hate F**king Kiosk" Game
 
