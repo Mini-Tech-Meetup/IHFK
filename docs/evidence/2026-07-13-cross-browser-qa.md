@@ -43,3 +43,7 @@ PASS iPhone WebKit emulation touch input and 30-unit Endless stress avg 61.3 / p
 ## Remaining physical-device gate
 
 Headless WebKit is not evidence of iOS Safari fullscreen, manual rotation, native file sharing or hardware audio unlock. Android emulation likewise cannot prove actual orientation locking, native share UI or physical-device FPS. Those remain open and must be captured through `/qa/device.html` on physical devices. The QA page now links directly to distinct `previewStress=15` campaign and `previewStress=30` endless presets.
+
+## Remote CI
+
+GitHub Actions run [29247682557](https://github.com/Mini-Tech-Meetup/IHFK/actions/runs/29247682557) passed the full static, raster, Chromium E2E and six-environment cross-browser suite. Firefox and WebKit run under Xvfb so Linux CI provides a real WebGL context rather than the unsupported displayless Firefox headless path.

@@ -45,7 +45,7 @@ SPEC-00~09
 - 알려진 제한: physical-device/native-share, human average, and post-merge live Pages verification
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
 - 실기기 수집 도구: `/qa/device.html`, [report template](../evidence/DEVICE_QA_TEMPLATE.md)
-- 브라우저 매트릭스: [cross-browser QA](../evidence/2026-07-13-cross-browser-qa.md)
+- 브라우저 매트릭스: [cross-browser QA](../evidence/2026-07-13-cross-browser-qa.md), remote CI run 29247682557 PASS
 - 실기기 스트레스 프리셋: `previewStress=15` 캠페인, `previewStress=30` 무한; 10초 후 복사 가능한 avg/p05 보고서
 
 ## 평가
