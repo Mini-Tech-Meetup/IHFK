@@ -31,13 +31,13 @@ SPEC-00~09
 - [x] 알려진 P0/P1 없음
 
 ## 테스트
-- [x] 자동: `npm run check`, browser 29/29, headless responsive/E2E 5그룹
+- [x] 자동: `npm run check`, browser 32/32, headless responsive/E2E 12그룹
 - [x] 데스크톱: 로컬 HTTP와 Pages-equivalent 경로
 - [ ] 모바일: Android/iOS fullscreen·orientation·share
 - [x] 시각 검수: 844×390 FIT와 touch HUD
 
 ## 증거
-- 명령 및 결과: `npm run check`; browser 29/29; `npm test` 5/5; 10/10 locale containment; accelerated campaign→Result→Endless; exact 1080×640 and Android/iPhone responsive captures; GitHub Actions [static-validation PASS](https://github.com/Mini-Tech-Meetup/IHFK/actions/runs/29226812637) in 58s
+- 명령 및 결과: `npm run check`; browser 32/32; `npm test` 12/12; 10/10 locale containment; accelerated campaign→Result→Endless; exact 1080×640, 1080×1080 and Android/iPhone responsive captures; GitHub Actions static validation
 - 스크린샷: Language, Title, 각 stage, Result, touch landscape
 - 성능 수치: normal-balance automated lower bound 124.265s; factory fist 41.7s/full-reserve 36.9s; 30 active desktop samples min 60 / avg 60.75 / max 61 FPS
 - 알려진 제한: physical-device/native-share, human average, and post-merge live Pages verification

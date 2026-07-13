@@ -4,11 +4,13 @@ import { LOCALE_NAMES } from '../src/data/locales.js';
 import { ShareCardService } from '../src/services/ShareCardService.js';
 
 const load = source => new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=source;});
-const [character,factory]=await Promise.all([
+const [character,factory,wreck,kiosk]=await Promise.all([
   load('../assets/character/Strong Guy Attacks/Strong_Guy_Attacks_Without_The_Repeated_Frames.png'),
-  load('../assets/background/factory.png')
+  load('../assets/background/factory.png'),
+  load('../assets/factory/frames-v2/05.png'),
+  load('../assets/kiosk/frames-v2/05.png')
 ]);
-const sources={'strong-attack':character,'bg-factory':factory};
+const sources={'strong-attack':character,'bg-factory':factory,'factory-v2-4':wreck,'kiosk-v2-4':kiosk};
 const textures={get:key=>({getSourceImage:()=>sources[key]})};
 const session=new GameSession();session.elapsedMs=187430;session.destroyedTotal=127;
 const i18n=new I18n(session);const select=document.querySelector('#locale');const target=document.querySelector('#card');

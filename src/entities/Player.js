@@ -43,10 +43,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       depleted=this.session.weapons[key]<=0;
     }
     if(key==='shotgun')this.scene.audio?.sfx('shotgun');if(key==='chainsaw')this.scene.audio?.sfx('saw');
-    const direction=this.flipX?-1:1;const rect=this.attackRectangle(data,direction);const targets=this.attackTargets(rect,direction);
-    document.body.dataset.attackRect=`${Math.round(rect.x)},${Math.round(rect.y)},${Math.round(rect.width)},${Math.round(rect.height)}`;document.body.dataset.attackTargets=String(key==='fist'?Math.min(1,targets.length):targets.length);
+    const direction=this.flipX?-1:1;const rect=this.attackRectangle(data,direction);const targets=this.attackTargets(rect,direction);const hits=targets.slice(0,data.maxTargets);
+    document.body.dataset.attackRect=`${Math.round(rect.x)},${Math.round(rect.y)},${Math.round(rect.width)},${Math.round(rect.height)}`;document.body.dataset.attackTargets=String(hits.length);
     if(!PREVIEW_WEAPON){
-      const hits=key==='fist'?targets.slice(0,1):targets;const kioskDamage=PREVIEW_KIOSK?4:data.damage;
+      const kioskDamage=PREVIEW_KIOSK?4:data.damage;
       hits.forEach(target=>{if(target.kind==='kiosk')target.value.takeDamage(kioskDamage,direction);else target.value.takeDamage(data.factoryDamage,direction,key);});
     }
     if(depleted)this.breakWeapon(key);

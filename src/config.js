@@ -24,11 +24,18 @@ export const BALANCE = Object.freeze({
   streetGoal: TEST_MODE ? 2 : 50,
   weaponDropChance: 0.15,
   attack: {
-    fist: { cooldown: 100, damage: 12, factoryDamage: 12, range: 78, height: 58, offsetX: 18, offsetY: -60 },
-    bat: { cooldown: 180, damage: 38, factoryDamage: 26, range: 150, height: 112, offsetX: 12, offsetY: -62 },
-    chainsaw: { cooldown: 50, damage: 8, factoryDamage: 6, range: 108, height: 92, offsetX: 18, offsetY: -60 },
-    shotgun: { cooldown: 250, damage: 100, factoryDamage: 70, range: 430, height: 210, offsetX: 20, offsetY: -75 }
+    fist: { cooldown: 100, damage: 12, factoryDamage: 12, range: 78, height: 58, offsetX: 18, offsetY: -60, maxTargets: 1, role: 'unlimited-single' },
+    bat: { cooldown: 180, damage: 38, factoryDamage: 26, range: 150, height: 112, offsetX: 12, offsetY: -62, maxTargets: Infinity, role: 'wide-cleave' },
+    chainsaw: { cooldown: 50, damage: 8, factoryDamage: 7, range: 108, height: 92, offsetX: 18, offsetY: -60, maxTargets: 1, role: 'rapid-focus' },
+    shotgun: { cooldown: 250, damage: 100, factoryDamage: 70, range: 430, height: 210, offsetX: 20, offsetY: -75, maxTargets: 3, role: 'long-burst' }
   },
   grants: { bat: 10, chainsaw: 4000, shotgun: 6 },
   caps: { bat: 20, chainsaw: 8000, shotgun: 12 }
 });
+
+export function getWeaponDps(key, target = 'kiosk') {
+  const attack = BALANCE.attack[key];
+  if (!attack) return 0;
+  const damage = target === 'factory' ? attack.factoryDamage : attack.damage;
+  return damage * 1000 / attack.cooldown;
+}

@@ -108,6 +108,14 @@ for filename, expected in responsive_captures.items():
     image = Image.open(path)
     if image.size != expected: raise SystemExit(f"{path}: expected {expected}, got {image.size}")
 
+square_captures = {
+    "runtime-share-card-broken-kiosks-1080x1080.png": (1080, 1080),
+}
+for filename, expected in square_captures.items():
+    path = Path("docs/evidence") / filename
+    image = Image.open(path)
+    if image.size != expected: raise SystemExit(f"{path}: expected {expected}, got {image.size}")
+
 run = grid_content(Path("assets/character/Strong Guy Runs/Strong_Guy_Rung_SpriteSheet.png"), 18, 24)
 attack = grid_content(Path("assets/character/Strong Guy Attacks/Strong_Guy_Attacks_Without_The_Repeated_Frames.png"), 27, 24)
 validate_transform_sheet()
@@ -119,5 +127,6 @@ print("PASS 28 generated runtime frames use hard alpha, safe bounds, and shared 
 print("PASS 3 derived weapon pickups are 80x48 hard-alpha pixel sprites")
 print(f"PASS {len(runtime_captures)} runtime evidence captures are exactly 1080x640")
 print("PASS 3 responsive evidence captures retain their exact device viewports")
+print("PASS share-card evidence capture is exactly 1080x1080")
 print("PASS inspected source sheets retain 8 run and 15 attack frames with expected empty tail cells")
 print("PASS all 27 transform frames match the supplied 29x25 GIF pixel-for-pixel")

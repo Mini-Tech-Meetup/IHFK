@@ -82,7 +82,7 @@ try {
     await page.goto(`${base}/tests/`, { waitUntil: 'networkidle' });
     await page.waitForFunction(() => document.title.endsWith('PASSED'));
     const result = await page.locator('#out').textContent();
-    assert(result.includes('29 passed, 0 failed'), result);
+    assert(result.includes('32 passed, 0 failed'), result);
   });
 
   await test('intro bubble anchors above the hero and transform uses all source frames', async () => {
@@ -151,13 +151,14 @@ try {
       const first=scene.spawnKiosk(275,false,'attack-test');const second=scene.spawnKiosk(325,false,'attack-test');scene.player.attack(scene.time.now+1000);
       const [x,y,width,height]=document.body.dataset.attackRect.split(',').map(Number);
       const frontState={firstDead:first.dead,secondHp:second.hp,targets:Number(document.body.dataset.attackTargets)};scene.kiosks.clear(true,true);
-      const weaponScales={};for(const key of ['bat','chainsaw','shotgun']){scene.session.weapons[key]=9999;scene.session.selectWeapon(key);scene.player.nextAttack=0;scene.player.attack(scene.time.now+2000);weaponScales[key]=scene.player.visual.scaleX;}
-      return {...frontState,rect:{x,y,width,height},playerX:scene.player.x,weaponScales,pickupState};
+      const weaponScales={},targetProfiles={};for(const key of ['bat','chainsaw','shotgun']){const samples=[255,280,305,330].map(position=>scene.spawnKiosk(position,false,'profile-test'));scene.session.weapons[key]=9999;scene.session.selectWeapon(key);scene.player.nextAttack=0;scene.player.attack(scene.time.now+2000);weaponScales[key]=scene.player.visual.scaleX;targetProfiles[key]=samples.filter(kiosk=>kiosk.hp<12).length;scene.kiosks.clear(true,true);}
+      return {...frontState,rect:{x,y,width,height},playerX:scene.player.x,weaponScales,targetProfiles,pickupState};
     });
     assert(state.firstDead && state.secondHp > 0, `front/back damage: ${state.firstDead}/${state.secondHp}`);
     assert(state.targets === 1, `fist targets: ${state.targets}`);
     assert(state.rect.width === 78 && state.rect.height === 58 && state.rect.x === state.playerX + 18, `fist rect: ${JSON.stringify(state.rect)}`);
     assert(Object.values(state.weaponScales).every(scale => scale === 2.5), `weapon scales: ${JSON.stringify(state.weaponScales)}`);
+    assert(state.targetProfiles.bat === 4 && state.targetProfiles.chainsaw === 1 && state.targetProfiles.shotgun === 3, `weapon target profiles: ${JSON.stringify(state.targetProfiles)}`);
     assert(state.pickupState.offsetX === 0 && state.pickupState.offsetY === 0, `pickup offset: ${state.pickupState.offsetX},${state.pickupState.offsetY}`);
     assert(state.pickupState.halo.width >= state.pickupState.image.width && state.pickupState.halo.height >= state.pickupState.image.height, 'pickup image not contained by box');
   });
