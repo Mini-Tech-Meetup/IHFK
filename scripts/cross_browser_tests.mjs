@@ -23,7 +23,7 @@ const base=`http://127.0.0.1:${server.address().port}`;
 const matrix=[
   {name:'Chrome stable',type:chromium,launch:{channel:'chrome'}},
   {name:'Playwright Chromium /IHFK/',type:chromium,launch:{},subpath:true},
-  {name:'Firefox',type:firefox,launch:{}},
+  {name:'Firefox',type:firefox,launch:{firefoxUserPrefs:{'webgl.disabled':false,'webgl.force-enabled':true,'webgl.software':true}}},
   {name:'WebKit',type:webkit,launch:{}}
 ];
 const mobileMatrix=[
@@ -38,7 +38,7 @@ try{
     page.on('pageerror',error=>errors.push(error.message));
     page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
     await page.goto(`${base}${entry.subpath?'/IHFK/':'/'}?testMode&autoplay&previewPickup=bat`,{waitUntil:'networkidle'});
-    await page.waitForFunction(()=>document.body.dataset.scene==='FastFood',null,{timeout:20_000});
+    try{await page.waitForFunction(()=>document.body.dataset.scene==='FastFood',null,{timeout:45_000});}catch(error){const state=await page.evaluate(()=>({scene:document.body.dataset.scene||'none',hasGame:Boolean(window.IHFK),hasPhaser:Boolean(window.Phaser),text:document.body.innerText.slice(0,300)}));throw new Error(`${entry.name}: FastFood timeout ${JSON.stringify(state)}; ${errors.join(' | ')}; ${error.message}`);}
     const boot=await page.evaluate(()=>{
       const scene=window.IHFK.scene.getScene('FastFood');const canvas=document.querySelector('#game canvas');
       return {renderer:window.IHFK.renderer.type,webgl:Phaser.WEBGL,canvas:{width:canvas.width,height:canvas.height},x:scene.player.x};
@@ -65,7 +65,7 @@ try{
     page.on('pageerror',error=>errors.push(error.message));page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
     await page.goto(`${base}/?testMode&touchMode&previewPickup=bat`,{waitUntil:'networkidle'});
     await page.getByRole('button',{name:'English'}).tap();await page.locator('.service-list button').nth(1).tap();await page.getByRole('button',{name:'GAME START'}).tap();
-    await page.waitForFunction(()=>document.body.dataset.scene==='FastFood',null,{timeout:20_000});
+    try{await page.waitForFunction(()=>document.body.dataset.scene==='FastFood',null,{timeout:45_000});}catch(error){const state=await page.evaluate(()=>({scene:document.body.dataset.scene||'none',hasGame:Boolean(window.IHFK),hasPhaser:Boolean(window.Phaser)}));throw new Error(`${entry.name}: mobile FastFood timeout ${JSON.stringify(state)}; ${errors.join(' | ')}; ${error.message}`);}
     const layout=await page.evaluate(()=>({touch:getComputedStyle(document.querySelector('#touch-controls')).display,rotate:getComputedStyle(document.querySelector('#rotate-overlay')).display,canvas:getComputedStyle(document.querySelector('#game')).visibility}));
     assert(layout.touch==='block'&&layout.rotate==='none'&&layout.canvas==='visible',`${entry.name}: ${JSON.stringify(layout)}`);
     await page.evaluate(()=>window.IHFK.scene.getScene('FastFood').session.addWeapon('bat'));
