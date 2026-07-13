@@ -8,6 +8,7 @@ This pass validates the post-prototype overhaul requested for the kiosk UI, tran
 
 - `npm run check`: PASS — 24 modules, 40 runtime assets, nine static deliverables, 10 locales/25 keys, 11 SPEC documents, three opaque 1080×640 backgrounds, 23 generated hard-alpha animation frames and three derived pickup sprites.
 - Browser suite at `/tests/`: PASS — 29 passed, 0 failed.
+- Headless `npm test`: PASS — browser unit suite, Android 844×390 landscape, iPhone 932×430 landscape, portrait rotation fallback and 1080×640 Result action containment; console errors 0.
 - Python sprite helpers: PASS — every helper compiles.
 - `git diff --check`: PASS; only Git's existing LF/CRLF notices were emitted.
 
@@ -29,6 +30,8 @@ This pass validates the post-prototype overhaul requested for the kiosk UI, tran
 - Exact 1080×640 capture review found and fixed two playfield-obstruction defects: touch players now spawn at x=230 clear of the 150px joystick, and FastFood/Street exit labels moved left of the touch weapon column.
 - Exact 1080×640 result review found and fixed clipped action labels. The settled result screen measured its action buttons at y=406–452 entirely inside the kiosk screen at y=142–509.6.
 - Preserved exact-size evidence: [title](runtime-title-1080x640.png), [guide/start](runtime-howto-1080x640.png), [FastFood touch HUD](runtime-fastfood-1080x640.png), [30-kiosk touch stress](runtime-factory-stress-1080x640.png), and [result](runtime-result-1080x640.png).
+- Android 844×390 review found and fixed the vertical weapon rail overlapping mute/attack controls. Low landscape viewports now use a top-center horizontal weapon rail; all five touch regions are inside the viewport with zero pairwise overlaps on both [Android 844×390](runtime-android-844x390.png) and [iPhone 932×430](runtime-ios-932x430.png).
+- [Portrait 390×844](runtime-mobile-portrait-390x844.png) shows only the rotation instruction; game and touch controls both report `visibility:hidden`.
 - The 1080×1080 share card now reuses the shipping factory raster and strong-character frame, with a broken-factory overlay; `/qa/share-card.html` provides ten-locale inspection.
 - The synthesized music loop now runs a 115 ms eight-step cheap-MIDI pattern with bass, root/fifth power-chord voices, intentionally blunt lead, kick, snare and alternating high-hat; final subjective listening remains a physical-user gate.
 - Falling trace with 5,200 px/s² configured acceleration reached more than 1,000 px/s before landing. Observed spawn-to-lock time was 1,067 ms; repeated landed samples stayed at x=700 with vx=0 and vy=0.

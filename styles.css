@@ -156,3 +156,7 @@ body.touch-device .weapon-rack { display:none; }
   body.touch-device #rotate-overlay { display: flex; }
   body.touch-device #game, body.touch-device #touch-controls { visibility: hidden; }
 }
+@media (max-height:560px) and (orientation:landscape) {
+  #weapon-buttons { top:max(10px,env(safe-area-inset-top)); left:50%; right:auto; bottom:auto; flex-direction:row; transform:translateX(-50%); }
+  #weapon-buttons button.selected { transform:translateY(5px); }
+}

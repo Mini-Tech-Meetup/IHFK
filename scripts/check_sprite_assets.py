@@ -65,6 +65,16 @@ for filename in runtime_captures:
     image = Image.open(path)
     if image.size != (1080, 640): raise SystemExit(f"{path}: expected 1080x640, got {image.size}")
 
+responsive_captures = {
+    "runtime-android-844x390.png": (844, 390),
+    "runtime-ios-932x430.png": (932, 430),
+    "runtime-mobile-portrait-390x844.png": (390, 844),
+}
+for filename, expected in responsive_captures.items():
+    path = Path("docs/evidence") / filename
+    image = Image.open(path)
+    if image.size != expected: raise SystemExit(f"{path}: expected {expected}, got {image.size}")
+
 run = grid_content(Path("assets/character/Strong Guy Runs/Strong_Guy_Rung_SpriteSheet.png"), 18, 24)
 attack = grid_content(Path("assets/character/Strong Guy Attacks/Strong_Guy_Attacks_Without_The_Repeated_Frames.png"), 27, 24)
 if run[:8] != [True] * 8 or run[8]: raise SystemExit("Strong-run source population changed")
@@ -74,4 +84,5 @@ print("PASS 3 backgrounds are 1080x640, opaque, and at most 16 colors")
 print("PASS 23 generated runtime frames use hard alpha, safe bounds, and shared 16-color palettes")
 print("PASS 3 derived weapon pickups are 80x48 hard-alpha pixel sprites")
 print("PASS 5 runtime evidence captures are exactly 1080x640")
+print("PASS 3 responsive evidence captures retain their exact device viewports")
 print("PASS inspected source sheets retain 8 run and 15 attack frames with expected empty tail cells")

@@ -27,7 +27,7 @@ SPEC-00
 - [x] 데스크톱에서 터치 HUD 숨김
 
 ## 테스트
-- [x] 자동: 강제 터치 공격 탭 큐, fullscreen/orientation 성공·거부 폴백
+- [x] 자동: 강제 터치 공격 탭 큐, fullscreen/orientation 성공·거부 폴백, Android/iPhone 뷰포트 경계·겹침 0
 - [x] 데스크톱: 터치 HUD 숨김과 키보드 자동 주행
 - [ ] Android landscape/fullscreen
 - [ ] iOS manual rotate fallback
@@ -35,7 +35,7 @@ SPEC-00
 
 ## 증거
 - 명령 및 결과: 강제 터치 공격 탭 전달, mobile API 성공·거부 무예외, 터치 시작 x=230 안전영역 자동검사 확인
-- 스크린샷: [1080×640 FastFood touch HUD](../evidence/runtime-fastfood-1080x640.png), [30-unit touch stress](../evidence/runtime-factory-stress-1080x640.png)
+- 스크린샷: [1080×640 FastFood touch HUD](../evidence/runtime-fastfood-1080x640.png), [Android 844×390](../evidence/runtime-android-844x390.png), [iPhone 932×430](../evidence/runtime-ios-932x430.png), [portrait fallback](../evidence/runtime-mobile-portrait-390x844.png)
 - 성능 수치: 입력 상태 1개로 keyboard/touch 통합
 - 알려진 제한: Android/iOS 실기기 fullscreen·orientation 미검증
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
