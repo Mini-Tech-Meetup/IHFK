@@ -94,7 +94,7 @@ export class GameUi {
     shell.querySelector('.guide-actions').append(this.button(this.i18n.t('back'), onBack, 'secondary-button'));
   }
 
-  showIntroBubble(text, { x = 50, y = 69 } = {}) {
+  showIntroBubble(text) {
     let bubble = this.root.querySelector('.cutscene-bubble');
     if (!bubble) {
       this.clear('cutscene-ui');
@@ -102,10 +102,19 @@ export class GameUi {
       bubble.className = 'cutscene-bubble';
       this.root.append(bubble);
     }
-    bubble.style.setProperty('--bubble-x', `${x}%`);
-    bubble.style.setProperty('--bubble-y', `${y}%`);
     bubble.classList.remove('pop'); void bubble.offsetWidth;
     bubble.textContent = text; bubble.classList.add('pop');this.audio?.sfx('dialogue');
+    return bubble;
+  }
+
+  positionIntroBubble(bubble, { x, y }) {
+    if (!bubble || !Number.isFinite(x) || !Number.isFinite(y)) return;
+    const margin=8,tailHeight=22,width=bubble.offsetWidth,height=bubble.offsetHeight;
+    const center=Math.max(margin+width/2,Math.min(innerWidth-margin-width/2,x));
+    const top=Math.max(margin+height,Math.min(innerHeight-margin-tailHeight,y-tailHeight));
+    const tailX=Math.max(24,Math.min(width-24,x-(center-width/2)));
+    bubble.style.left=`${center}px`;bubble.style.top=`${top}px`;bubble.style.setProperty('--bubble-tail-x',`${tailX}px`);
+    bubble.dataset.anchorX=String(x);bubble.dataset.anchorY=String(y);
   }
 
   showResult({ previewUrl, playtest = null, onRetry, onEndless, onShare }) {

@@ -11,7 +11,7 @@ export class BasePlayScene extends Phaser.Scene {
     this.ground=this.add.rectangle(GAME_WIDTH/2,GROUND_Y+35,GAME_WIDTH,70,0x333333);this.physics.add.existing(this.ground,true);
     const safeSpawnX=safePlayerSpawn(playerX,document.body.classList.contains('touch-device'));
     this.player=new Player(this,safeSpawnX,GROUND_Y-80,this.session,this.inputController);this.physics.add.collider(this.player,this.ground);this.physics.add.collider(this.player,this.kiosks,this.onPlayerKioskCollision,null,this);this.physics.add.collider(this.kiosks,this.ground);this.physics.add.collider(this.kiosks,this.kiosks);
-    this.hud=new Hud(this,this.session,this.i18n,targetKey);this.events.on('kiosk-destroyed',this.onKioskDestroyed,this);document.querySelector('#touch-mute').onclick=()=>this.audio.toggleMute();
+    this.hud=new Hud(this,this.session,this.i18n,targetKey,key=>this.inputController.queueWeapon(key));this.events.on('kiosk-destroyed',this.onKioskDestroyed,this);document.querySelector('#touch-mute').onclick=()=>this.audio.toggleMute();
   }
   spawnKiosk(x=Phaser.Math.Between(90,990),falling=true,stage='global') {const kiosk=new Kiosk(this,x,falling?-100:GROUND_Y-70,{stage,falling});this.kiosks.add(kiosk);return kiosk;}
   onPlayerKioskCollision(player,kiosk){
@@ -45,7 +45,7 @@ export class BasePlayScene extends Phaser.Scene {
     document.body.dataset.playerVelocityX=String(Math.round(this.player?.body?.velocity.x||0));document.body.dataset.playerVelocityY=String(Math.round(this.player?.body?.velocity.y||0));
     document.body.dataset.playerHitbox=this.player?.body?`${Math.round(this.player.body.width)}x${Math.round(this.player.body.height)}`:'none';document.body.dataset.kioskHitbox=inspectedKiosk?.body?`${Math.round(inspectedKiosk.body.width)}x${Math.round(inspectedKiosk.body.height)}`:'none';
     const touchAmounts={fist:'∞',bat:String(Math.ceil(this.session.weapons.bat)),chainsaw:`${(this.session.weapons.chainsaw/1000).toFixed(1)}s`,shotgun:String(Math.ceil(this.session.weapons.shotgun))};
-    document.querySelectorAll('#weapon-buttons [data-weapon]').forEach(button=>{button.classList.toggle('selected',button.dataset.weapon===this.session.selectedWeapon);button.dataset.amount=touchAmounts[button.dataset.weapon];});
+    document.querySelectorAll('#weapon-buttons [data-weapon]').forEach(button=>{const key=button.dataset.weapon;const empty=key!=='fist'&&this.session.weapons[key]<=0;button.classList.toggle('selected',key===this.session.selectedWeapon);button.classList.toggle('empty',empty);button.disabled=empty;button.dataset.amount=touchAmounts[key];});
   }
   shutdownPlay(){this.inputController?.setGameplay(false);this.hud?.destroy();}
 }

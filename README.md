@@ -38,11 +38,11 @@ Open `http://<PC IPv4 address>:4173/qa/device.html` on the phone. Windows Firewa
 
 ## Mobile
 
-Play in landscape orientation. Game Start requests fullscreen and a landscape lock directly from the tap gesture where the browser supports them, including the WebKit fullscreen fallback. On iOS or when those requests are rejected, rotate the device manually. The mobile kiosk uses a thin landscape bezel and its screen scrolls independently, so every language, guide action, and Game Start remains selectable even while browser chrome is visible. Touch controls provide a left joystick, jump/attack buttons, weapon slots 1–4, and mute.
+Play in landscape orientation. Game Start requests fullscreen and a landscape lock directly from the tap gesture where the browser supports them, including the WebKit fullscreen fallback. On iOS or when those requests are rejected, rotate the device manually. The mobile kiosk uses a thin landscape bezel and its screen scrolls independently, so every language, guide action, and Game Start remains selectable even while browser chrome is visible. Touch controls provide a left joystick, jump/attack buttons, clickable weapon slots 1–4, and mute. Available weapons switch immediately when tapped; empty slots are visibly disabled. Desktop HUD weapon slots can also be clicked.
 
 For release-device verification, open [`qa/device.html`](qa/device.html) on the deployed host. It tests fullscreen/orientation requests, audio unlock, native PNG sharing, 10-second 15/30-kiosk real-game FPS loads, and three real campaign completions without storing or transmitting the report. The timing shortcut can also be opened directly with `?playtest`; after the third result it marks the 2:30–3:30 average target pass or retest and offers a copyable JSON report.
 
-For localized result-card review, open [`qa/share-card.html`](qa/share-card.html). It renders the shipping 1080×640 button-free result surface in any of the ten supported languages.
+For localized result-card review, open [`qa/share-card.html`](qa/share-card.html). It renders the shipping 1080×640 button-free result surface in any of the ten supported languages. The Canvas, native share payload, and clipboard fallback all use the canonical `https://mini-tech-meetup.github.io/IHFK/` URL.
 
 ## Languages
 

@@ -1,4 +1,5 @@
 const sharedTouch = { left:false, right:false, jump:false, attack:false, jumpQueued:false, attackQueued:false, weapon:null };
+let activeController = null;
 
 import { AUTO_PLAY, FORCE_TOUCH, PREVIEW_WEAPON, PREVIEW_KIOSK, PREVIEW_LANDING, PREVIEW_FACTORY, PREVIEW_STRESS, PREVIEW_PICKUP } from '../config.js';
 
@@ -6,6 +7,7 @@ export class InputController {
   constructor(scene) {
     this.scene = scene;
     this.touch = sharedTouch;
+    activeController = this;
     this.keys = scene.input.keyboard.addKeys({
       left:'LEFT', right:'RIGHT', jump:'UP', attack:'SPACE', fist:'ONE', bat:'TWO', chainsaw:'THREE', shotgun:'FOUR', mute:'M'
     });
@@ -36,8 +38,13 @@ export class InputController {
     document.querySelectorAll('[data-weapon]').forEach(button => {
       if (button.dataset.bound) return;
       button.dataset.bound = 'true';
-      button.addEventListener('pointerdown', event => { event.preventDefault(); sharedTouch.weapon = button.dataset.weapon; });
+      button.addEventListener('click', event => { event.preventDefault(); activeController?.queueWeapon(button.dataset.weapon); });
     });
+  }
+
+  queueWeapon(key) {
+    sharedTouch.weapon = key;
+    this.scene.session?.selectWeapon(key);
   }
 
   bindHold(selector, key) {
@@ -52,6 +59,8 @@ export class InputController {
 
   setGameplay(enabled) {
     document.body.classList.toggle('gameplay', enabled);
+    if (enabled) activeController = this;
+    else if (activeController === this) activeController = null;
     if (!enabled) Object.assign(sharedTouch,{left:false,right:false,jump:false,attack:false,jumpQueued:false,attackQueued:false,weapon:null});
   }
   get left() { return !AUTO_PLAY && (this.keys.left.isDown || this.touch.left); }
