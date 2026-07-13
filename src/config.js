@@ -4,6 +4,7 @@ export const GROUND_Y = 570;
 const QUERY = new URLSearchParams(location.search);
 export const TEST_MODE = QUERY.has('testMode');
 export const AUTO_PLAY = QUERY.has('autoplay');
+export const PLAYTEST_MODE = QUERY.has('playtest');
 export const PREVIEW_WEAPON = ['fist','bat','chainsaw','shotgun'].includes(QUERY.get('previewWeapon')) ? QUERY.get('previewWeapon') : null;
 export const PREVIEW_TRANSFORM = QUERY.has('previewTransform');
 export const PREVIEW_KIOSK = QUERY.has('previewKiosk');

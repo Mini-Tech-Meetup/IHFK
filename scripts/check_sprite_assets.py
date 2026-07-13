@@ -104,6 +104,7 @@ runtime_captures = (
     "runtime-street-moving-clouds-1080x640.png",
     "runtime-firefox-result-1080x640.png",
     "runtime-webkit-result-1080x640.png",
+    "runtime-playtest-report-1080x640.png",
 )
 for filename in runtime_captures:
     path = Path("docs/evidence") / filename
@@ -117,6 +118,7 @@ responsive_captures = {
     "runtime-webkit-iphone-touch-932x430.png": (932, 430),
     "runtime-chromium-android-stress-844x390.png": (844, 390),
     "runtime-webkit-iphone-stress-932x430.png": (932, 430),
+    "runtime-playtest-report-844x390.png": (844, 390),
 }
 for filename, expected in responsive_captures.items():
     path = Path("docs/evidence") / filename

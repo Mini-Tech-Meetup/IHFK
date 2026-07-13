@@ -82,7 +82,7 @@ try {
     await page.goto(`${base}/tests/`, { waitUntil: 'networkidle' });
     await page.waitForFunction(() => document.title.endsWith('PASSED'));
     const result = await page.locator('#out').textContent();
-    assert(result.includes('34 passed, 0 failed'), result);
+    assert(result.includes('35 passed, 0 failed'), result);
   });
 
   await test('intro bubble anchors above the hero and transform uses all source frames', async () => {
@@ -306,6 +306,35 @@ try {
     }
     assert(bounds.preview.left>=bounds.screen.left&&bounds.preview.top>=bounds.screen.top&&bounds.preview.right<=bounds.screen.right&&bounds.preview.bottom<=bounds.screen.bottom,'share-card preview clipped');
     assert(bounds.preview.naturalWidth===1080&&bounds.preview.naturalHeight===1080&&bounds.preview.source==='data:image/png;base64,',`share-card preview source: ${JSON.stringify(bounds.preview)}`);
+  });
+
+  await test('playtest mode records three human runs and renders an in-screen timing report', async () => {
+    await page.setViewportSize({ width: 1080, height: 640 });
+    await page.goto(`${base}/?testMode&playtest&autoplay&previewPickup=bat`, { waitUntil: 'networkidle' });
+    await page.waitForFunction(() => document.body.dataset.scene === 'FastFood');
+    await page.evaluate(() => {
+      const scene=window.IHFK.scene.getScene('FastFood');scene.session.elapsedMs=150000;scene.session.running=false;scene.scene.start('Result');
+    });
+    await page.waitForFunction(() => document.body.dataset.scene==='Result'&&document.body.dataset.playtestRuns==='1');
+    for (const elapsed of [180000,210000]) {
+      await page.evaluate(value => {const scene=window.IHFK.scene.getScene('Result');scene.session.resetRun();scene.session.elapsedMs=value;scene.scene.restart();},elapsed);
+      await page.waitForFunction(expected => Number(document.body.dataset.playtestRuns)===expected, elapsed===180000?2:3);
+    }
+    const state=await page.evaluate(() => {
+      const dialog=document.querySelector('.playtest-report'),screen=document.querySelector('.kiosk-screen');const d=dialog.getBoundingClientRect(),s=screen.getBoundingClientRect();const report=JSON.parse(dialog.querySelector('pre').textContent);
+      return {count:document.body.dataset.playtestRuns,average:document.body.dataset.playtestAverage,status:document.body.dataset.playtestStatus,buttons:[...document.querySelectorAll('.result-actions button')].map(button=>button.textContent),runs:[...dialog.querySelectorAll('ol li')].map(item=>item.textContent),state:dialog.querySelector('.playtest-state').textContent,report,bounds:{dialog:{left:d.left,top:d.top,right:d.right,bottom:d.bottom},screen:{left:s.left,top:s.top,right:s.right,bottom:s.bottom}}};
+    });
+    assert(state.count==='3'&&state.average==='180000'&&state.status==='pass',`playtest dataset: ${state.count}/${state.average}/${state.status}`);
+    assert(state.report.runsMs.join(',')==='150000,180000,210000'&&state.report.averageMs===180000&&state.report.passed,`playtest report: ${JSON.stringify(state.report)}`);
+    assert(state.runs.join('|').includes('02:30.00')&&state.runs.join('|').includes('03:30.00')&&state.state==='TARGET PASS',`playtest labels: ${state.runs.join('|')} / ${state.state}`);
+    assert(state.buttons.length===3&&state.buttons[1]==='QA REPORT',`playtest actions: ${state.buttons.join('|')}`);
+    assert(state.bounds.dialog.left>=state.bounds.screen.left&&state.bounds.dialog.top>=state.bounds.screen.top&&state.bounds.dialog.right<=state.bounds.screen.right&&state.bounds.dialog.bottom<=state.bounds.screen.bottom,`playtest report clipped: ${JSON.stringify(state.bounds)}`);
+    if(process.env.IHFK_CAPTURE_PLAYTEST)await page.screenshot({path:'docs/evidence/runtime-playtest-report-1080x640.png'});
+    await page.setViewportSize({width:844,height:390});
+    await page.waitForTimeout(500);
+    const mobileBounds=await page.evaluate(()=>{const dialog=document.querySelector('.playtest-report').getBoundingClientRect(),screen=document.querySelector('.kiosk-screen').getBoundingClientRect();return{dialog:{left:dialog.left,top:dialog.top,right:dialog.right,bottom:dialog.bottom},screen:{left:screen.left,top:screen.top,right:screen.right,bottom:screen.bottom}};});
+    assert(mobileBounds.dialog.left>=mobileBounds.screen.left&&mobileBounds.dialog.top>=mobileBounds.screen.top&&mobileBounds.dialog.right<=mobileBounds.screen.right&&mobileBounds.dialog.bottom<=mobileBounds.screen.bottom,`mobile playtest report clipped: ${JSON.stringify(mobileBounds)}`);
+    if(process.env.IHFK_CAPTURE_PLAYTEST)await page.screenshot({path:'docs/evidence/runtime-playtest-report-844x390.png'});
   });
 
   assert(errors.length === 0, `browser console errors: ${errors.join(' | ')}; missing: ${missingRequests.join(', ')}`);

@@ -114,6 +114,16 @@ kbd { min-width:42px; padding:7px; border:4px solid #111; background:#fff; box-s
 .stress-report pre { max-height:170px; overflow:auto; margin:0; padding:9px; color:#bdf6c8; background:#0d1510; border:3px solid #4d6253; font:11px/1.25 Consolas; user-select:text; touch-action:auto; }
 .stress-report div { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:10px; }
 .stress-report button { min-height:42px; color:#111; background:#f4c338; border:4px solid #111; box-shadow:3px 4px 0 #000; font:900 13px "Arial Black",Arial,sans-serif; }
+.playtest-report { pointer-events:auto; position:absolute; z-index:70; inset:10px; display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,.9fr); grid-template-rows:auto auto minmax(0,1fr) auto; gap:8px 16px; padding:14px 16px; color:#bdf6c8; background:#17231c; border:7px solid #111; box-shadow:inset 0 0 0 4px #68756c,9px 10px 0 rgba(0,0,0,.5); }
+.playtest-report>strong { grid-column:1/-1; padding-bottom:7px; border-bottom:4px solid #4ad26c; color:#fff9dd; font:900 22px "Arial Black",Arial,sans-serif; letter-spacing:1px; }
+.playtest-state { grid-column:1/-1; margin:0; padding:5px 9px; color:#111; background:#f4c338; border:3px solid #111; font:900 14px Consolas,monospace; }
+.playtest-state.pass { background:#5ed677; }.playtest-state.fail { color:#fff; background:#d73e32; }
+.playtest-report ol { grid-row:3; margin:0; padding:9px 9px 9px 34px; color:#fff9dd; background:#0d1510; border:3px solid #4d6253; font:bold 15px/1.75 Consolas,monospace; }
+.playtest-average { grid-row:4; display:grid; grid-template-columns:auto 1fr; align-items:baseline; gap:2px 12px; padding:7px 10px; color:#111; background:#dfe8d0; border:3px solid #111; }
+.playtest-average span { font:bold 11px Consolas; }.playtest-average b { justify-self:end; font:900 25px Consolas; }.playtest-average small { grid-column:1/-1; font:bold 10px Consolas; }
+.playtest-report pre { grid-column:2; grid-row:3/5; min-height:0; overflow:auto; margin:0; padding:8px; color:#bdf6c8; background:#0d1510; border:3px solid #4d6253; font:9px/1.2 Consolas; user-select:text; touch-action:auto; }
+.playtest-report-actions { grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.playtest-report-actions .kiosk-button { min-height:36px; font-size:12px; }
 @keyframes receipt-pop { from { opacity:0; transform:translateY(14px) scale(.96); } to { opacity:1; transform:none; } }
 @keyframes status-blink { 0%,82% { opacity:1; } 83%,90% { opacity:.2; } 91% { opacity:1; } }
 @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.001ms !important; transition-duration:.001ms !important; } }
@@ -152,6 +162,16 @@ kbd { min-width:42px; padding:7px; border:4px solid #111; background:#fff; box-s
   .stress-report pre { max-height:92px; padding:5px; font-size:8px; }
   .stress-report div { gap:6px; margin-top:6px; }
   .stress-report button { min-height:34px; font-size:10px; }
+  .playtest-report { inset:5px; grid-template-columns:minmax(0,1fr) minmax(150px,.9fr); gap:4px 8px; padding:7px 8px; border-width:5px; box-shadow:inset 0 0 0 2px #68756c,5px 6px 0 rgba(0,0,0,.5); }
+  .playtest-report>strong { padding-bottom:3px; border-bottom-width:3px; font-size:15px; }
+  .playtest-state { padding:3px 6px; border-width:2px; font-size:10px; }
+  .playtest-report ol { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px; padding:4px; border-width:2px; font-size:8px; line-height:1.2; list-style:none; }
+  .playtest-report ol li { min-width:0; overflow:hidden; text-align:center; white-space:nowrap; }
+  .playtest-average { gap:1px 6px; padding:3px 6px; border-width:2px; }
+  .playtest-average span,.playtest-average small { font-size:8px; }.playtest-average b { font-size:17px; }
+  .playtest-report pre { padding:4px; border-width:2px; font-size:6px; line-height:1.05; }
+  .playtest-report-actions { gap:5px; }
+  .playtest-report-actions .kiosk-button { min-height:30px; border-width:3px; box-shadow:2px 3px 0 var(--ink); font-size:9px; }
 }
 #rotate-overlay { display: none; position: fixed; inset: 0; z-index: 100; background: #111; color: #fff; align-items: center; justify-content: center; flex-direction: column; text-align: center; font: 64px monospace; }
 #rotate-overlay span { font-size: 24px; margin-top: 20px; }

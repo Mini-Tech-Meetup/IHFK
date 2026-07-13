@@ -1,6 +1,6 @@
 # Device QA report template
 
-Open `/qa/device.html` from the same deployed origin as the game. Run all four buttons and both real-game stress links on each target device. Paste the device JSON and both stress reports below. The page stores and transmits nothing.
+Open `/qa/device.html` from the same deployed origin as the game. Run all four buttons, both real-game stress links, and the three-run playtest link on each target device. Paste the device JSON, both stress reports, and copied timing report below. The page stores and transmits nothing.
 
 ## Android Chrome
 
@@ -11,6 +11,7 @@ Open `/qa/device.html` from the same deployed origin as the game. Run all four b
 - Campaign 15 report:
 - Endless 30 report:
 - Human campaign times (at least 3):
+- Three-run timing JSON:
 - Notes:
 
 ```json
@@ -26,6 +27,7 @@ paste device report here
 - Campaign 15 report:
 - Endless 30 report:
 - Human campaign times (at least 3):
+- Three-run timing JSON:
 - Notes:
 
 ```json
@@ -43,3 +45,4 @@ paste device report here
 - [ ] Actual endless 30-kiosk stress records average and 5th-percentile FPS.
 - [ ] The actual game joystick, jump, hold attack, weapon 1–4 and mute controls pass.
 - [ ] At least three human campaign completions per target platform are recorded; combined average is 2:30–3:30.
+- [ ] The `?playtest` report lists the same three observed completion times without duplicate result entries.

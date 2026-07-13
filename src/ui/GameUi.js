@@ -106,7 +106,7 @@ export class GameUi {
     bubble.textContent = text; bubble.classList.add('pop');
   }
 
-  showResult({ time, destroyed, previewUrl, onRetry, onEndless, onShare }) {
+  showResult({ time, destroyed, previewUrl, playtest = null, onRetry, onEndless, onShare }) {
     const shell = this.kioskShell(`
       <div class="screen-heading result-heading"><span>OK</span><h1>${escapeHtml(this.i18n.t('complete'))}</h1></div>
       <div class="result-layout"><figure class="result-share-card"><div class="result-share-card-label">SHARE CARD / 1080×1080</div><img alt="IHFK share card preview"></figure><div class="result-summary"><div class="result-receipt"><div><span>${escapeHtml(this.i18n.t('time'))}</span><strong>${escapeHtml(time)}</strong></div><div><span>${escapeHtml(this.i18n.t('destroyed'))}</span><strong>${destroyed}</strong></div><p>ERROR CODE: FACTORY-000<br>PRODUCTION TERMINATED</p></div></div><div class="result-actions"></div></div>`, { status: 'TRANSACTION COMPLETE', className: 'result-shell' });
@@ -117,6 +117,22 @@ export class GameUi {
       const outcome = await onShare();
       share.textContent = outcome === 'error' ? 'ERROR' : this.i18n.t('share'); share.disabled = false;
     }, 'share-button');
-    actions.append(this.button(this.i18n.t('retry'), onRetry, 'secondary-button'), this.button(this.i18n.t('endless'), onEndless, 'start-button'), share);
+    if(playtest){
+      const nextAction=playtest.count<3?onRetry:()=>{this.session.resetPlaytest();onRetry();};const nextLabel=playtest.count<3?`NEXT RUN ${playtest.count+1}/3`:'NEW 3-RUN SET';
+      actions.append(this.button(nextLabel,nextAction,'secondary-button'),this.button('QA REPORT',()=>this.showPlaytestDialog(playtest),'start-button'),share);
+      this.showPlaytestDialog(playtest);
+    }else actions.append(this.button(this.i18n.t('retry'), onRetry, 'secondary-button'), this.button(this.i18n.t('endless'), onEndless, 'start-button'), share);
   }
+
+  showPlaytestDialog(summary) {
+    this.root.querySelector('.playtest-report')?.remove();
+    const report={timestamp:new Date().toISOString(),userAgent:navigator.userAgent,viewport:`${innerWidth}x${innerHeight}`,locale:this.session.locale,runsMs:summary.runs,averageMs:summary.averageMs,targetMs:[150000,210000],complete:summary.complete,passed:summary.passed};
+    const dialog=document.createElement('section');dialog.className='playtest-report';dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.setAttribute('aria-label','Human playtest timing report');
+    const heading=document.createElement('strong');heading.textContent='HUMAN TIMING QA';const state=document.createElement('p');state.className=`playtest-state ${summary.complete?(summary.passed?'pass':'fail'):'collecting'}`;state.textContent=summary.complete?(summary.passed?'TARGET PASS':'OUTSIDE TARGET'):`COLLECTING ${summary.count}/3`;
+    const runs=document.createElement('ol');for(let index=0;index<3;index++){const item=document.createElement('li');item.textContent=summary.runs[index]==null?`RUN ${index+1}  --:--.--`:`RUN ${index+1}  ${this.formatTime(summary.runs[index])}`;runs.append(item);}
+    const average=document.createElement('div');average.className='playtest-average';average.innerHTML=`<span>AVERAGE</span><b>${summary.count?this.formatTime(summary.averageMs):'--:--.--'}</b><small>TARGET 02:30.00–03:30.00</small>`;
+    const output=document.createElement('pre');output.tabIndex=0;output.textContent=JSON.stringify(report,null,2);const actions=document.createElement('div');actions.className='playtest-report-actions';const copy=this.button('COPY REPORT',async()=>{try{await navigator.clipboard.writeText(output.textContent);copy.textContent='COPIED';}catch{copy.textContent='SELECT TEXT';output.focus();}},'start-button');const close=this.button('CLOSE',()=>dialog.remove(),'secondary-button');actions.append(copy,close);dialog.append(heading,state,runs,average,output,actions);this.root.querySelector('.kiosk-screen')?.append(dialog);
+  }
+
+  formatTime(ms) { const min=Math.floor(ms/60000),sec=Math.floor(ms/1000)%60,cs=Math.floor(ms/10)%100;return `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}.${String(cs).padStart(2,'0')}`; }
 }
