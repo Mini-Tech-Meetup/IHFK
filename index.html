@@ -1,9 +1,29 @@
-<html>
-	<head>
-		<title>I Hate FXXKing Kiosk</title>
-		<script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
-	</head>
-	<body>
-		<script type="module" src="src/game.js"></script>
-	</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+    <meta name="theme-color" content="#111111" />
+    <title>I HATE F**KING KIOSK</title>
+    <link rel="stylesheet" href="styles.css?v=10" />
+  </head>
+  <body>
+    <main id="game-shell">
+      <div id="game"></div>
+      <div id="ui-layer" aria-live="polite"></div>
+      <div id="rotate-overlay">↻<br /><span>ROTATE YOUR DEVICE</span></div>
+      <div id="touch-controls" aria-hidden="true">
+        <div id="joystick" class="touch-control"><div id="joystick-knob"></div></div>
+        <div id="weapon-buttons">
+          <button data-weapon="fist">1</button><button data-weapon="bat">2</button>
+          <button data-weapon="chainsaw">3</button><button data-weapon="shotgun">4</button>
+        </div>
+        <button id="touch-jump" class="action-button">↑</button>
+        <button id="touch-attack" class="action-button">!</button>
+        <button id="touch-mute">♪</button>
+      </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@4.1.0/dist/phaser.min.js"></script>
+    <script type="module" src="src/game.js?v=18"></script>
+  </body>
 </html>

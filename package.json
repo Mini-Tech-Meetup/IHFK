@@ -1,0 +1,10 @@
+{
+  "name": "ihfk",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "serve": "python -m http.server 4173",
+    "serve:lan": "python -m http.server 4173 --bind 0.0.0.0",
+    "check": "node scripts/check.mjs && python scripts/check_sprite_assets.py"
+  }
+}
