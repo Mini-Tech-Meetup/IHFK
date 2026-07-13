@@ -37,7 +37,7 @@ SPEC-00~09
 - [x] 시각 검수: 844×390 FIT와 touch HUD
 
 ## 증거
-- 명령 및 결과: `npm run check`; browser 29/29; `npm test` 5/5; 10/10 locale containment; accelerated campaign→Result→Endless; exact 1080×640 and Android/iPhone responsive captures; GitHub Actions [static-validation PASS](https://github.com/Mini-Tech-Meetup/IHFK/actions/runs/29226230002) in 11s
+- 명령 및 결과: `npm run check`; browser 29/29; `npm test` 5/5; 10/10 locale containment; accelerated campaign→Result→Endless; exact 1080×640 and Android/iPhone responsive captures; GitHub Actions [static-validation PASS](https://github.com/Mini-Tech-Meetup/IHFK/actions/runs/29226812637) in 58s
 - 스크린샷: Language, Title, 각 stage, Result, touch landscape
 - 성능 수치: normal-balance automated lower bound 124.265s; factory fist 41.7s/full-reserve 36.9s; 30 active desktop samples min 60 / avg 60.75 / max 61 FPS
 - 알려진 제한: physical-device/native-share, human average, and post-merge live Pages verification
