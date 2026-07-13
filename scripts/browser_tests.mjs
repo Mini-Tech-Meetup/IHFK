@@ -121,6 +121,13 @@ try {
     assert(state.bounds.bottom <= state.heroTop + 10, 'intro bubble is not above hero');
     assert(state.distance <= 140, `hero and kiosk are too far apart: ${state.distance}`);
     assert(state.frames === 27, `transform animation frames: ${state.frames}`);
+    for(const [width,height] of [[516,288],[844,390],[1080,640]]){
+      await page.setViewportSize({width,height});await page.waitForTimeout(220);
+      const anchor=await page.evaluate(()=>{const scene=window.IHFK.scene.getScene('Intro');scene.syncBubble(true);const bubble=document.querySelector('.cutscene-bubble'),bounds=bubble.getBoundingClientRect(),style=getComputedStyle(bubble),canvas=document.querySelector('#game canvas').getBoundingClientRect(),view=scene.cameras.main.worldView,headY=scene.hero.y-scene.hero.displayHeight+Math.min(22,scene.hero.displayHeight*.18),expectedX=canvas.left+((scene.hero.x-view.x)/view.width)*canvas.width,expectedY=canvas.top+((headY-view.y)/view.height)*canvas.height,tailX=parseFloat(style.getPropertyValue('--bubble-tail-x'));return{tipX:bounds.left+tailX,tipY:bounds.bottom+22,expectedX,expectedY,bounds:{left:bounds.left,top:bounds.top,right:bounds.right,bottom:bounds.bottom},viewport:{width:innerWidth,height:innerHeight}};});
+      assert(Math.abs(anchor.tipX-anchor.expectedX)<=2&&Math.abs(anchor.tipY-anchor.expectedY)<=2,`responsive bubble anchor ${width}x${height}: ${JSON.stringify(anchor)}`);
+      assert(anchor.bounds.left>=0&&anchor.bounds.top>=0&&anchor.bounds.right<=width&&anchor.bounds.bottom+22<=height,`responsive bubble clipping ${width}x${height}: ${JSON.stringify(anchor)}`);
+      if(process.env.IHFK_CAPTURE_INTRO_RESPONSIVE&&width===516)await page.screenshot({path:'docs/evidence/runtime-intro-bubble-516x288.png'});
+    }
   });
 
   await test('title complaint bubble renders above the unclipped kiosk shell', async () => {
@@ -361,6 +368,11 @@ try {
     assert(bounds.preview.left>=bounds.screen.left&&bounds.preview.top>=bounds.screen.top&&bounds.preview.right<=bounds.screen.right&&bounds.preview.bottom<=bounds.screen.bottom,'share-card preview clipped');
     assert(bounds.preview.naturalWidth===1080&&bounds.preview.naturalHeight===640&&bounds.preview.source==='data:image/png;base64,',`share-card preview source: ${JSON.stringify(bounds.preview)}`);
     assert(bounds.buttons.every(button=>button.top>=bounds.preview.bottom-1),`result buttons overlap shared surface: ${JSON.stringify(bounds)}`);
+    await page.evaluate(()=>{window.__sharePayload=null;Object.defineProperty(navigator,'canShare',{configurable:true,value:()=>true});Object.defineProperty(navigator,'share',{configurable:true,value:async payload=>{window.__sharePayload={title:payload.title,text:payload.text,url:payload.url,files:payload.files?.map(file=>({name:file.name,type:file.type}))};}});});
+    await page.locator('.result-actions .share-button').click();
+    await page.waitForFunction(()=>document.body.dataset.shareOutcome==='shared');
+    const sharePayload=await page.evaluate(()=>window.__sharePayload);
+    assert(sharePayload.url==='https://mini-tech-meetup.github.io/IHFK/'&&sharePayload.files?.[0]?.type==='image/png',`share payload: ${JSON.stringify(sharePayload)}`);
     if(process.env.IHFK_CAPTURE_RESULT_CARD){await page.evaluate(()=>{const scene=window.IHFK.scene.getScene('Result');scene.session.locale='ko';scene.scene.restart();});await page.waitForFunction(()=>document.querySelector('.result-share-card img')?.naturalHeight===640);await page.waitForTimeout(150);const source=await page.locator('.result-share-card img').getAttribute('src');await writeFile('docs/evidence/runtime-result-share-surface-1080x640.png',Buffer.from(source.split(',')[1],'base64'));await page.screenshot({path:'docs/evidence/runtime-result-share-surface-screen-1080x640.png'});}
     await page.setViewportSize({width:844,height:390});await page.waitForTimeout(250);const mobile=await page.evaluate(()=>{const screen=document.querySelector('.kiosk-screen').getBoundingClientRect(),preview=document.querySelector('.result-share-card img').getBoundingClientRect(),buttons=[...document.querySelectorAll('.result-actions button')].map(button=>button.getBoundingClientRect());return{screen:{left:screen.left,top:screen.top,right:screen.right,bottom:screen.bottom},preview:{left:preview.left,top:preview.top,right:preview.right,bottom:preview.bottom},buttons:buttons.map(button=>({left:button.left,top:button.top,right:button.right,bottom:button.bottom}))};});
     assert(mobile.preview.left>=mobile.screen.left&&mobile.preview.top>=mobile.screen.top&&mobile.preview.right<=mobile.screen.right&&mobile.preview.bottom<=mobile.screen.bottom,`mobile shared surface clipped: ${JSON.stringify(mobile)}`);assert(mobile.buttons.every(button=>button.left>=mobile.screen.left&&button.right<=mobile.screen.right&&button.bottom<=mobile.screen.bottom&&button.top>=mobile.preview.bottom-1),`mobile result buttons clipped/overlap: ${JSON.stringify(mobile)}`);

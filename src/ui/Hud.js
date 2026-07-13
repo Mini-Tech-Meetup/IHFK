@@ -6,7 +6,7 @@ const WEAPONS = [
 ];
 
 export class Hud {
-  constructor(scene, session, i18n, targetKey) {
+  constructor(scene, session, i18n, targetKey, onWeaponSelect = null) {
     this.scene = scene;
     this.session = session;
     this.i18n = i18n;
@@ -26,9 +26,12 @@ export class Hud {
     this.rack = this.root.querySelector('.weapon-rack');
     this.slots = new Map();
     WEAPONS.forEach(([key, number, icon]) => {
-      const slot = document.createElement('div');
+      const slot = document.createElement('button');
+      slot.type = 'button';
       slot.className = 'weapon-slot'; slot.dataset.weapon = key;
+      slot.setAttribute('aria-label', `Select weapon ${number}: ${key}`);
       slot.innerHTML = `<b>${number}</b><img src="assets/ui/icons/${icon}" alt=""><span>0</span>`;
+      slot.addEventListener('click', () => onWeaponSelect?.(key));
       this.rack.append(slot); this.slots.set(key, slot);
     });
   }
@@ -45,8 +48,10 @@ export class Hud {
     this.timer.textContent = this.format(this.session.getElapsed());
     const values = { fist: '∞', bat: Math.ceil(this.session.weapons.bat), chainsaw: `${(this.session.weapons.chainsaw / 1000).toFixed(1)}s`, shotgun: Math.ceil(this.session.weapons.shotgun) };
     this.slots.forEach((slot, key) => {
+      const empty = key !== 'fist' && this.session.weapons[key] <= 0;
       slot.classList.toggle('selected', key === this.session.selectedWeapon);
-      slot.classList.toggle('empty', key !== 'fist' && this.session.weapons[key] <= 0);
+      slot.classList.toggle('empty', empty);
+      slot.disabled = empty;
       slot.querySelector('span').textContent = values[key];
     });
   }

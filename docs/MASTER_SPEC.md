@@ -29,13 +29,13 @@ Phaser 4.1 기반의 정적 웹 게임으로 IHFK를 전면 리팩터링한다. 
 |---|---|---|---:|---|
 | [00](specs/SPEC-00-foundation.md) | Phaser 4 foundation | 구현 완료 | 92 | Chrome 150, Chromium, Firefox 151 and WebKit 26.5 WebGL smoke verified; physical devices pending |
 | [01](specs/SPEC-01-title-i18n.md) | Title and localization | 구현 완료 | 92 | 10-language thin landscape menu, internal scroll and pt-BR start flow verified |
-| [02](specs/SPEC-02-input-mobile.md) | Input and mobile | 구현 완료 | 86 | Gesture-first fullscreen plus Android/iPhone viewport automation pass; physical devices pending |
-| [03](specs/SPEC-03-player-intro.md) | Player and intro | 구현 완료 | 92 | 27-frame transform + 10-locale bubble fit verified; mobile audio unlock pending |
+| [02](specs/SPEC-02-input-mobile.md) | Input and mobile | 구현 완료 | 87 | Gesture-first fullscreen and immediate click/tap weapon selection pass; physical devices pending |
+| [03](specs/SPEC-03-player-intro.md) | Player and intro | 구현 완료 | 93 | DOM bubble follows Phaser hero head within 2 px across three viewport sizes |
 | [04](specs/SPEC-04-combat-weapons.md) | Combat and weapons | 검증 완료 | 94 | [DPS/role validation](evidence/2026-07-13-dps-share-followup.md) |
 | [05](specs/SPEC-05-fastfood.md) | Fast-food stage | 구현 완료 | 90 | hidden-until-clear GO sign verified; mobile play pending |
 | [06](specs/SPEC-06-street.md) | Street stage | 구현 완료 | 88 | 25-kiosk goal, knockback, stacked gravity and moving cloud layer verified |
 | [07](specs/SPEC-07-factory-endless.md) | Factory and endless | 구현 완료 | 93 | separate background, five damage stages and product-behind-target depth verified |
-| [08](specs/SPEC-08-result-share.md) | HUD, result and share | 구현 완료 | 91 | button-free 1080×640 Result surface is the exact share/export canvas |
+| [08](specs/SPEC-08-result-share.md) | HUD, result and share | 구현 완료 | 93 | Result/export Canvas and native/fallback payload include the canonical Pages URL |
 | [09](specs/SPEC-09-art-audio.md) | Art and audio | 구현 완료 | 91 | louder title-onward BGM, nine SFX routes and hard-alpha moving clouds verified; physical-device listening pending |
 | [10](specs/SPEC-10-qa-deploy.md) | QA and deploy | 구현 완료 | 86 | 37/37 + 15 responsive/E2E + 6 cross-browser; 3-run collector verified, physical QA pending |
 

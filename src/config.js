@@ -1,6 +1,7 @@
 export const GAME_WIDTH = 1080;
 export const GAME_HEIGHT = 640;
 export const GROUND_Y = 570;
+export const GAME_URL = 'https://mini-tech-meetup.github.io/IHFK/';
 const QUERY = new URLSearchParams(location.search);
 export const TEST_MODE = QUERY.has('testMode');
 export const AUTO_PLAY = QUERY.has('autoplay');

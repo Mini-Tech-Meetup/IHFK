@@ -1,4 +1,4 @@
-import { FORCE_SHARE_FALLBACK } from '../config.js';
+import { FORCE_SHARE_FALLBACK, GAME_URL } from '../config.js';
 
 export class ShareCardService {
   constructor(session, i18n, textures = null) { this.session=session; this.i18n=i18n; this.textures=textures; }
@@ -37,7 +37,7 @@ export class ShareCardService {
     const x=475,y=170,w=570,h=350;context.fillStyle='#111';context.fillRect(x+14,y+14,w,h);context.fillStyle='#fff9dd';context.fillRect(x,y,w,h);context.strokeStyle='#17151a';context.lineWidth=8;context.strokeRect(x,y,w,h);
     const row=(label,value,rowY)=>{context.fillStyle='#17151a';context.textAlign='left';context.font='900 27px Arial, sans-serif';context.fillText(label,x+38,rowY);context.textAlign='right';context.font='900 54px "Arial Black", Arial, sans-serif';context.fillText(value,x+w-38,rowY+3);context.strokeStyle='#777';context.lineWidth=4;context.setLineDash([10,7]);context.beginPath();context.moveTo(x+38,rowY+25);context.lineTo(x+w-38,rowY+25);context.stroke();context.setLineDash([]);};
     row(this.i18n.t('time'),this.formatTime(this.session.elapsedMs),270);row(this.i18n.t('destroyed'),String(this.session.destroyedTotal),370);
-    context.fillStyle='#17151a';context.textAlign='center';context.font='bold 16px Consolas, monospace';context.fillText('ERROR CODE: KIOSK-404',x+w/2,463);context.fillText('SMASHING SESSION COMPLETE',x+w/2,486);
+    context.fillStyle='#17151a';context.textAlign='center';context.font='bold 16px Consolas, monospace';context.fillText('ERROR CODE: KIOSK-404',x+w/2,453);context.fillText('SMASHING SESSION COMPLETE',x+w/2,476);context.font='bold 13px Consolas, monospace';context.fillText(GAME_URL,x+w/2,505);
   }
   createCanvas() {
     const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=640;const context=canvas.getContext('2d');context.imageSmoothingEnabled=false;
@@ -47,7 +47,7 @@ export class ShareCardService {
     this.drawPoster(context);this.drawReceipt(context);return canvas;
   }
   async share(canvas = this.createCanvas()) {
-    const text=this.i18n.t('shareText',{count:this.session.destroyedTotal,time:this.formatTime(this.session.elapsedMs)});const url=location.href;
+    const text=this.i18n.t('shareText',{count:this.session.destroyedTotal,time:this.formatTime(this.session.elapsedMs)});const url=GAME_URL;
     const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));const file=new File([blob],'ihfk-result.png',{type:'image/png'});
     if(!FORCE_SHARE_FALLBACK&&navigator.share&&navigator.canShare?.({files:[file]})){try{await navigator.share({title:'I HATE F**KING KIOSK',text,url,files:[file]});return 'shared';}catch(error){if(error?.name==='AbortError')return 'cancelled';}}
     const anchor=document.createElement('a');anchor.href=URL.createObjectURL(blob);anchor.download='ihfk-result.png';anchor.click();setTimeout(()=>URL.revokeObjectURL(anchor.href),1000);try{await navigator.clipboard?.writeText(`${text}\n${url}`);}catch{}return 'downloaded';

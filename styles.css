@@ -75,8 +75,8 @@ kbd { min-width:42px; padding:7px; border:4px solid #111; background:#fff; box-s
 .credit-receipt p { margin:4px 0 12px; }.credit-receipt small { display:block; border-top:2px dashed #444; padding-top:9px; text-align:center; }
 .cutscene-ui { pointer-events:none; }
 .cutscene-bubble { position:absolute; left:var(--bubble-x,50%); top:var(--bubble-y,69%); width:max-content; max-width:min(680px,calc(100vw - 28px)); min-width:170px; padding:13px 20px 15px; translate:-50% -100%; color:#111; background:#fff; border:6px solid #111; box-shadow:7px 8px 0 rgba(0,0,0,.55); font:900 clamp(18px,3.3vw,31px)/1.08 "Arial Black",Arial,sans-serif; text-align:center; overflow-wrap:anywhere; word-break:keep-all; opacity:0; }
-.cutscene-bubble::before { content:""; position:absolute; left:50%; top:100%; translate:-50% 0; width:0; height:0; border-left:18px solid transparent; border-right:18px solid transparent; border-top:22px solid #111; }
-.cutscene-bubble::after { content:""; position:absolute; left:50%; top:calc(100% - 1px); translate:-50% 0; width:0; height:0; border-left:11px solid transparent; border-right:11px solid transparent; border-top:14px solid #fff; }
+.cutscene-bubble::before { content:""; position:absolute; left:var(--bubble-tail-x,50%); top:100%; translate:-50% 0; width:0; height:0; border-left:18px solid transparent; border-right:18px solid transparent; border-top:22px solid #111; }
+.cutscene-bubble::after { content:""; position:absolute; left:var(--bubble-tail-x,50%); top:calc(100% - 1px); translate:-50% 0; width:0; height:0; border-left:11px solid transparent; border-right:11px solid transparent; border-top:14px solid #fff; }
 .cutscene-bubble.pop { animation:receipt-pop .15s steps(2) forwards; }
 .result-shell { height:min(610px,94vh); }
 .result-shell .kiosk-screen { padding-top:14px; padding-bottom:10px; }
@@ -95,9 +95,10 @@ kbd { min-width:42px; padding:7px; border:4px solid #111; background:#fff; box-s
 .timer-module small { display:block; color:#7dae89; font:bold 10px Consolas; letter-spacing:2px; }
 .timer-module strong { font:900 26px Consolas; text-shadow:0 0 7px #4ad26c; }
 .timer-module i { position:absolute; left:8px; top:10px; width:8px; height:8px; background:#4ad26c; box-shadow:0 0 8px #4ad26c; animation:status-blink 1s steps(1) infinite; }
-.weapon-rack { position:absolute; right:max(18px,env(safe-area-inset-right)); bottom:max(18px,env(safe-area-inset-bottom)); display:flex; gap:7px; padding:7px; border:5px solid #111; background:#2b292e; box-shadow:6px 7px 0 rgba(0,0,0,.52); }
+.weapon-rack { pointer-events:auto; position:absolute; right:max(18px,env(safe-area-inset-right)); bottom:max(18px,env(safe-area-inset-bottom)); display:flex; gap:7px; padding:7px; border:5px solid #111; background:#2b292e; box-shadow:6px 7px 0 rgba(0,0,0,.52); }
 .weapon-rack::before { content:"WEAPON"; position:absolute; right:0; bottom:100%; padding:3px 7px; color:#fff; background:#111; font:bold 9px Consolas; letter-spacing:1px; }
-.weapon-slot { position:relative; width:70px; height:64px; border:4px solid #111; background:#b7b9b1; filter:saturate(.7); }
+.weapon-slot { position:relative; width:70px; height:64px; padding:0; border:4px solid #111; background:#b7b9b1; filter:saturate(.7); cursor:pointer; touch-action:manipulation; }
+.weapon-slot:hover:not(:disabled),.weapon-slot:focus-visible { outline:4px solid #fff; outline-offset:2px; }
 .weapon-slot.selected { background:var(--warning); outline:4px solid #fff; outline-offset:-7px; filter:none; transform:translateY(-5px); }
 .weapon-slot.empty { opacity:.42; filter:grayscale(1); }
 .weapon-slot b { position:absolute; z-index:2; left:-4px; top:-4px; width:22px; height:22px; display:grid; place-items:center; color:#fff; background:#111; font:bold 13px Consolas; }
@@ -177,6 +178,7 @@ kbd { min-width:42px; padding:7px; border:4px solid #111; background:#fff; box-s
 #weapon-buttons button[data-weapon="chainsaw"] { background-image:url('assets/ui/icons/chainsaw.png'); }
 #weapon-buttons button[data-weapon="shotgun"] { background-image:url('assets/ui/icons/shotgun.png'); }
 #weapon-buttons button.selected { background-color:#f0bd26; color:#111; box-shadow:inset 0 0 0 3px #fff; transform:translateX(-5px); }
+#weapon-buttons button.empty,#weapon-buttons button:disabled { opacity:.38; filter:grayscale(1); }
 #weapon-buttons button::after { content:attr(data-amount); position:absolute; right:2px; bottom:1px; padding:1px 3px; color:#fff; background:#111; font:700 10px Consolas,monospace; }
 #weapon-buttons button { position:relative; }
 .action-button { position: absolute; bottom: max(24px, env(safe-area-inset-bottom)); width: 86px; height: 86px; border-radius: 50%; background:#e4e0ce !important; box-shadow:inset 0 0 0 5px #777,5px 6px 0 rgba(0,0,0,.35); }
