@@ -40,9 +40,9 @@ SPEC-00~09
 - [x] 시각 검수: 844×390 FIT와 touch HUD
 
 ## 증거
-- 명령 및 결과: `npm run check`; browser 36/36; responsive/E2E 14/14; cross-browser 6/6; 10/10 locale containment; accelerated campaign→Result→Endless; synthetic 3-run collector boundary 2:30/3:00/3:30 → 3:00 PASS; exact 1080×640, 1080×1080 and Android/iPhone responsive captures; GitHub Actions static validation
+- 명령 및 결과: `npm run check`; browser 36/36; responsive/E2E 14/14; cross-browser 6/6; 10/10 locale containment; accelerated campaign→Result→Endless; synthetic 3-run collector boundary 2:30/3:00/3:30 → 3:00 PASS; exact 1080×640 result/share and Android/iPhone responsive captures; GitHub Actions static validation
 - 스크린샷: Language, Title, 각 stage, Result, touch landscape
-- 성능 수치: normal-balance automated lower bound 124.265s; factory fist 41.7s/full-reserve 36.9s; 30 active desktop min 60 / avg 60.75 / max 61 FPS; Android Chromium emulation campaign15 avg 61.5/p05 59.5; iPhone WebKit emulation endless30 avg 61.3/p05 33.3 FPS
+- 성능 수치: prior 50-kiosk automated lower bound 124.265s; current street goal 25 requires human remeasurement; factory fist 41.7s/full-reserve 36.9s; 30 active desktop min 60 / avg 60.75 / max 61 FPS; Android Chromium emulation campaign15 avg 61.5/p05 59.5; iPhone WebKit emulation endless30 avg 61.3/p05 33.3 FPS
 - 알려진 제한: physical-device/native-share, human average, and post-merge live Pages verification
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
 - 실기기 수집 도구: `/qa/device.html`, [report template](../evidence/DEVICE_QA_TEMPLATE.md)

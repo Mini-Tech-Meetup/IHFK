@@ -3,67 +3,53 @@ import { FORCE_SHARE_FALLBACK } from '../config.js';
 export class ShareCardService {
   constructor(session, i18n, textures = null) { this.session=session; this.i18n=i18n; this.textures=textures; }
   formatTime(ms) { const min=Math.floor(ms/60000); const sec=Math.floor(ms/1000)%60; const cs=Math.floor(ms/10)%100; return `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}.${String(cs).padStart(2,'0')}`; }
+  fittedText(context,text,x,y,maxWidth,baseSize,{align='left',family='"Arial Black", Arial, sans-serif'}={}) {
+    let size=baseSize;context.font=`900 ${size}px ${family}`;const measured=context.measureText(text).width;
+    if(measured>maxWidth)size=Math.max(22,Math.floor(size*maxWidth/measured));
+    context.font=`900 ${size}px ${family}`;context.textAlign=align;context.fillText(text,x,y);
+  }
   drawCharacter(context) {
-    const texture=this.textures?.get?.('strong-attack');
-    const source=texture?.getSourceImage?.();
-    if(source){context.drawImage(source,0,0,27,24,150,390,270,240);return;}
-    context.fillStyle='#f1b48a';context.fillRect(220,420,150,230);context.fillStyle='#111';context.fillRect(190,410,210,28);context.fillStyle='#e64c3c';context.fillRect(175,635,240,35);
+    const source=this.textures?.get?.('strong-attack')?.getSourceImage?.();
+    if(source){context.drawImage(source,0,0,27,24,82,360,108,96);return;}
+    context.fillStyle='#f1b48a';context.fillRect(102,365,66,82);context.fillStyle='#111';context.fillRect(88,360,94,12);context.fillStyle='#56324a';context.fillRect(93,443,84,13);
   }
-  drawBrokenFactory(context) {
-    const factoryTexture=this.textures?.get?.('bg-factory');
-    const factorySource=factoryTexture?.getSourceImage?.();
-    if(factorySource){
-      context.drawImage(factorySource,0,0,factorySource.width,factorySource.height,0,168,1080,640);
-      const wreckTexture=this.textures?.get?.('factory-v2-4');const wreck=wreckTexture?.getSourceImage?.();
-      if(wreck)context.drawImage(wreck,0,0,wreck.width,wreck.height,400,168,680,576);
-      return;
-    }
-    context.fillStyle='#777';context.fillRect(540,250,430,475);context.strokeStyle='#111';context.lineWidth=20;context.strokeRect(540,250,430,475);
-    context.fillStyle='#333';context.fillRect(590,315,310,165);context.fillStyle='#e64c3c';context.fillRect(565,535,380,45);
-    context.fillStyle='#555';context.fillRect(850,170,80,115);context.strokeRect(850,170,80,115);
-    context.lineWidth=18;context.beginPath();context.moveTo(585,285);context.lineTo(920,680);context.moveTo(925,290);context.lineTo(600,680);context.stroke();
-    context.fillStyle='#222';context.fillRect(500,700,500,38);
+  drawKiosk(context,source,x,y,size,angle=0,intact=true) {
+    context.save();context.translate(x,y);context.rotate(angle);
+    if(source)context.drawImage(source,0,0,source.width,source.height,-size/2,-size/2,size,size);
+    else{context.fillStyle=intact?'#d8d8d8':'#17151a';context.fillRect(-size*.22,-size*.46,size*.44,size*.8);context.fillStyle='#035119';context.fillRect(-size*.15,-size*.36,size*.3,size*.34);context.fillStyle='#e1a50f';context.font=`bold ${Math.floor(size*.22)}px monospace`;context.textAlign='center';context.fillText(intact?'B':'×',0,-size*.12);}
+    context.restore();
   }
-  drawKiosks(context) {
-    const intact=this.textures?.get?.('kiosk-v2-0')?.getSourceImage?.();
-    const broken=this.textures?.get?.('kiosk-v2-4')?.getSourceImage?.();
-    const placements=[
-      {x:105,y:704,size:170,angle:-.12,source:intact,intact:true},
-      {x:510,y:700,size:165,angle:.12,source:broken,intact:false},
-      {x:950,y:704,size:170,angle:.12,source:intact,intact:true}
-    ];
-    for(const item of placements){
-      context.save();context.translate(item.x,item.y);context.rotate(item.angle);
-      if(item.source)context.drawImage(item.source,0,0,item.source.width,item.source.height,-item.size/2,-item.size/2,item.size,item.size);
-      else{context.fillStyle=item.intact?'#ccc':'#17151a';context.fillRect(-35,-72,70,128);context.fillStyle='#035119';context.fillRect(-24,-58,48,54);context.fillStyle='#e1a50f';context.font='bold 38px monospace';context.textAlign='center';context.fillText(item.intact?'B':'×',0,-20);}
-      context.restore();
-    }
+  drawPoster(context) {
+    const x=40,y=155,w=390,h=390,innerX=58,innerY=173,innerW=354;
+    context.fillStyle='#111';context.fillRect(x+14,y+14,w,h);context.fillStyle='#29282d';context.fillRect(x,y,w,h);context.strokeStyle='#111';context.lineWidth=8;context.strokeRect(x,y,w,h);
+    context.save();context.beginPath();context.rect(innerX,innerY,innerW,354);context.clip();
+    context.fillStyle='#e64c3c';context.fillRect(innerX,innerY,innerW,58);context.fillStyle='#f4c338';context.fillRect(innerX,innerY+45,innerW,8);context.fillStyle='#111';context.font='900 20px Arial, sans-serif';context.textAlign='center';context.fillText('I HATE F**KING KIOSK',innerX+innerW/2,innerY+36);
+    const factory=this.textures?.get?.('bg-factory')?.getSourceImage?.();
+    if(factory)context.drawImage(factory,0,0,factory.width,factory.height,innerX,innerY+58,innerW,260);else{context.fillStyle='#607976';context.fillRect(innerX,innerY+58,innerW,260);context.fillStyle='#25272d';for(let index=0;index<6;index++)context.fillRect(innerX+index*63,innerY+74,34,180);}
+    const wreck=this.textures?.get?.('factory-v2-4')?.getSourceImage?.();
+    if(wreck)context.drawImage(wreck,0,0,wreck.width,wreck.height,188,236,224,230);else{context.fillStyle='#25272d';context.fillRect(220,285,178,165);}
+    this.drawCharacter(context);
+    const intact=this.textures?.get?.('kiosk-v2-0')?.getSourceImage?.();const broken=this.textures?.get?.('kiosk-v2-4')?.getSourceImage?.();
+    this.drawKiosk(context,intact,100,440,86,-.1,true);this.drawKiosk(context,broken,250,438,92,.08,false);this.drawKiosk(context,intact,380,440,86,.1,true);
+    context.fillStyle='#f4c338';context.fillRect(innerX,491,innerW,36);context.fillStyle='#111';context.font='900 22px Consolas, monospace';context.textAlign='center';context.fillText('#IHFK',innerX+innerW/2,517);context.restore();
   }
-  drawFittedText(context,text,y,maxWidth=980,baseSize=54) {
-    let size=baseSize;
-    context.font=`bold ${size}px Arial, sans-serif`;
-    if(context.measureText(text).width>maxWidth)size=Math.max(30,Math.floor(size*maxWidth/context.measureText(text).width));
-    context.font=`bold ${size}px Arial, sans-serif`;context.fillText(text,540,y);
+  drawReceipt(context) {
+    const x=475,y=170,w=570,h=350;context.fillStyle='#111';context.fillRect(x+14,y+14,w,h);context.fillStyle='#fff9dd';context.fillRect(x,y,w,h);context.strokeStyle='#17151a';context.lineWidth=8;context.strokeRect(x,y,w,h);
+    const row=(label,value,rowY)=>{context.fillStyle='#17151a';context.textAlign='left';context.font='900 27px Arial, sans-serif';context.fillText(label,x+38,rowY);context.textAlign='right';context.font='900 54px "Arial Black", Arial, sans-serif';context.fillText(value,x+w-38,rowY+3);context.strokeStyle='#777';context.lineWidth=4;context.setLineDash([10,7]);context.beginPath();context.moveTo(x+38,rowY+25);context.lineTo(x+w-38,rowY+25);context.stroke();context.setLineDash([]);};
+    row(this.i18n.t('time'),this.formatTime(this.session.elapsedMs),270);row(this.i18n.t('destroyed'),String(this.session.destroyedTotal),370);
+    context.fillStyle='#17151a';context.textAlign='center';context.font='bold 16px Consolas, monospace';context.fillText('ERROR CODE: KIOSK-404',x+w/2,463);context.fillText('SMASHING SESSION COMPLETE',x+w/2,486);
   }
   createCanvas() {
-    const canvas=document.createElement('canvas'); canvas.width=1080; canvas.height=1080; const c=canvas.getContext('2d'); c.imageSmoothingEnabled=false;
-    c.fillStyle='#f7e05e'; c.fillRect(0,0,1080,1080); c.fillStyle='#e64c3c'; c.fillRect(0,0,1080,150); c.fillStyle='#111'; c.fillRect(0,150,1080,18);
-    c.fillStyle='#222'; c.font='bold 62px Arial, sans-serif'; c.textAlign='center'; c.fillText('I HATE F**KING KIOSK',540,100);
-    this.drawBrokenFactory(c);
-    for(let i=0;i<18;i++){c.fillStyle=i%2?'#ddd':'#333';c.fillRect(500+(i*73)%460,690+(i*29)%76,18+(i*7)%30,12+(i*11)%20);}
-    this.drawKiosks(c);this.drawCharacter(c);
-    c.fillStyle='#111';this.drawFittedText(c,`${this.i18n.t('time')}  ${this.formatTime(this.session.elapsedMs)}`,850);this.drawFittedText(c,`${this.i18n.t('destroyed')}  ${this.session.destroyedTotal}`,930);
-    c.font='bold 42px monospace'; c.fillText('#IHFK',540,1010); return canvas;
+    const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=640;const context=canvas.getContext('2d');context.imageSmoothingEnabled=false;
+    context.fillStyle='#dfe8d0';context.fillRect(0,0,1080,640);context.fillStyle='rgba(24,58,43,.07)';for(let y=3;y<640;y+=4)context.fillRect(0,y,1080,1);
+    context.fillStyle='#3f9b60';context.fillRect(35,25,72,72);context.strokeStyle='#17151a';context.lineWidth=8;context.strokeRect(35,25,72,72);context.fillStyle='#fff';context.font='900 32px Arial, sans-serif';context.textAlign='center';context.fillText('OK',71,72);
+    context.fillStyle='#17151a';this.fittedText(context,this.i18n.t('complete'),135,81,890,62);context.fillRect(35,112,1010,9);
+    this.drawPoster(context);this.drawReceipt(context);return canvas;
   }
   async share(canvas = this.createCanvas()) {
-    const text=this.i18n.t('shareText',{count:this.session.destroyedTotal,time:this.formatTime(this.session.elapsedMs)}); const url=location.href;
-    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png')); const file=new File([blob],'ihfk-result.png',{type:'image/png'});
-    if (!FORCE_SHARE_FALLBACK && navigator.share && navigator.canShare?.({files:[file]})) {
-      try { await navigator.share({title:'I HATE F**KING KIOSK',text,url,files:[file]}); return 'shared'; }
-      catch(error) { if(error?.name==='AbortError')return 'cancelled'; }
-    }
-    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ihfk-result.png'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-    try{await navigator.clipboard?.writeText(`${text}\n${url}`);}catch{}
-    return 'downloaded';
+    const text=this.i18n.t('shareText',{count:this.session.destroyedTotal,time:this.formatTime(this.session.elapsedMs)});const url=location.href;
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));const file=new File([blob],'ihfk-result.png',{type:'image/png'});
+    if(!FORCE_SHARE_FALLBACK&&navigator.share&&navigator.canShare?.({files:[file]})){try{await navigator.share({title:'I HATE F**KING KIOSK',text,url,files:[file]});return 'shared';}catch(error){if(error?.name==='AbortError')return 'cancelled';}}
+    const anchor=document.createElement('a');anchor.href=URL.createObjectURL(blob);anchor.download='ihfk-result.png';anchor.click();setTimeout(()=>URL.revokeObjectURL(anchor.href),1000);try{await navigator.clipboard?.writeText(`${text}\n${url}`);}catch{}return 'downloaded';
   }
 }

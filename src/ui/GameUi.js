@@ -108,11 +108,10 @@ export class GameUi {
     bubble.textContent = text; bubble.classList.add('pop');this.audio?.sfx('dialogue');
   }
 
-  showResult({ time, destroyed, previewUrl, playtest = null, onRetry, onEndless, onShare }) {
+  showResult({ previewUrl, playtest = null, onRetry, onEndless, onShare }) {
     const shell = this.kioskShell(`
-      <div class="screen-heading result-heading"><span>OK</span><h1>${escapeHtml(this.i18n.t('complete'))}</h1></div>
-      <div class="result-layout"><figure class="result-share-card"><div class="result-share-card-label">SHARE CARD / 1080×1080</div><img alt="IHFK share card preview"></figure><div class="result-summary"><div class="result-receipt"><div><span>${escapeHtml(this.i18n.t('time'))}</span><strong>${escapeHtml(time)}</strong></div><div><span>${escapeHtml(this.i18n.t('destroyed'))}</span><strong>${destroyed}</strong></div><p>ERROR CODE: FACTORY-000<br>PRODUCTION TERMINATED</p></div></div><div class="result-actions"></div></div>`, { status: 'TRANSACTION COMPLETE', className: 'result-shell' });
-    const preview=shell.querySelector('.result-share-card img');preview.src=previewUrl;preview.dataset.width='1080';preview.dataset.height='1080';
+      <div class="result-layout"><figure class="result-share-card"><img alt="IHFK result share card"></figure><div class="result-actions"></div></div>`, { status: 'TRANSACTION COMPLETE', className: 'result-shell' });
+    const preview=shell.querySelector('.result-share-card img');preview.src=previewUrl;preview.dataset.width='1080';preview.dataset.height='640';
     const actions = shell.querySelector('.result-actions');
     const share = this.button(this.i18n.t('share'), async () => {
       share.disabled = true; share.textContent = '...';

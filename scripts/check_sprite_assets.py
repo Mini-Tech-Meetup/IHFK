@@ -105,6 +105,8 @@ runtime_captures = (
     "runtime-firefox-result-1080x640.png",
     "runtime-webkit-result-1080x640.png",
     "runtime-playtest-report-1080x640.png",
+    "runtime-result-share-surface-1080x640.png",
+    "runtime-result-share-surface-screen-1080x640.png",
 )
 for filename in runtime_captures:
     path = Path("docs/evidence") / filename
@@ -145,6 +147,7 @@ print("PASS 28 generated runtime frames use hard alpha, safe bounds, and shared 
 print("PASS 3 derived weapon pickups are 80x48 hard-alpha pixel sprites")
 print(f"PASS {len(runtime_captures)} runtime evidence captures are exactly 1080x640")
 print(f"PASS {len(responsive_captures)} responsive evidence captures retain their exact device viewports")
-print("PASS share-card evidence capture is exactly 1080x1080")
+print("PASS current result-share surface evidence is exactly 1080x640")
+print("PASS historical square share-card evidence remains exactly 1080x1080")
 print("PASS inspected source sheets retain 8 run and 15 attack frames with expected empty tail cells")
 print("PASS all 27 transform frames match the supplied 29x25 GIF pixel-for-pixel")

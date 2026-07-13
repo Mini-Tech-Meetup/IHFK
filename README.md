@@ -42,7 +42,7 @@ Play in landscape orientation. After Game Start, the game requests fullscreen an
 
 For release-device verification, open [`qa/device.html`](qa/device.html) on the deployed host. It tests fullscreen/orientation requests, audio unlock, native PNG sharing, 10-second 15/30-kiosk real-game FPS loads, and three real campaign completions without storing or transmitting the report. The timing shortcut can also be opened directly with `?playtest`; after the third result it marks the 2:30–3:30 average target pass or retest and offers a copyable JSON report.
 
-For localized result-card review, open [`qa/share-card.html`](qa/share-card.html). It renders the shipping 1080×1080 raster card in any of the ten supported languages.
+For localized result-card review, open [`qa/share-card.html`](qa/share-card.html). It renders the shipping 1080×640 button-free result surface in any of the ten supported languages.
 
 ## Languages
 

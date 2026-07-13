@@ -1,5 +1,5 @@
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { extname, resolve, sep } from 'node:path';
 import { chromium } from 'playwright';
 
@@ -308,7 +308,11 @@ try {
       assert(button.left >= bounds.screen.left && button.top >= bounds.screen.top && button.right <= bounds.screen.right && button.bottom <= bounds.screen.bottom, 'result action clipped');
     }
     assert(bounds.preview.left>=bounds.screen.left&&bounds.preview.top>=bounds.screen.top&&bounds.preview.right<=bounds.screen.right&&bounds.preview.bottom<=bounds.screen.bottom,'share-card preview clipped');
-    assert(bounds.preview.naturalWidth===1080&&bounds.preview.naturalHeight===1080&&bounds.preview.source==='data:image/png;base64,',`share-card preview source: ${JSON.stringify(bounds.preview)}`);
+    assert(bounds.preview.naturalWidth===1080&&bounds.preview.naturalHeight===640&&bounds.preview.source==='data:image/png;base64,',`share-card preview source: ${JSON.stringify(bounds.preview)}`);
+    assert(bounds.buttons.every(button=>button.top>=bounds.preview.bottom-1),`result buttons overlap shared surface: ${JSON.stringify(bounds)}`);
+    if(process.env.IHFK_CAPTURE_RESULT_CARD){await page.evaluate(()=>{const scene=window.IHFK.scene.getScene('Result');scene.session.locale='ko';scene.scene.restart();});await page.waitForFunction(()=>document.querySelector('.result-share-card img')?.naturalHeight===640);await page.waitForTimeout(150);const source=await page.locator('.result-share-card img').getAttribute('src');await writeFile('docs/evidence/runtime-result-share-surface-1080x640.png',Buffer.from(source.split(',')[1],'base64'));await page.screenshot({path:'docs/evidence/runtime-result-share-surface-screen-1080x640.png'});}
+    await page.setViewportSize({width:844,height:390});await page.waitForTimeout(250);const mobile=await page.evaluate(()=>{const screen=document.querySelector('.kiosk-screen').getBoundingClientRect(),preview=document.querySelector('.result-share-card img').getBoundingClientRect(),buttons=[...document.querySelectorAll('.result-actions button')].map(button=>button.getBoundingClientRect());return{screen:{left:screen.left,top:screen.top,right:screen.right,bottom:screen.bottom},preview:{left:preview.left,top:preview.top,right:preview.right,bottom:preview.bottom},buttons:buttons.map(button=>({left:button.left,top:button.top,right:button.right,bottom:button.bottom}))};});
+    assert(mobile.preview.left>=mobile.screen.left&&mobile.preview.top>=mobile.screen.top&&mobile.preview.right<=mobile.screen.right&&mobile.preview.bottom<=mobile.screen.bottom,`mobile shared surface clipped: ${JSON.stringify(mobile)}`);assert(mobile.buttons.every(button=>button.left>=mobile.screen.left&&button.right<=mobile.screen.right&&button.bottom<=mobile.screen.bottom&&button.top>=mobile.preview.bottom-1),`mobile result buttons clipped/overlap: ${JSON.stringify(mobile)}`);
   });
 
   await test('playtest mode records three human runs and renders an in-screen timing report', async () => {

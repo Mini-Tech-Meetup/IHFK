@@ -25,7 +25,7 @@ export const BALANCE = Object.freeze({
   kioskFallGravity: 5200,
   kioskHp: TEST_MODE ? 12 : 100,
   factoryHp: TEST_MODE ? 100 : 5000,
-  streetGoal: TEST_MODE ? 2 : 50,
+  streetGoal: TEST_MODE ? 2 : 25,
   weaponDropChance: 0.15,
   attack: {
     fist: { cooldown: 100, damage: 12, factoryDamage: 12, range: 78, height: 58, offsetX: 18, offsetY: -60, maxTargets: 1, role: 'unlimited-single' },

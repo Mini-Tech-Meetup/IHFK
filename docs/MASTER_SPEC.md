@@ -10,7 +10,7 @@ Phaser 4.1 기반의 정적 웹 게임으로 IHFK를 전면 리팩터링한다. 
 - 체력·사망·서버·최고 기록 없음
 - 키보드와 모바일 가로 터치 지원
 - 1 주먹 / 2 야구방망이 / 3 전기톱 / 4 샷건, Space 홀드 공격
-- 길거리 키오스크 50대, 공장 본체 5,000 HP
+- 길거리 키오스크 25대, 공장 본체 5,000 HP
 - 10개 언어: ko, zh-CN, zh-TW, ja, en, fr, de, es, pt-BR, it
 - 공식명 `I HATE F**KING KIOSK`는 번역하지 않음
 - 현재 판의 시간·파괴 수와 공유 카드만 제공
@@ -33,9 +33,9 @@ Phaser 4.1 기반의 정적 웹 게임으로 IHFK를 전면 리팩터링한다. 
 | [03](specs/SPEC-03-player-intro.md) | Player and intro | 구현 완료 | 92 | 27-frame transform + 10-locale bubble fit verified; mobile audio unlock pending |
 | [04](specs/SPEC-04-combat-weapons.md) | Combat and weapons | 검증 완료 | 94 | [DPS/role validation](evidence/2026-07-13-dps-share-followup.md) |
 | [05](specs/SPEC-05-fastfood.md) | Fast-food stage | 구현 완료 | 90 | hidden-until-clear GO sign verified; mobile play pending |
-| [06](specs/SPEC-06-street.md) | Street stage | 구현 완료 | 88 | knockback, stacked gravity and moving cloud layer verified |
+| [06](specs/SPEC-06-street.md) | Street stage | 구현 완료 | 88 | 25-kiosk goal, knockback, stacked gravity and moving cloud layer verified |
 | [07](specs/SPEC-07-factory-endless.md) | Factory and endless | 구현 완료 | 93 | separate background, five damage stages and product-behind-target depth verified |
-| [08](specs/SPEC-08-result-share.md) | HUD, result and share | 구현 완료 | 91 | in-result preview uses the exact share/export canvas |
+| [08](specs/SPEC-08-result-share.md) | HUD, result and share | 구현 완료 | 91 | button-free 1080×640 Result surface is the exact share/export canvas |
 | [09](specs/SPEC-09-art-audio.md) | Art and audio | 구현 완료 | 91 | louder title-onward BGM, nine SFX routes and hard-alpha moving clouds verified; physical-device listening pending |
 | [10](specs/SPEC-10-qa-deploy.md) | QA and deploy | 구현 완료 | 86 | 36/36 + 14 responsive/E2E + 6 cross-browser; 3-run collector verified, physical QA pending |
 
@@ -56,6 +56,6 @@ Phaser 4.1 기반의 정적 웹 게임으로 IHFK를 전면 리팩터링한다. 
 - Release gate is not met: SPEC-02, SPEC-09, and SPEC-10 still require Android/iOS/native-share, final listening and human play-session evidence.
 - Current defects: P0 0, P1 0; remaining evidence gaps are classified P3.
 - Draft PR #1 and `main` run the same static/runtime-asset QA through GitHub Actions before merge.
-- Pages-equivalent `/IHFK/` relative-path campaign passed at full 50-kiosk/5,000-HP balance in 124.265 seconds automated lower-bound time.
+- The prior 50-kiosk Pages-equivalent lower-bound run completed in 124.265 seconds. The current user-approved balance is 25 kiosks and requires a new human timing sample through `?playtest`.
 - GitHub Pages is correctly configured from `main` `/` with HTTPS. The refactor is pushed on `codex/ihfk-phaser4-refactor` in draft PR [#1](https://github.com/Mini-Tech-Meetup/IHFK/pull/1); the live site remains the pre-refactor build until the remaining physical-device gates pass and the PR is merged.
 - External validation handoff: run all seven actions on `/qa/device.html` in Android Chrome and iOS Safari, then paste the reports into [DEVICE_QA_TEMPLATE.md](evidence/DEVICE_QA_TEMPLATE.md). Action 7 preserves three campaign times in memory, rejects duplicate result records, calculates the average, and exports a JSON report; actual human samples are still required before the Goal can be marked complete. The requirement-by-requirement release audit is [recorded here](evidence/2026-07-13-completion-audit.md).

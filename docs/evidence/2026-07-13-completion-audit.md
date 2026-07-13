@@ -23,9 +23,9 @@ The implementation is not yet eligible for `검증 완료` or Goal completion. A
 | 03 Player/intro | 27 transform frames, dialogue containment, timer boundary | Mobile audio unlock at the Game Start gesture |
 | 04 Combat/weapons | DPS order, durability, targets, hitboxes, animation height, destruction feedback | Real touch-hold feel observation; no known correctness defect |
 | 05 Fast-food | Auto first break, manual second break, GO and exit transition | Physical touch exit traversal |
-| 06 Street | 50 goal, fall/stack physics, active cap, emulated 15-unit performance | Target-device 12/15-unit FPS report |
+| 06 Street | 25 goal, fall/stack physics, active cap, emulated 15-unit performance | Target-device 12/15-unit FPS report |
 | 07 Factory/endless | 5-stage raster damage, depth, 5,000 HP, endless scaling, emulated 30-unit performance | Target-device 30-unit endless FPS report |
-| 08 Result/share | Exact 1080×1080 card, preview/export identity, fallback | Native PNG share sheet or documented cancellation on both platforms |
+| 08 Result/share | Exact button-free 1080×640 Result card, preview/export identity, fallback | Native PNG share sheet or documented cancellation on both platforms |
 | 09 Art/audio | Palette/alpha validators, screenshots, moving clouds, nine SFX routes, louder title-onward MIDI scheduling | Audible music/SFX/mute confirmation on both devices |
 | 10 Integration | Full automated matrix, zero known P0/P1, 3-run collector boundary proof | Three unaccelerated human runs per platform, combined target average, physical reports, post-merge Pages smoke |
 

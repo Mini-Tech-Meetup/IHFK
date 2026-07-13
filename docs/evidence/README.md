@@ -5,3 +5,5 @@ Store test logs, screenshots, performance measurements, browser matrices, and kn
 Use [DEVICE_QA_TEMPLATE.md](DEVICE_QA_TEMPLATE.md) with the deployed `/qa/device.html` page for the remaining Android/iOS, native-share, and human timing gates. The collector implementation and synthetic boundary proof are documented in [the human playtest collector evidence](2026-07-13-human-playtest-collector.md).
 
 The current release decision, including every SPEC's authoritative proof and remaining external evidence, is in [the completion audit](2026-07-13-completion-audit.md).
+
+The shipping result/share surface and the 25-kiosk balance override are documented in [the result-share follow-up](2026-07-13-result-share-surface.md).
