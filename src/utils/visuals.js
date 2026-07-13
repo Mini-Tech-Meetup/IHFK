@@ -42,6 +42,21 @@ export function drawStreet(scene) {
   const colors=[0xd75b4a,0xe3b84d,0x7594a6,0xb66f8c]; for(let i=0;i<5;i++){const x=i*220;g.fillStyle(colors[i%4]).fillRect(x,160,215,410);g.fillStyle(0x222222).fillRect(x+25,220,165,105);g.fillStyle(0x89b5c4).fillRect(x+38,233,139,79);g.fillStyle(0xf0d85c).fillRect(x+20,175,175,30);}
   g.fillStyle(0x555555).fillRect(0,550,1080,90); g.fillStyle(0xeeeeee); for(let x=30;x<1080;x+=130)g.fillRect(x,590,75,12); return g;
 }
+export function addMovingClouds(scene) {
+  const clouds=[
+    scene.add.image(125,78,'street-cloud').setDepth(-9).setName('street-cloud-near'),
+    scene.add.image(690,118,'street-cloud').setDepth(-9).setName('street-cloud-far').setScale(.72).setFlipX(true)
+  ];
+  const speeds=[18,11];
+  const move=(_time,delta)=>clouds.forEach((cloud,index)=>{
+    if(!cloud.active)return;
+    cloud.x+=speeds[index]*Math.min(delta,50)/1000;
+    if(cloud.x-cloud.displayWidth/2>1080)cloud.x=-cloud.displayWidth/2;
+  });
+  scene.events.on('update',move);
+  scene.events.once('shutdown',()=>scene.events.off('update',move));
+  return clouds;
+}
 export function drawFactory(scene) {
   scene.cameras.main.setBackgroundColor('#7b8287');
   if(scene.textures.exists('bg-factory'))return scene.add.image(540,320,'bg-factory').setDepth(-10);

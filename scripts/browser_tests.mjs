@@ -169,14 +169,16 @@ try {
     await page.locator('.service-list button').nth(1).click();
     await page.getByRole('button', { name: 'GAME START' }).click();
     await page.waitForFunction(() => document.body.dataset.scene === 'Factory');
+    await page.waitForFunction(() => window.IHFK.scene.getScene('Factory').lastAssemblyProduct?.active, null, { timeout: 5000 });
     const state = await page.evaluate(() => {
-      const scene=window.IHFK.scene.getScene('Factory');const target=scene.factoryTarget;const stages=[];
+      const scene=window.IHFK.scene.getScene('Factory');const target=scene.factoryTarget;const productDepth=scene.lastAssemblyProduct?.depth;const stages=[];
       for(const amount of [21,20,20,20]){target.takeDamage(amount,1,'fist');stages.push({state:target.damageState,key:target.visual.texture.key,bounds:{x:target.bounds.x,y:target.bounds.y,width:target.bounds.width,height:target.bounds.height}});}
       const background=scene.children.list.find(child=>child.texture?.key==='bg-factory');
-      return {backgroundKey:background?.texture?.key,visualKey:target.visual.texture.key,visualType:target.visual.type,stages,legacyOverlays:['damage','flash','screen'].filter(key=>key in target)};
+      return {backgroundKey:background?.texture?.key,visualKey:target.visual.texture.key,visualType:target.visual.type,factoryDepth:target.visual.depth,productDepth,stages,legacyOverlays:['damage','flash','screen'].filter(key=>key in target)};
     });
     assert(state.backgroundKey === 'bg-factory' && state.visualKey === 'factory-v2-4', `${state.backgroundKey}/${state.visualKey}`);
     assert(state.visualType === 'Image', `factory visual type: ${state.visualType}`);
+    assert(state.productDepth < state.factoryDepth, `factory product depth ${state.productDepth} is not behind target depth ${state.factoryDepth}`);
     assert(state.stages.map(stage=>stage.state).join(',') === '1,2,3,4', `factory stages: ${JSON.stringify(state.stages)}`);
     assert(state.stages.every((stage,index)=>stage.key===`factory-v2-${index+1}`), `factory textures: ${JSON.stringify(state.stages)}`);
     assert(state.stages[3].bounds.height < state.stages[0].bounds.height, 'destroyed factory hitbox did not shrink with sprite');
@@ -242,6 +244,21 @@ try {
     assert(afterY > beforeY + 60, `stacked kiosk did not drop far enough: ${beforeY} -> ${afterY}`);
   });
 
+  await test('street clouds are separate continuous moving layers', async () => {
+    await page.goto(`${base}/?testMode&autoplay&previewPickup=bat`, { waitUntil: 'networkidle' });
+    await page.waitForFunction(() => document.body.dataset.scene === 'FastFood');
+    await page.evaluate(() => window.IHFK.scene.getScene('FastFood').scene.start('Street'));
+    await page.waitForFunction(() => document.body.dataset.scene === 'Street');
+    const before = await page.evaluate(() => {
+      const scene=window.IHFK.scene.getScene('Street');
+      return {xs:scene.clouds.map(cloud=>cloud.x),depths:scene.clouds.map(cloud=>cloud.depth),background:scene.children.list.find(child=>child.texture?.key==='bg-street')?.depth};
+    });
+    await page.waitForTimeout(500);
+    const after = await page.evaluate(() => window.IHFK.scene.getScene('Street').clouds.map(cloud=>cloud.x));
+    assert(before.xs.every((x,index)=>after[index]>x), `clouds did not move continuously: ${before.xs} -> ${after}`);
+    assert(before.depths.every(depth=>depth>before.background&&depth<0), `cloud layer depths: bg=${before.background}, clouds=${before.depths}`);
+  });
+
   for (const [name, width, height] of [['Android', 844, 390], ['iPhone', 932, 430]]) {
     await test(`${name} landscape touch layout`, async () => {
       await page.setViewportSize({ width, height });
@@ -276,15 +293,19 @@ try {
     const bounds = await page.evaluate(() => {
       const screen = document.querySelector('.kiosk-screen').getBoundingClientRect();
       const buttons = [...document.querySelectorAll('.result-actions button')].map(button => button.getBoundingClientRect());
+      const preview=document.querySelector('.result-share-card img');const previewBounds=preview.getBoundingClientRect();
       return {
         screen: { left: screen.left, top: screen.top, right: screen.right, bottom: screen.bottom },
         buttons: buttons.map(button => ({ left: button.left, top: button.top, right: button.right, bottom: button.bottom })),
+        preview:{left:previewBounds.left,top:previewBounds.top,right:previewBounds.right,bottom:previewBounds.bottom,naturalWidth:preview.naturalWidth,naturalHeight:preview.naturalHeight,source:preview.currentSrc.slice(0,22)},
       };
     });
     assert(bounds.buttons.length === 3, `result buttons: ${bounds.buttons.length}`);
     for (const button of bounds.buttons) {
       assert(button.left >= bounds.screen.left && button.top >= bounds.screen.top && button.right <= bounds.screen.right && button.bottom <= bounds.screen.bottom, 'result action clipped');
     }
+    assert(bounds.preview.left>=bounds.screen.left&&bounds.preview.top>=bounds.screen.top&&bounds.preview.right<=bounds.screen.right&&bounds.preview.bottom<=bounds.screen.bottom,'share-card preview clipped');
+    assert(bounds.preview.naturalWidth===1080&&bounds.preview.naturalHeight===1080&&bounds.preview.source==='data:image/png;base64,',`share-card preview source: ${JSON.stringify(bounds.preview)}`);
   });
 
   assert(errors.length === 0, `browser console errors: ${errors.join(' | ')}; missing: ${missingRequests.join(', ')}`);

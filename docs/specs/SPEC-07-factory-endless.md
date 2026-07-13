@@ -21,6 +21,7 @@ SPEC-04, SPEC-06, SPEC-09
 - [x] 단계별 실루엣에 맞춰 공장 타격 영역 축소
 - [x] 피격 시 실제 공장 스프라이트가 흰색으로 깜빡이고 파손 단계가 교체됨
 - [x] 컨베이어 조립·하늘 발사 배경 루프
+- [x] 조립·발사 키오스크를 공장 본체보다 뒤에 렌더링
 - [x] 체력 구간별 낙하 증가
 - [x] 35~45초 목표 파괴 시간
 - [x] 파괴 시 타이머·BGM 정지
@@ -29,6 +30,7 @@ SPEC-04, SPEC-06, SPEC-09
 ## 인수 조건
 - [x] 공장 본체는 키오스크 수에 포함되지 않음
 - [x] 무한 모드에 실패 조건 없음
+- [x] 이동 제품 depth 2 < 공장 본체 depth 3
 
 ## 테스트
 - [x] 자동: 체력 경계·공장 종료 full E2E
@@ -43,6 +45,7 @@ SPEC-04, SPEC-06, SPEC-09
 - 알려진 제한: 30대 모바일 FPS 실측 대기
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
 - 래스터 분리 검증: [targeting and factory follow-up](../evidence/2026-07-13-targeting-factory-followup.md)
+- 제품 레이어 검증: [layer/result/cloud follow-up](../evidence/2026-07-13-layer-result-cloud-followup.md)
 
 ## 평가
 기능 정확성 40/40 · 게임 감각 19/20 · 시각·오디오 14/15 · 호환성·현지화 11/15 · 코드 품질 9/10 · 총점 93/100

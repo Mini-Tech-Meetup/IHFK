@@ -6,7 +6,7 @@ export class BootScene extends Phaser.Scene {
   constructor(){super('Boot');}
   preload(){
     const base='assets/character/';
-    this.load.image('bg-fastfood','assets/background/fastfood.png');this.load.image('bg-street','assets/background/street.png');this.load.image('bg-factory','assets/background/factory.png');
+    this.load.image('bg-fastfood','assets/background/fastfood.png');this.load.image('bg-street','assets/background/street.png');this.load.image('street-cloud','assets/background/layers/street-cloud.png');this.load.image('bg-factory','assets/background/factory.png');
     this.load.spritesheet('normal-idle',`${base}Normal Guy Idle/Normal_Guy_Idle_SpriteSheet.png`,{frameWidth:15,frameHeight:20});
     this.load.spritesheet('normal-transform',`${base}Normal Guy Transforms/Normal_Guy_Transforms_SpriteSheet.png`,{frameWidth:29,frameHeight:25});
     this.load.spritesheet('strong-idle',`${base}Strong Guy Idle/Strong_Guy_Idle_SpriteSheet.png`,{frameWidth:18,frameHeight:23});

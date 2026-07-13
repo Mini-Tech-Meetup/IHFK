@@ -60,6 +60,12 @@ for background in Path("assets/background").glob("*.png"):
     colors = image.getcolors(maxcolors=1_000_000) or []
     if len(colors) > 16 or any(color[3] != 255 for _, color in colors): raise SystemExit(f"{background}: palette/alpha gate failed")
 
+cloud = rgba(Path("assets/background/layers/street-cloud.png"))
+if cloud.size != (240, 112): raise SystemExit(f"street cloud: wrong size {cloud.size}")
+cloud_colors = cloud.getcolors(maxcolors=1_000_000) or []
+if any(color[3] not in (0, 255) for _, color in cloud_colors): raise SystemExit("street cloud: partial alpha found")
+if len([color for _, color in cloud_colors if color[3]]) > 2: raise SystemExit("street cloud: palette exceeds 2 opaque colors")
+
 validate_frames(Path("assets/kiosk/frames-v2"), 5, 128)
 for weapon in ("bat", "chainsaw", "shotgun"): validate_frames(Path(f"assets/weapons/{weapon}/frames-v2"), 6, 64)
 validate_frames(Path("assets/factory/frames-v2"), 5, (680, 576))
@@ -93,6 +99,9 @@ runtime_captures = (
     "runtime-factory-raster-stage3-1080x640.png",
     "runtime-factory-raster-stage4-1080x640.png",
     "runtime-kiosk-menu-ui-1080x640.png",
+    "runtime-factory-product-behind-1080x640.png",
+    "runtime-result-share-preview-1080x640.png",
+    "runtime-street-moving-clouds-1080x640.png",
 )
 for filename in runtime_captures:
     path = Path("docs/evidence") / filename
@@ -124,6 +133,7 @@ if run[:8] != [True] * 8 or run[8]: raise SystemExit("Strong-run source populati
 if attack[:15] != [True] * 15 or attack[15]: raise SystemExit("Strong-attack source population changed")
 
 print("PASS 3 backgrounds are 1080x640, opaque, and at most 16 colors")
+print("PASS street cloud is a 240x112 hard-alpha pixel layer")
 print("PASS 28 generated runtime frames use hard alpha, safe bounds, and shared 16-color palettes")
 print("PASS 3 derived weapon pickups are 80x48 hard-alpha pixel sprites")
 print(f"PASS {len(runtime_captures)} runtime evidence captures are exactly 1080x640")

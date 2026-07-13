@@ -20,7 +20,7 @@ for(const path of sourceFiles){
   }
 }
 const requiredAssets=[
-  'assets/background/fastfood.png','assets/background/street.png','assets/background/factory.png',
+  'assets/background/fastfood.png','assets/background/street.png','assets/background/layers/street-cloud.png','assets/background/factory.png',
   'assets/character/Normal Guy Idle/Normal_Guy_Idle_SpriteSheet.png',
   'assets/character/Normal Guy Transforms/Normal_Guy_Transforms_SpriteSheet.png',
   'assets/character/Strong Guy Runs/Strong_Guy_Rung_SpriteSheet.png',

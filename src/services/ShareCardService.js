@@ -49,13 +49,14 @@ export class ShareCardService {
     const canvas=document.createElement('canvas'); canvas.width=1080; canvas.height=1080; const c=canvas.getContext('2d'); c.imageSmoothingEnabled=false;
     c.fillStyle='#f7e05e'; c.fillRect(0,0,1080,1080); c.fillStyle='#e64c3c'; c.fillRect(0,0,1080,150); c.fillStyle='#111'; c.fillRect(0,150,1080,18);
     c.fillStyle='#222'; c.font='bold 62px Arial, sans-serif'; c.textAlign='center'; c.fillText('I HATE F**KING KIOSK',540,100);
-    this.drawBrokenFactory(c);this.drawKiosks(c);this.drawCharacter(c);
-    for(let i=0;i<18;i++){c.fillStyle=i%2?'#ddd':'#333'; c.fillRect(500+Math.random()*470,690+Math.random()*80,18+Math.random()*30,12+Math.random()*20);}
+    this.drawBrokenFactory(c);
+    for(let i=0;i<18;i++){c.fillStyle=i%2?'#ddd':'#333';c.fillRect(500+(i*73)%460,690+(i*29)%76,18+(i*7)%30,12+(i*11)%20);}
+    this.drawKiosks(c);this.drawCharacter(c);
     c.fillStyle='#111';this.drawFittedText(c,`${this.i18n.t('time')}  ${this.formatTime(this.session.elapsedMs)}`,850);this.drawFittedText(c,`${this.i18n.t('destroyed')}  ${this.session.destroyedTotal}`,930);
     c.font='bold 42px monospace'; c.fillText('#IHFK',540,1010); return canvas;
   }
-  async share() {
-    const canvas=this.createCanvas(); const text=this.i18n.t('shareText',{count:this.session.destroyedTotal,time:this.formatTime(this.session.elapsedMs)}); const url=location.href;
+  async share(canvas = this.createCanvas()) {
+    const text=this.i18n.t('shareText',{count:this.session.destroyedTotal,time:this.formatTime(this.session.elapsedMs)}); const url=location.href;
     const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png')); const file=new File([blob],'ihfk-result.png',{type:'image/png'});
     if (!FORCE_SHARE_FALLBACK && navigator.share && navigator.canShare?.({files:[file]})) {
       try { await navigator.share({title:'I HATE F**KING KIOSK',text,url,files:[file]}); return 'shared'; }

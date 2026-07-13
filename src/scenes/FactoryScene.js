@@ -15,7 +15,7 @@ export class FactoryScene extends BasePlayScene {
   startAssemblyLoop(){
     const launch=()=>{
       if(!this.scene.isActive())return;
-      const product=this.add.image(-55,475,'kiosk-v2-0').setScale(.52).setDepth(4).setAngle(-4);
+      const product=this.add.image(-55,475,'kiosk-v2-0').setScale(.52).setDepth(2).setName('factory-product').setAngle(-4);this.lastAssemblyProduct=product;
       this.tweens.add({targets:product,x:485,duration:this.mode==='endless'?650:1050,ease:'Linear',onComplete:()=>{
         product.setTint(this.mode==='endless'?0x995555:0xffffff);
         this.tweens.add({targets:product,x:Phaser.Math.Between(420,580),y:-120,angle:Phaser.Math.Between(-220,220),duration:this.mode==='endless'?500:780,ease:'Quad.easeIn',onComplete:()=>product.destroy()});

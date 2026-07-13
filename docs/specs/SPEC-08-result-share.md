@@ -7,7 +7,7 @@ HUD, 현재 판 결과와 정사각형 공유 카드를 구현한다.
 플레이 중 목표·시간·무기 잔량을 보고, 완료 후 시간과 파괴 수만 확인해 재시작·계속 부수기·공유 중 하나를 고른다.
 
 ## 기술 설계
-Hud가 세션을 읽고 Result가 시간을 동결한다. ShareCardService는 별도 1080 Canvas와 Web Share/PNG·clipboard 폴백을 제공한다.
+Hud가 세션을 읽고 Result가 시간을 동결한다. ShareCardService는 별도 1080 Canvas와 Web Share/PNG·clipboard 폴백을 제공한다. Result는 장면 진입 시 한 번 만든 동일 Canvas를 화면 미리보기와 실제 공유에 함께 사용한다.
 
 ## 의존 SPEC
 SPEC-01, SPEC-04, SPEC-07
@@ -22,11 +22,13 @@ localStorage, 최고 기록, 서버 업로드
 - [x] 1080×1080 결과 카드
 - [x] Web Share와 PNG/clipboard 폴백
 - [x] 공유 카드 전경에 실제 정상 키오스크 2대와 최종 파손 키오스크 1대 합성
+- [x] 완료 키오스크 화면 안에 실제 1080×1080 공유 카드 미리보기 표시
 
 ## 인수 조건
 - [x] localStorage 사용 없음
 - [x] 공유 카드에 선택 언어와 #IHFK 표시
 - [x] 공유 카드에 캐릭터·붕괴 공장·정상 2대·파손 1대 키오스크가 모두 표시됨
+- [x] 화면 미리보기와 공유·저장 대상 Canvas가 동일함
 
 ## 테스트
 - [x] 자동: Canvas 크기·PNG 다운로드 폴백·정상/최종 파손 키오스크 텍스처 합성
@@ -42,6 +44,7 @@ localStorage, 최고 기록, 서버 업로드
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
 - 실기기 수집 도구: `/qa/device.html`, [report template](../evidence/DEVICE_QA_TEMPLATE.md)
 - DPS·공유 카드 후속 검증: [DPS and share-card follow-up](../evidence/2026-07-13-dps-share-followup.md)
+- 완료 화면 미리보기 검증: [layer/result/cloud follow-up](../evidence/2026-07-13-layer-result-cloud-followup.md)
 
 ## 평가
 기능 정확성 39/40 · 게임 감각 17/20 · 시각·오디오 14/15 · 호환성·현지화 12/15 · 코드 품질 9/10 · 총점 91/100

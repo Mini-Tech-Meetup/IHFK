@@ -106,11 +106,11 @@ export class GameUi {
     bubble.textContent = text; bubble.classList.add('pop');
   }
 
-  showResult({ time, destroyed, onRetry, onEndless, onShare }) {
+  showResult({ time, destroyed, previewUrl, onRetry, onEndless, onShare }) {
     const shell = this.kioskShell(`
       <div class="screen-heading result-heading"><span>OK</span><h1>${escapeHtml(this.i18n.t('complete'))}</h1></div>
-      <div class="result-receipt"><div><span>${escapeHtml(this.i18n.t('time'))}</span><strong>${escapeHtml(time)}</strong></div><div><span>${escapeHtml(this.i18n.t('destroyed'))}</span><strong>${destroyed}</strong></div><p>ERROR CODE: FACTORY-000<br>PRODUCTION TERMINATED</p></div>
-      <div class="result-actions"></div>`, { status: 'TRANSACTION COMPLETE', className: 'result-shell' });
+      <div class="result-layout"><figure class="result-share-card"><div class="result-share-card-label">SHARE CARD / 1080×1080</div><img alt="IHFK share card preview"></figure><div class="result-summary"><div class="result-receipt"><div><span>${escapeHtml(this.i18n.t('time'))}</span><strong>${escapeHtml(time)}</strong></div><div><span>${escapeHtml(this.i18n.t('destroyed'))}</span><strong>${destroyed}</strong></div><p>ERROR CODE: FACTORY-000<br>PRODUCTION TERMINATED</p></div></div><div class="result-actions"></div></div>`, { status: 'TRANSACTION COMPLETE', className: 'result-shell' });
+    const preview=shell.querySelector('.result-share-card img');preview.src=previewUrl;preview.dataset.width='1080';preview.dataset.height='1080';
     const actions = shell.querySelector('.result-actions');
     const share = this.button(this.i18n.t('share'), async () => {
       share.disabled = true; share.textContent = '...';

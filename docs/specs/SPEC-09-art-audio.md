@@ -29,6 +29,7 @@ SPEC-00, SPEC-03, SPEC-04
 - [x] 공장 배경과 본체를 분리하고 본체를 5단계 래스터 파손 시트로 교체
 - [x] 키오스크 정상 화면에 레거시 B 로고와 메뉴 UI, 파손 단계별 UI 소실 표현
 - [x] hit/break/pickup/shotgun/saw/land/weaponBreak/factory 효과음 라우팅 자동 검증
+- [x] 길거리 배경에서 구름을 240×112 hard-alpha 래스터로 분리하고 반복 이동
 
 ## 인수 조건
 - [x] 기존 캐릭터 5배 오버레이 시 의도한 C급 스타일 유지
@@ -48,6 +49,7 @@ SPEC-00, SPEC-03, SPEC-04
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
 - 공장 에셋 상세: [targeting and factory follow-up](../evidence/2026-07-13-targeting-factory-followup.md)
 - 키오스크·사운드 상세: [DPS and share-card follow-up](../evidence/2026-07-13-dps-share-followup.md)
+- 이동 구름 에셋 상세: [layer/result/cloud follow-up](../evidence/2026-07-13-layer-result-cloud-followup.md)
 
 ## 평가
 기능 정확성 38/40 · 게임 감각 19/20 · 시각·오디오 15/15 · 호환성·현지화 11/15 · 코드 품질 8/10 · 총점 91/100
