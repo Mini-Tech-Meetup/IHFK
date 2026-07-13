@@ -150,16 +150,23 @@ try {
   await test('real weapon pickup enables pointer selection on HUD and touch controls', async () => {
     await page.setViewportSize({ width: 1080, height: 640 });
     await page.goto(`${base}/?testMode&autoplay&previewPickup=bat`, { waitUntil: 'networkidle' });
-    await page.waitForFunction(() => document.body.dataset.scene === 'FastFood' && window.IHFK.scene.getScene('FastFood').pickupLabels.length === 1);
+    await page.waitForFunction(() => document.body.dataset.scene === 'FastFood' && document.body.dataset.weapon === 'fist');
     await page.evaluate(() => {
-      const scene=window.IHFK.scene.getScene('FastFood');
-      const pickup=scene.pickupLabels[0].pickup;
-      scene.player.setPosition(pickup.x,pickup.y).setVelocity(0,0);
+      const fastFood=window.IHFK.scene.getScene('FastFood');
+      fastFood.shutdownPlay();
+      fastFood.scene.start('Street');
+    });
+    await page.waitForFunction(() => document.body.dataset.scene === 'Street');
+    await page.evaluate(() => {
+      const scene=window.IHFK.scene.getScene('Street');
+      scene.dropWeapon(scene.player.x,scene.player.y,'bat');
     });
     await page.waitForFunction(() => {
-      const scene=window.IHFK.scene.getScene('FastFood');
+      const scene=window.IHFK.scene.getScene('Street');
       return scene.session.weapons.bat > 0 && document.querySelector('.weapon-slot[data-weapon="bat"]')?.getAttribute('aria-disabled') === 'false';
     });
+    const bindingState=await page.evaluate(()=>({bodyBound:document.body.dataset.bound||'',touchButtons:[...document.querySelectorAll('#weapon-buttons button[data-weapon]')].every(button=>button.dataset.bound==='true')}));
+    assert(bindingState.bodyBound===''&&bindingState.touchButtons,`weapon listener scope leaked outside buttons: ${JSON.stringify(bindingState)}`);
     await page.locator('.weapon-slot[data-weapon="bat"]').dispatchEvent('pointerdown');
     await page.waitForFunction(() => document.body.dataset.weapon === 'bat' && document.querySelector('.weapon-slot[data-weapon="bat"]')?.classList.contains('selected'));
     await page.locator('#weapon-buttons [data-weapon="fist"]').dispatchEvent('pointerdown');

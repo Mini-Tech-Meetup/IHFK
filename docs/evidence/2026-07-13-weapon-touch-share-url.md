@@ -31,4 +31,6 @@ The native operating-system share sheet still requires physical Android/iOS conf
 
 ## 2026-07-14 Regression Fix
 
-The first implementation only tested a direct session grant followed by a synthesized click. The regression test now crosses the actual pickup overlap boundary and uses pointer events on both visible control surfaces, matching the player path that exposed the bug.
+The first implementation only proved selection in the first FastFood scene. On the next gameplay scene, the broad `[data-weapon]` binding selector also matched `<body data-weapon="fist">`. A weapon-button pointer event selected the requested weapon and then bubbled to the body listener, which immediately selected the previous body value (`fist`) again. The selector is now restricted to `#weapon-buttons button[data-weapon]`, and both mobile and desktop handlers stop propagation.
+
+The regression test now crosses `FastFood → Street`, collects a real Arcade Physics pickup, asserts that only the four mobile buttons are input-bound, and exercises both visible control surfaces (`fist → bat → fist → bat`).

@@ -1,4 +1,4 @@
-import { BasePlayScene } from './BasePlayScene.js?v=30';
+import { BasePlayScene } from './BasePlayScene.js?v=31';
 import { drawFactory } from '../utils/visuals.js';
 import { BALANCE, PREVIEW_STRESS, PREVIEW_STRESS_CAP } from '../config.js';
 
