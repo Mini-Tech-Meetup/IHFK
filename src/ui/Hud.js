@@ -33,6 +33,7 @@ export class Hud {
       slot.innerHTML = `<b>${number}</b><img src="assets/ui/icons/${icon}" alt=""><span>0</span>`;
       slot.addEventListener('pointerdown', event => {
         event.preventDefault();
+        event.stopPropagation();
         onWeaponSelect?.(key);
       });
       this.rack.append(slot); this.slots.set(key, slot);

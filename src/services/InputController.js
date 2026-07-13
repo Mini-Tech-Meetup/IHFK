@@ -35,11 +35,12 @@ export class InputController {
     }
     this.bindHold('#touch-jump', 'jump');
     this.bindHold('#touch-attack', 'attack');
-    document.querySelectorAll('[data-weapon]').forEach(button => {
+    document.querySelectorAll('#weapon-buttons button[data-weapon]').forEach(button => {
       if (button.dataset.bound) return;
       button.dataset.bound = 'true';
       button.addEventListener('pointerdown', event => {
         event.preventDefault();
+        event.stopPropagation();
         activeController?.queueWeapon(button.dataset.weapon);
       });
     });

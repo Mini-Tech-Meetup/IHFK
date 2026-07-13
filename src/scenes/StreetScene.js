@@ -1,4 +1,4 @@
-import { BasePlayScene } from './BasePlayScene.js?v=30';
+import { BasePlayScene } from './BasePlayScene.js?v=31';
 import { drawStreet, addGoSign, addMovingClouds } from '../utils/visuals.js';
 import { BALANCE } from '../config.js';
 

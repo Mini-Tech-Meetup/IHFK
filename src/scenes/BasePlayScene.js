@@ -1,5 +1,5 @@
 import { BALANCE, GAME_WIDTH, GROUND_Y } from '../config.js';
-import { InputController } from '../services/InputController.js?v=30';
+import { InputController } from '../services/InputController.js?v=31';
 import { Player } from '../entities/Player.js';
 import { Kiosk } from '../entities/Kiosk.js';
 import { Hud } from '../ui/Hud.js?v=30';
