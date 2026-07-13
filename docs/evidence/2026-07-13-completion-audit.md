@@ -6,11 +6,11 @@ The implementation is not yet eligible for `검증 완료` or Goal completion. A
 
 ## Authoritative current state
 
-- Mobile-menu implementation commit: `80e4613becfd4108238d2f09ef7cd00f4c9eb41d` on `codex/ihfk-phaser4-refactor`.
-- Original rebuild PR [#1](https://github.com/Mini-Tech-Meetup/IHFK/pull/1) is merged. Follow-up Draft PR [#2](https://github.com/Mini-Tech-Meetup/IHFK/pull/2) targets `main` with the mobile fullscreen/menu fix.
-- Remote run [29259531774](https://github.com/Mini-Tech-Meetup/IHFK/actions/runs/29259531774) validates PR #2; final status is tracked by the PR check.
+- Current weapon/share/dialogue implementation commit: `f4cd390af23fab618eeb4aed6e797c91ca2f6779` on `codex/ihfk-phaser4-refactor`.
+- Rebuild PR [#1](https://github.com/Mini-Tech-Meetup/IHFK/pull/1) and mobile fullscreen/menu PR [#2](https://github.com/Mini-Tech-Meetup/IHFK/pull/2) are merged. Follow-up Draft PR [#3](https://github.com/Mini-Tech-Meetup/IHFK/pull/3) targets `main` with the weapon/share/dialogue fixes.
+- Remote run [29261566180](https://github.com/Mini-Tech-Meetup/IHFK/actions/runs/29261566180) validates PR #3; final status is tracked by the PR check.
 - Local proof: `npm run check` PASS; `npm test` PASS; 37 browser unit tests, 15 responsive/E2E groups, and 6 cross-browser environments.
-- GitHub Pages is built from `main` `/` with HTTPS; PR #2 is intentionally not public until merged.
+- GitHub Pages is built from `main` `/` with HTTPS; PR #3 is intentionally not public until merged.
 - Worktree is clean except for the user-owned untracked `Super Strong Normal Guy (1).zip`, which is outside the implementation and must remain untouched.
 
 ## Requirement-by-requirement audit
@@ -42,7 +42,7 @@ Perform this once on Android Chrome and once on iOS Safari from the same deploye
 5. Run action 7, finish three unaccelerated campaigns, and copy the timing JSON.
 6. During the campaigns, verify joystick, jump, hold attack, slots 1–4, mute, stage exit, all 10 language screens, and absence of clipped text.
 7. Paste all observations and JSON into `DEVICE_QA_TEMPLATE.md`.
-8. If both platform reports pass and the human timing target is met, merge the current follow-up PR #2 and repeat boot, campaign result, share fallback, and endless entry on the public Pages URL.
+8. If both platform reports pass and the human timing target is met, merge the current follow-up PR #3 and repeat boot, campaign result, share fallback, and endless entry on the public Pages URL.
 
 Any failure is a product finding and must be logged with device, OS/browser version, reproduction steps, screenshot, and severity before the corresponding SPEC is rescored.
 
