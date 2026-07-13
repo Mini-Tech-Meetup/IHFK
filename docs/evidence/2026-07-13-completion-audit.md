@@ -6,11 +6,11 @@ The implementation is not yet eligible for `검증 완료` or Goal completion. A
 
 ## Authoritative current state
 
-- Head: `d363ec20bc83046875d7afa303a610f9bd9d2651` on `codex/ihfk-phaser4-refactor`.
-- Draft PR [#1](https://github.com/Mini-Tech-Meetup/IHFK/pull/1) is open and mergeable into `main`.
-- Remote run [29248742662](https://github.com/Mini-Tech-Meetup/IHFK/actions/runs/29248742662) passed the complete static, raster, unit, responsive/E2E, and six-environment browser matrix.
-- Local proof: `npm run check` PASS; `npm test` PASS; 36 browser unit tests, 14 responsive/E2E groups, and 6 cross-browser environments.
-- GitHub Pages is built from `main` `/` with HTTPS, so the draft branch is intentionally not the public build yet.
+- Mobile-menu implementation commit: `80e4613becfd4108238d2f09ef7cd00f4c9eb41d` on `codex/ihfk-phaser4-refactor`.
+- Original rebuild PR [#1](https://github.com/Mini-Tech-Meetup/IHFK/pull/1) is merged. Follow-up Draft PR [#2](https://github.com/Mini-Tech-Meetup/IHFK/pull/2) targets `main` with the mobile fullscreen/menu fix.
+- Remote run [29259531774](https://github.com/Mini-Tech-Meetup/IHFK/actions/runs/29259531774) validates PR #2; final status is tracked by the PR check.
+- Local proof: `npm run check` PASS; `npm test` PASS; 37 browser unit tests, 15 responsive/E2E groups, and 6 cross-browser environments.
+- GitHub Pages is built from `main` `/` with HTTPS; PR #2 is intentionally not public until merged.
 - Worktree is clean except for the user-owned untracked `Super Strong Normal Guy (1).zip`, which is outside the implementation and must remain untouched.
 
 ## Requirement-by-requirement audit
@@ -18,8 +18,8 @@ The implementation is not yet eligible for `검증 완료` or Goal completion. A
 | SPEC | Proven now | Evidence still required before `검증 완료` |
 |---|---|---|
 | 00 Foundation | Phaser 4 boot, WebGL, relative subpath, asset failure and browser matrix | Physical Android Chrome and iOS Safari boot |
-| 01 Title/i18n | 10/10 key completeness, fallback, desktop containment, localized share cards | Physical-device font rendering and clipping pass in all 10 locales |
-| 02 Input/mobile | Shared input state, touch HUD, portrait fallback, Android/iPhone emulation | Android fullscreen/landscape request, iOS manual rotation, real touch controls |
+| 01 Title/i18n | 10/10 key completeness, fallback, desktop containment, localized share cards, 844×390 two-row language menu and guide containment | Physical-device font rendering and clipping pass in all 10 locales |
+| 02 Input/mobile | Shared input state, touch HUD, portrait fallback, gesture-first fullscreen/WebKit fallback, thin scrollable landscape menu, Android/iPhone emulation | Android fullscreen/landscape request, iOS manual rotation, real touch controls |
 | 03 Player/intro | 27 transform frames, dialogue containment, timer boundary | Mobile audio unlock at the Game Start gesture |
 | 04 Combat/weapons | DPS order, durability, targets, hitboxes, animation height, destruction feedback | Real touch-hold feel observation; no known correctness defect |
 | 05 Fast-food | Auto first break, manual second break, GO and exit transition | Physical touch exit traversal |
@@ -27,7 +27,7 @@ The implementation is not yet eligible for `검증 완료` or Goal completion. A
 | 07 Factory/endless | 5-stage raster damage, depth, 5,000 HP, endless scaling, emulated 30-unit performance | Target-device 30-unit endless FPS report |
 | 08 Result/share | Exact button-free 1080×640 Result card, preview/export identity, fallback | Native PNG share sheet or documented cancellation on both platforms |
 | 09 Art/audio | Palette/alpha validators, screenshots, moving clouds, nine SFX routes, louder title-onward MIDI scheduling | Audible music/SFX/mute confirmation on both devices |
-| 10 Integration | Full automated matrix, zero known P0/P1, 3-run collector boundary proof | Three unaccelerated human runs per platform, combined target average, physical reports, post-merge Pages smoke |
+| 10 Integration | 37/37 unit, 15/15 responsive/E2E and 6/6 browser matrix, zero known P0/P1, 3-run collector boundary proof | Three unaccelerated human runs per platform, combined target average, physical reports, post-merge Pages smoke |
 
 The score threshold is already met provisionally (90.5 overall and every SPEC at least 85), but status and evidence gates are conjunctive. A score cannot replace missing physical proof.
 
