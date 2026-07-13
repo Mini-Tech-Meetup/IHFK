@@ -1,6 +1,6 @@
 # Device QA report template
 
-Open `/qa/device.html` from the same deployed origin as the game. Run all four buttons on each target device and paste the copied JSON below. The page stores and transmits nothing.
+Open `/qa/device.html` from the same deployed origin as the game. Run all four buttons and both real-game stress links on each target device. Paste the device JSON and both stress reports below. The page stores and transmits nothing.
 
 ## Android Chrome
 
@@ -8,6 +8,9 @@ Open `/qa/device.html` from the same deployed origin as the game. Run all four b
 - Browser version:
 - Game controls: pass / fail
 - Portrait overlay then landscape play: pass / fail
+- Campaign 15 report:
+- Endless 30 report:
+- Human campaign times (at least 3):
 - Notes:
 
 ```json
@@ -20,6 +23,9 @@ paste device report here
 - Browser version:
 - Manual rotation fallback: pass / fail
 - Game controls: pass / fail
+- Campaign 15 report:
+- Endless 30 report:
+- Human campaign times (at least 3):
 - Notes:
 
 ```json
@@ -33,5 +39,7 @@ paste device report here
 - [ ] iOS Safari starts without an exception when fullscreen/orientation APIs are absent or rejected.
 - [ ] Audio reports `tone-played` after the user gesture.
 - [ ] Native share reports `share-sheet-completed` or `share-sheet-opened-and-cancelled`.
-- [ ] 30-kiosk stress test records average and 5th-percentile FPS.
+- [ ] Actual campaign 15-kiosk stress records average and 5th-percentile FPS.
+- [ ] Actual endless 30-kiosk stress records average and 5th-percentile FPS.
 - [ ] The actual game joystick, jump, hold attack, weapon 1–4 and mute controls pass.
+- [ ] At least three human campaign completions per target platform are recorded; combined average is 2:30–3:30.

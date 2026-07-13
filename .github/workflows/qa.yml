@@ -27,8 +27,8 @@ jobs:
         run: npm ci
       - name: Install raster validator
         run: python -m pip install --disable-pip-version-check Pillow
-      - name: Install browser runtime
-        run: npx playwright install --with-deps chromium
+      - name: Install browser runtimes
+        run: npx playwright install --with-deps chromium firefox webkit
       - name: Validate runtime, locales, specs, and raster assets
         run: npm run check
       - name: Run browser and responsive tests

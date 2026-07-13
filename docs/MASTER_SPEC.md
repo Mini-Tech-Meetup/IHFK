@@ -27,7 +27,7 @@ Phaser 4.1 기반의 정적 웹 게임으로 IHFK를 전면 리팩터링한다. 
 
 | SPEC | Title | Status | Score | Evidence |
 |---|---|---|---:|---|
-| [00](specs/SPEC-00-foundation.md) | Phaser 4 foundation | 구현 완료 | 92 | desktop verified; browser/device matrix pending |
+| [00](specs/SPEC-00-foundation.md) | Phaser 4 foundation | 구현 완료 | 92 | Chrome 150, Chromium, Firefox 151 and WebKit 26.5 WebGL smoke verified; physical devices pending |
 | [01](specs/SPEC-01-title-i18n.md) | Title and localization | 구현 완료 | 92 | pt-BR representative and automated fit verified |
 | [02](specs/SPEC-02-input-mobile.md) | Input and mobile | 구현 완료 | 86 | Android/iPhone viewport automation passes; physical devices pending |
 | [03](specs/SPEC-03-player-intro.md) | Player and intro | 구현 완료 | 92 | 27-frame transform + 10-locale bubble fit verified; mobile audio unlock pending |
@@ -37,7 +37,7 @@ Phaser 4.1 기반의 정적 웹 게임으로 IHFK를 전면 리팩터링한다. 
 | [07](specs/SPEC-07-factory-endless.md) | Factory and endless | 구현 완료 | 93 | separate background, five damage stages and product-behind-target depth verified |
 | [08](specs/SPEC-08-result-share.md) | HUD, result and share | 구현 완료 | 91 | in-result preview uses the exact share/export canvas |
 | [09](specs/SPEC-09-art-audio.md) | Art and audio | 구현 완료 | 91 | kiosk UI, eight SFX routes and hard-alpha moving clouds verified; physical-device listening pending |
-| [10](specs/SPEC-10-qa-deploy.md) | QA and deploy | 구현 완료 | 86 | 34/34 + 13 headless responsive/E2E groups; physical QA pending |
+| [10](specs/SPEC-10-qa-deploy.md) | QA and deploy | 구현 완료 | 86 | 34/34 + 13 responsive/E2E + 6 cross-browser environments; physical QA pending |
 
 ## Completion gate
 

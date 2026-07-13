@@ -40,11 +40,12 @@ SPEC-04, SPEC-09
 ## 증거
 - 명령 및 결과: normal-balance E2E에서 Street → Factory 통과
 - 스크린샷: street background 및 낙하 장면
-- 성능 수치: interval 2000ms, cluster 3–5, cap 12, goal 50; stacked support removal drop 133.4px; grounded vx/vy 0
+- 성능 수치: interval 2000ms, cluster 3–5, cap 12, goal 50; stacked support removal drop 133.4px; grounded vx/vy 0; Android Chromium emulation 15-unit stress avg 61.5/p05 59.5 FPS
 - 알려진 제한: 목표 모바일 FPS 실측 대기
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
 - 후속 검증: [intro and physics follow-up](../evidence/2026-07-13-intro-physics-followup.md)
 - 레이어 후속 검증: [layer/result/cloud follow-up](../evidence/2026-07-13-layer-result-cloud-followup.md)
+- 에뮬레이션 성능: [cross-browser QA](../evidence/2026-07-13-cross-browser-qa.md)
 
 ## 평가
 기능 정확성 37/40 · 게임 감각 18/20 · 시각·오디오 12/15 · 호환성·현지화 12/15 · 코드 품질 9/10 · 총점 88/100

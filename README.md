@@ -23,7 +23,7 @@ npm run serve:lan
 ipconfig
 ```
 
-Open `http://<PC IPv4 address>:4173/qa/device.html` on the phone. Windows Firewall may ask once whether Python may accept private-network connections. The device page links to the real 30-kiosk Phaser stress scene and produces a copyable report.
+Open `http://<PC IPv4 address>:4173/qa/device.html` on the phone. Windows Firewall may ask once whether Python may accept private-network connections. The device page links to real 15-kiosk campaign and 30-kiosk endless Phaser stress scenes; each produces a copyable 10-second FPS report.
 
 ## Controls
 
@@ -40,7 +40,7 @@ Open `http://<PC IPv4 address>:4173/qa/device.html` on the phone. Windows Firewa
 
 Play in landscape orientation. After Game Start, the game requests fullscreen and a landscape lock where the browser supports them. On iOS or when those requests are rejected, rotate the device manually. Touch controls provide a left joystick, jump/attack buttons, weapon slots 1–4, and mute.
 
-For release-device verification, open [`qa/device.html`](qa/device.html) on the deployed host. It tests fullscreen/orientation requests, audio unlock, native PNG sharing, and a 10-second 30-kiosk FPS load without storing or transmitting the report.
+For release-device verification, open [`qa/device.html`](qa/device.html) on the deployed host. It tests fullscreen/orientation requests, audio unlock, native PNG sharing, and 10-second 15/30-kiosk real-game FPS loads without storing or transmitting the report.
 
 For localized result-card review, open [`qa/share-card.html`](qa/share-card.html). It renders the shipping 1080×1080 raster card in any of the ten supported languages.
 

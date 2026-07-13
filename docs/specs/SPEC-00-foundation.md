@@ -28,16 +28,17 @@ Phaser 4.1.0 정적 CDN과 ES 모듈 기반의 새 루트 런타임을 구축한
 
 ## 테스트
 - [x] 자동: 정적 모듈과 에셋 경로 검사
-- [ ] 데스크톱: 최신 Chrome/Firefox
+- [x] 데스크톱: 최신 Chrome/Firefox WebGL 부팅·입력·결과 smoke
 - [ ] 모바일: Android Chrome/iOS Safari
 - [x] 시각 검수: 1080×640 캔버스와 FIT letterbox
 
 ## 증거
 - 명령 및 결과: `npm run check` 통과
 - 스크린샷: 로컬 Language 화면 및 844×390 FIT 확인
-- 성능 수치: 소스 모듈 21개, locale 10개 정적 검사
-- 알려진 제한: Firefox 및 모바일 실기기 미검증
+- 성능 수치: 소스 모듈 24개, locale 10개 정적 검사; Chrome 150/Firefox 151/WebKit 26.5 호환성 smoke
+- 알려진 제한: Android/iOS 실기기 미검증
 - 상세: [QA evidence](../evidence/2026-07-13-qa.md)
+- 브라우저 매트릭스: [cross-browser QA](../evidence/2026-07-13-cross-browser-qa.md)
 
 ## 평가
 기능 정확성 40/40 · 게임 감각 18/20 · 시각·오디오 13/15 · 호환성·현지화 13/15 · 코드 품질 8/10 · 총점 92/100

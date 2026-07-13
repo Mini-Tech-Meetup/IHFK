@@ -1,13 +1,13 @@
 import { BasePlayScene } from './BasePlayScene.js';
 import { drawFactory } from '../utils/visuals.js';
-import { BALANCE, PREVIEW_STRESS } from '../config.js';
+import { BALANCE, PREVIEW_STRESS, PREVIEW_STRESS_CAP } from '../config.js';
 
 export class FactoryScene extends BasePlayScene {
   constructor(){super('Factory');}
   init(data){this.mode=data.mode||'campaign';}
   create(){
     document.body.dataset.scene=this.mode==='endless'?'Endless':'Factory';
-    this.session.mode=this.mode;drawFactory(this);this.createPlay(this.mode==='endless'?'extra':'targetFactory');this.allowDrops=true;this.nextFall=0;this.endlessStarted=this.time.now;
+    this.session.mode=this.mode;drawFactory(this);this.createPlay(this.mode==='endless'?'extra':'targetFactory');this.allowDrops=true;this.nextFall=0;this.endlessStarted=this.time.now;this.stressStartedAt=null;this.stressLastFrameAt=null;this.stressSamples=[];this.stressReportReady=false;delete document.body.dataset.stressFpsAverage;delete document.body.dataset.stressFpsP05;delete document.body.dataset.stressStatus;
     this.factoryVisual=this.add.image(740,288,this.mode==='endless'?'factory-v2-4':'factory-v2-0').setDepth(3);
     this.startAssemblyLoop();
     if(this.mode==='campaign')this.createFactoryTarget();else this.factoryTarget=null;
@@ -46,13 +46,27 @@ export class FactoryScene extends BasePlayScene {
   }
   destroyFactory(target){target.active=false;target.damageState=4;target.bounds=target.boundsByState[4];target.visual.setTexture('factory-v2-4').clearTint().setAlpha(1);this.assemblyTimer?.remove();this.session.stopTimer();this.audio.stopMusic();this.audio.sfx('factory');this.factoryBandBreak(target,5);this.cameras.main.shake(900,.04);this.cameras.main.flash(220,255,220,120);this.tweens.add({targets:target.visual,alpha:.18,angle:5,duration:850,onComplete:()=>{this.shutdownPlay();this.time.delayedCall(500,()=>this.scene.start('Result'));}});}
   fallProfile(){
-    if(PREVIEW_STRESS)return {interval:120,cluster:5,cap:30};
+    if(PREVIEW_STRESS)return {interval:120,cluster:Math.min(5,PREVIEW_STRESS_CAP),cap:PREVIEW_STRESS_CAP};
     if(this.mode==='endless'){const elapsed=(this.time.now-this.endlessStarted)/1000;return {interval:Math.max(250,650-Math.floor(elapsed/20)*50),cluster:Math.min(5,1+Math.floor(elapsed/40)),cap:Math.min(30,15+Math.floor(elapsed/20))};}
     const ratio=this.factoryTarget?.hp/BALANCE.factoryHp;if(ratio>.67)return {interval:2000,cluster:1,cap:15};if(ratio>.33)return {interval:1200,cluster:2,cap:15};return {interval:650,cluster:Phaser.Math.Between(2,4),cap:15};
   }
-  getProgress(){if(PREVIEW_STRESS)return `${this.kiosks.countActive(true)} / 30 · ${Math.round(this.game.loop.actualFps||0)} FPS`;if(this.mode==='endless')return `${this.session.endlessDestroyed}`;return `${Math.ceil(Math.max(0,this.factoryTarget?.hp||0))} HP`;}
+  getProgress(){if(PREVIEW_STRESS)return `${this.kiosks.countActive(true)} / ${PREVIEW_STRESS_CAP} · ${Math.round(this.game.loop.actualFps||0)} FPS`;if(this.mode==='endless')return `${this.session.endlessDestroyed}`;return `${Math.ceil(Math.max(0,this.factoryTarget?.hp||0))} HP`;}
+  updateStressQa(time){
+    if(!PREVIEW_STRESS||this.stressReportReady||this.kiosks.countActive(true)<PREVIEW_STRESS_CAP)return;
+    if(this.stressStartedAt===null){this.stressStartedAt=time;this.stressLastFrameAt=time;document.body.dataset.stressStatus='sampling';return;}
+    const delta=time-this.stressLastFrameAt;this.stressLastFrameAt=time;if(delta>0&&delta<250)this.stressSamples.push(1000/delta);
+    if(time-this.stressStartedAt<10000)return;
+    const sorted=this.stressSamples.slice().sort((a,b)=>a-b);const average=this.stressSamples.reduce((sum,value)=>sum+value,0)/Math.max(1,this.stressSamples.length);const p05=sorted[Math.floor(sorted.length*.05)]||0;
+    this.stressReportReady=true;document.body.dataset.stressStatus='complete';document.body.dataset.stressFpsAverage=average.toFixed(1);document.body.dataset.stressFpsP05=p05.toFixed(1);this.showStressReport(average,p05);
+  }
+  showStressReport(average,p05){
+    const report={timestamp:new Date().toISOString(),userAgent:navigator.userAgent,viewport:`${innerWidth}x${innerHeight}`,devicePixelRatio,mode:this.mode,activeKiosks:PREVIEW_STRESS_CAP,fpsAverage:Number(average.toFixed(1)),fpsP05:Number(p05.toFixed(1))};
+    const panel=document.createElement('section');panel.className='stress-report';panel.setAttribute('role','dialog');panel.setAttribute('aria-label','Stress test complete');
+    const title=document.createElement('strong');title.textContent='STRESS TEST COMPLETE';const summary=document.createElement('p');summary.textContent=`${PREVIEW_STRESS_CAP} KIOSKS · AVG ${report.fpsAverage} · P05 ${report.fpsP05} FPS`;
+    const output=document.createElement('pre');output.textContent=JSON.stringify(report,null,2);const actions=document.createElement('div');const copy=document.createElement('button');copy.type='button';copy.textContent='COPY REPORT';copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(output.textContent);copy.textContent='COPIED';}catch{copy.textContent='SELECT TEXT';output.focus();}});const back=document.createElement('button');back.type='button';back.textContent='BACK TO DEVICE QA';back.addEventListener('click',()=>{location.href='qa/device.html';});actions.append(copy,back);panel.append(title,summary,output,actions);document.querySelector('#ui-layer .game-hud')?.append(panel);
+  }
   update(time){
     super.update(time);document.body.dataset.factoryHp=this.factoryTarget?String(Math.ceil(this.factoryTarget.hp)):'none';document.body.dataset.factoryFlash=this.factoryTarget?this.factoryTarget.flashAlpha.toFixed(2):'none';document.body.dataset.factoryStage=this.factoryTarget?String(this.factoryTarget.damageState):'4';document.body.dataset.fps=String(Math.round(this.game.loop.actualFps||0));
-    const profile=this.fallProfile();if(time>=this.nextFall&&this.kiosks.countActive(true)<profile.cap){this.nextFall=time+profile.interval;for(let i=0;i<profile.cluster;i++)this.time.delayedCall(i*100,()=>{if(this.kiosks.countActive(true)<profile.cap)this.spawnKiosk(Phaser.Math.Between(80,520),true,'factory');});}
+    const profile=this.fallProfile();if(time>=this.nextFall&&this.kiosks.countActive(true)<profile.cap){this.nextFall=time+profile.interval;for(let i=0;i<profile.cluster;i++)this.time.delayedCall(i*100,()=>{if(this.kiosks.countActive(true)<profile.cap)this.spawnKiosk(Phaser.Math.Between(80,520),true,'factory');});}this.updateStressQa(time);
   }
 }

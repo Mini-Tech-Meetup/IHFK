@@ -27,7 +27,7 @@ SPEC-00
 - [x] 데스크톱에서 터치 HUD 숨김
 
 ## 테스트
-- [x] 자동: 강제 터치 공격 탭 큐, fullscreen/orientation 성공·거부 폴백, Android/iPhone 뷰포트 경계·겹침 0
+- [x] 자동: 강제 터치 공격 탭 큐, fullscreen/orientation 성공·거부 폴백, Android/iPhone 뷰포트 경계·겹침 0, Android Chromium/iPhone WebKit 실제 DOM 탭 무기 선택·공격
 - [x] 데스크톱: 터치 HUD 숨김과 키보드 자동 주행
 - [ ] Android landscape/fullscreen
 - [ ] iOS manual rotate fallback
@@ -40,6 +40,7 @@ SPEC-00
 - 알려진 제한: Android/iOS 실기기 fullscreen·orientation 미검증
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
 - 실기기 수집 도구: `/qa/device.html`, [report template](../evidence/DEVICE_QA_TEMPLATE.md)
+- 에뮬레이션 매트릭스: [cross-browser QA](../evidence/2026-07-13-cross-browser-qa.md)
 
 ## 평가
 기능 정확성 38/40 · 게임 감각 17/20 · 시각·오디오 12/15 · 호환성·현지화 10/15 · 코드 품질 9/10 · 총점 86/100

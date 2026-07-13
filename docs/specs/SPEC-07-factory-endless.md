@@ -41,11 +41,12 @@ SPEC-04, SPEC-06, SPEC-09
 ## 증거
 - 명령 및 결과: normal campaign Result 도달, endless console error 0
 - 스크린샷: [정상 본체](../evidence/runtime-factory-raster-stage0-1080x640.png), [대파손](../evidence/runtime-factory-raster-stage3-1080x640.png), [붕괴](../evidence/runtime-factory-raster-stage4-1080x640.png), [1080×640 30-unit Endless](../evidence/runtime-factory-stress-1080x640.png)
-- 성능 수치: 5,000 HP; fist-only 41.7초; full-reserve 36.9초; 30 active min 60 / avg 60.75 / max 61 FPS
+- 성능 수치: 5,000 HP; fist-only 41.7초; full-reserve 36.9초; desktop 30 active min 60 / avg 60.75 / max 61 FPS; iPhone WebKit emulation 30 active avg 61.3/p05 33.3 FPS
 - 알려진 제한: 30대 모바일 FPS 실측 대기
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
 - 래스터 분리 검증: [targeting and factory follow-up](../evidence/2026-07-13-targeting-factory-followup.md)
 - 제품 레이어 검증: [layer/result/cloud follow-up](../evidence/2026-07-13-layer-result-cloud-followup.md)
+- 에뮬레이션 성능: [cross-browser QA](../evidence/2026-07-13-cross-browser-qa.md)
 
 ## 평가
 기능 정확성 40/40 · 게임 감각 19/20 · 시각·오디오 14/15 · 호환성·현지화 11/15 · 코드 품질 9/10 · 총점 93/100

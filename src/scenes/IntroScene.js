@@ -1,11 +1,11 @@
 import { drawFastFood } from '../utils/visuals.js';
-import { GROUND_Y, PREVIEW_TRANSFORM, PREVIEW_WEAPON, PREVIEW_KIOSK, PREVIEW_LANDING, PREVIEW_FACTORY, PREVIEW_STRESS, PREVIEW_PICKUP } from '../config.js';
+import { GROUND_Y, PREVIEW_TRANSFORM, PREVIEW_WEAPON, PREVIEW_KIOSK, PREVIEW_LANDING, PREVIEW_FACTORY, PREVIEW_STRESS, PREVIEW_STRESS_MODE, PREVIEW_PICKUP } from '../config.js';
 
 export class IntroScene extends Phaser.Scene {
   constructor(){super('Intro');}
   create(){
     document.body.dataset.scene='Intro';
-    if(PREVIEW_WEAPON||PREVIEW_KIOSK||PREVIEW_LANDING||PREVIEW_FACTORY||PREVIEW_STRESS||PREVIEW_PICKUP){this.ui.clear();this.session.startTimer();this.scene.start(PREVIEW_FACTORY||PREVIEW_STRESS?'Factory':'FastFood',PREVIEW_FACTORY||PREVIEW_STRESS?{mode:PREVIEW_STRESS?'endless':'campaign'}:undefined);return;}
+    if(PREVIEW_WEAPON||PREVIEW_KIOSK||PREVIEW_LANDING||PREVIEW_FACTORY||PREVIEW_STRESS||PREVIEW_PICKUP){this.ui.clear();this.session.startTimer();this.scene.start(PREVIEW_FACTORY||PREVIEW_STRESS?'Factory':'FastFood',PREVIEW_FACTORY||PREVIEW_STRESS?{mode:PREVIEW_STRESS?PREVIEW_STRESS_MODE:'campaign'}:undefined);return;}
     drawFastFood(this);document.body.classList.remove('gameplay');this.kiosk=this.add.image(535,GROUND_Y,'kiosk-v2-0').setOrigin(.5,1).setScale(1.15);this.hero=this.add.sprite(400,GROUND_Y,'normal-idle').setOrigin(.5,1).setScale(5).play('normal-idle');
     const bubblePosition={x:(this.hero.x/1080)*100,y:69};
     if(PREVIEW_TRANSFORM){this.ui.showIntroBubble('TRANSFORM SPRITE QA',bubblePosition);this.time.delayedCall(250,()=>this.previewTransform());return;}

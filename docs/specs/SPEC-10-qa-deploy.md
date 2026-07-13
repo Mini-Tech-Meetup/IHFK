@@ -23,6 +23,8 @@ SPEC-00~09
 - [ ] 캠페인 15대/무한 30대 모바일 FPS 측정
 - [x] README와 크레딧
 - [x] PR/main 정적 검증 GitHub Actions
+- [x] Chrome stable·Chromium·Firefox·WebKit WebGL 입력 smoke
+- [x] Android Chromium·iPhone WebKit 가로 터치 입력 에뮬레이션
 
 ## 인수 조건
 - [ ] human 평균 2:30~3:30
@@ -31,18 +33,20 @@ SPEC-00~09
 - [x] 알려진 P0/P1 없음
 
 ## 테스트
-- [x] 자동: `npm run check`, browser 34/34, headless responsive/E2E 12그룹
+- [x] 자동: `npm run check`, browser 34/34, headless responsive/E2E 13그룹, cross-browser 6환경
 - [x] 데스크톱: 로컬 HTTP와 Pages-equivalent 경로
 - [ ] 모바일: Android/iOS fullscreen·orientation·share
 - [x] 시각 검수: 844×390 FIT와 touch HUD
 
 ## 증거
-- 명령 및 결과: `npm run check`; browser 34/34; `npm test` 12/12; 10/10 locale containment; accelerated campaign→Result→Endless; exact 1080×640, 1080×1080 and Android/iPhone responsive captures; GitHub Actions static validation
+- 명령 및 결과: `npm run check`; browser 34/34; responsive/E2E 13/13; cross-browser 6/6; 10/10 locale containment; accelerated campaign→Result→Endless; exact 1080×640, 1080×1080 and Android/iPhone responsive captures; GitHub Actions static validation
 - 스크린샷: Language, Title, 각 stage, Result, touch landscape
-- 성능 수치: normal-balance automated lower bound 124.265s; factory fist 41.7s/full-reserve 36.9s; 30 active desktop samples min 60 / avg 60.75 / max 61 FPS
+- 성능 수치: normal-balance automated lower bound 124.265s; factory fist 41.7s/full-reserve 36.9s; 30 active desktop min 60 / avg 60.75 / max 61 FPS; Android Chromium emulation campaign15 avg 61.5/p05 59.5; iPhone WebKit emulation endless30 avg 61.3/p05 33.3 FPS
 - 알려진 제한: physical-device/native-share, human average, and post-merge live Pages verification
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
 - 실기기 수집 도구: `/qa/device.html`, [report template](../evidence/DEVICE_QA_TEMPLATE.md)
+- 브라우저 매트릭스: [cross-browser QA](../evidence/2026-07-13-cross-browser-qa.md)
+- 실기기 스트레스 프리셋: `previewStress=15` 캠페인, `previewStress=30` 무한; 10초 후 복사 가능한 avg/p05 보고서
 
 ## 평가
 기능 정확성 37/40 · 게임 감각 17/20 · 시각·오디오 13/15 · 호환성·현지화 10/15 · 코드 품질 9/10 · 총점 86/100

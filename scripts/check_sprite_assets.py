@@ -102,6 +102,8 @@ runtime_captures = (
     "runtime-factory-product-behind-1080x640.png",
     "runtime-result-share-preview-1080x640.png",
     "runtime-street-moving-clouds-1080x640.png",
+    "runtime-firefox-result-1080x640.png",
+    "runtime-webkit-result-1080x640.png",
 )
 for filename in runtime_captures:
     path = Path("docs/evidence") / filename
@@ -112,6 +114,9 @@ responsive_captures = {
     "runtime-android-844x390.png": (844, 390),
     "runtime-ios-932x430.png": (932, 430),
     "runtime-mobile-portrait-390x844.png": (390, 844),
+    "runtime-webkit-iphone-touch-932x430.png": (932, 430),
+    "runtime-chromium-android-stress-844x390.png": (844, 390),
+    "runtime-webkit-iphone-stress-932x430.png": (932, 430),
 }
 for filename, expected in responsive_captures.items():
     path = Path("docs/evidence") / filename
@@ -137,7 +142,7 @@ print("PASS street cloud is a 240x112 hard-alpha pixel layer")
 print("PASS 28 generated runtime frames use hard alpha, safe bounds, and shared 16-color palettes")
 print("PASS 3 derived weapon pickups are 80x48 hard-alpha pixel sprites")
 print(f"PASS {len(runtime_captures)} runtime evidence captures are exactly 1080x640")
-print("PASS 3 responsive evidence captures retain their exact device viewports")
+print(f"PASS {len(responsive_captures)} responsive evidence captures retain their exact device viewports")
 print("PASS share-card evidence capture is exactly 1080x1080")
 print("PASS inspected source sheets retain 8 run and 15 attack frames with expected empty tail cells")
 print("PASS all 27 transform frames match the supplied 29x25 GIF pixel-for-pixel")
