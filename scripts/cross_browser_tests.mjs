@@ -4,6 +4,7 @@ import { extname, resolve, sep } from 'node:path';
 import { chromium, firefox, webkit } from 'playwright';
 
 const root=process.cwd();
+const headless=!process.env.IHFK_HEADED;
 const mime={'.css':'text/css; charset=utf-8','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png'};
 const server=createServer(async(request,response)=>{
   try{
@@ -33,7 +34,7 @@ const mobileMatrix=[
 
 try{
   for(const entry of matrix){
-    const browser=await entry.type.launch({headless:true,...entry.launch});
+    const browser=await entry.type.launch({headless,...entry.launch});
     const page=await browser.newPage({viewport:{width:1080,height:640}});const errors=[];
     page.on('pageerror',error=>errors.push(error.message));
     page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
@@ -59,7 +60,7 @@ try{
     await browser.close();console.log(`PASS ${entry.name} WebGL boot, keyboard, hold attack, and result preview`);
   }
   for(const entry of mobileMatrix){
-    const browser=await entry.type.launch({headless:true});
+    const browser=await entry.type.launch({headless});
     const context=await browser.newContext({viewport:entry.viewport,userAgent:entry.userAgent,hasTouch:true,isMobile:true});
     const page=await context.newPage();const errors=[];
     page.on('pageerror',error=>errors.push(error.message));page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
