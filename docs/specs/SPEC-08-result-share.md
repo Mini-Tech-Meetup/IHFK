@@ -21,15 +21,15 @@ localStorage, 최고 기록, 서버 업로드
 - [x] 다시 하기·계속 부수기
 - [x] 1080×1080 결과 카드
 - [x] Web Share와 PNG/clipboard 폴백
-- [x] 공유 카드 전경에 실제 최종 파손 키오스크 래스터 3대 합성
+- [x] 공유 카드 전경에 실제 정상 키오스크 2대와 최종 파손 키오스크 1대 합성
 
 ## 인수 조건
 - [x] localStorage 사용 없음
 - [x] 공유 카드에 선택 언어와 #IHFK 표시
-- [x] 공유 카드에 캐릭터·붕괴 공장·파손 키오스크가 모두 표시됨
+- [x] 공유 카드에 캐릭터·붕괴 공장·정상 2대·파손 1대 키오스크가 모두 표시됨
 
 ## 테스트
-- [x] 자동: Canvas 크기·PNG 다운로드 폴백·최종 파손 키오스크 텍스처 합성
+- [x] 자동: Canvas 크기·PNG 다운로드 폴백·정상/최종 파손 키오스크 텍스처 합성
 - [x] 데스크톱: Result/Retry/Keep Breaking
 - [ ] 모바일: native file share sheet
 - [x] 시각 검수: 결과 화면과 카드 구성
@@ -37,7 +37,7 @@ localStorage, 최고 기록, 서버 업로드
 ## 증거
 - 명령 및 결과: 단위 PNG fallback PASS; 실제 Result 공유 동작 `downloaded` 반환; 1080×640 버튼 y=406–452가 화면 y=142–509.6 내부임을 실측
 - 스크린샷: [1080×640 Result](../evidence/runtime-result-1080x640.png), [파손 키오스크 포함 1080×1080 공유 카드](../evidence/runtime-share-card-broken-kiosks-1080x1080.png)
-- 성능 수치: card 1080×1080 PNG; 로드된 strong character/factory/destroyed-kiosk rasters 사용 검사 PASS
+- 성능 수치: card 1080×1080 PNG; 로드된 strong character/factory/intact-kiosk/destroyed-kiosk rasters 사용 검사 PASS
 - 알려진 제한: native Web Share 파일 시트 실기기 미검증
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
 - 실기기 수집 도구: `/qa/device.html`, [report template](../evidence/DEVICE_QA_TEMPLATE.md)

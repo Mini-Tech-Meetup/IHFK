@@ -35,9 +35,9 @@ Phaser 4.1 기반의 정적 웹 게임으로 IHFK를 전면 리팩터링한다. 
 | [05](specs/SPEC-05-fastfood.md) | Fast-food stage | 구현 완료 | 90 | hidden-until-clear GO sign verified; mobile play pending |
 | [06](specs/SPEC-06-street.md) | Street stage | 구현 완료 | 88 | knockback + stacked-support gravity verified |
 | [07](specs/SPEC-07-factory-endless.md) | Factory and endless | 구현 완료 | 93 | separate background + five raster damage stages verified |
-| [08](specs/SPEC-08-result-share.md) | HUD, result and share | 구현 완료 | 91 | destroyed-kiosk share composition and fallback verified |
-| [09](specs/SPEC-09-art-audio.md) | Art and audio | 구현 완료 | 91 | 28 generated frames and factory split verified; physical-device listening pending |
-| [10](specs/SPEC-10-qa-deploy.md) | QA and deploy | 구현 완료 | 86 | 32/32 + 12 headless responsive/E2E groups; physical QA pending |
+| [08](specs/SPEC-08-result-share.md) | HUD, result and share | 구현 완료 | 91 | two intact + one destroyed kiosk share composition verified |
+| [09](specs/SPEC-09-art-audio.md) | Art and audio | 구현 완료 | 91 | kiosk B/menu UI and eight SFX routes verified; physical-device listening pending |
+| [10](specs/SPEC-10-qa-deploy.md) | QA and deploy | 구현 완료 | 86 | 34/34 + 12 headless responsive/E2E groups; physical QA pending |
 
 ## Completion gate
 

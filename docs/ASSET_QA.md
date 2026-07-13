@@ -51,7 +51,7 @@ Built-in `imagegen` was used with the legacy kiosk, original strong-guy attack a
 
 | Asset | Final frames | Gate result |
 |---|---:|---|
-| kiosk damage v2 | 5 × 128×128 | each frame inspected; bottom-centered; safe horizontal/top margins; shared 16-color palette; hard alpha |
+| kiosk damage v2 | 5 × 128×128 | each frame inspected; bottom-centered; stage 0 has a readable legacy B mark and four menu buttons, stages 1–3 retain progressively broken UI, stage 4 is blacked out; shared 16-color palette; hard alpha |
 | baseball-bat attack v2 | 6 × 64×64 | each frame inspected; safe margins; shared 16-color palette; hard alpha |
 | chainsaw attack v2 | 6 × 64×64 | initial edge contact rejected; all frames inset to 90%; reinspected; shared 16-color palette; hard alpha |
 | shotgun attack v2 | 6 × 64×64 | each frame inspected; recoil/muzzle/casing readable; safe margins; shared 16-color palette; hard alpha |
@@ -74,3 +74,5 @@ Final previews:
 - Factory: one horizontal five-slot strip derived from the existing factory composite; same right-facing kiosk assembly/launch machine from intact through crushed wreckage; no room, wall, floor, text, logo or UI; uniform `#ff00ff` chroma background.
 
 The factory follow-up used exactly one sequential built-in image-generation call. It was chroma-removed locally, split into five connected subjects, normalized with one shared scale and bottom-center anchor, quantized as one animation, and inspected frame-by-frame. No parallel generation or variant retry was used.
+
+The kiosk B/menu follow-up used no image generation. `python scripts/enhance_kiosk_screens.py` paints only with colors already present in the approved shared palette, preserves the original crack mask, rebuilds the five-frame preview, and is idempotent.

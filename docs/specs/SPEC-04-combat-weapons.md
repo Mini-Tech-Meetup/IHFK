@@ -52,7 +52,7 @@ SPEC-02, SPEC-03
 ## 증거
 - 명령 및 결과: `npm test` 전체 브라우저 그룹 통과, `npm run check` 통과, 래스터 무기 3종 실화면 검수
 - 스크린샷: [주먹 전방 1대](../evidence/runtime-fist-front-target-1080x640.png), [방망이](../evidence/runtime-weapon-bat-height-1080x640.png), [전기톱](../evidence/runtime-weapon-chainsaw-height-1080x640.png), [샷건](../evidence/runtime-weapon-shotgun-height-1080x640.png), [픽업 정렬](../evidence/runtime-pickup-aligned-1080x640.png)
-- 성능 수치: 키오스크/공장 DPS — fist 120/120, bat 211.1/144.4, chainsaw 160/140, shotgun 400/280; full-reserve factory 35.6s; player 42×88; base/weapon visible-height normalization ≈115px
+- 성능 수치: 키오스크/공장 DPS — fist 120/120, bat 211.1/138.9, chainsaw 240/160, shotgun 400/240; 양쪽 모두 `fist < bat < chainsaw < shotgun`; full-reserve factory 35.4s; player 42×88; base/weapon visible-height normalization ≈115px
 - 알려진 제한: 실제 터치 홀드 감각은 모바일 실기기 대기
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
 - 후속 검증: [intro and physics follow-up](../evidence/2026-07-13-intro-physics-followup.md)

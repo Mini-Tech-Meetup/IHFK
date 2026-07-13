@@ -82,7 +82,7 @@ try {
     await page.goto(`${base}/tests/`, { waitUntil: 'networkidle' });
     await page.waitForFunction(() => document.title.endsWith('PASSED'));
     const result = await page.locator('#out').textContent();
-    assert(result.includes('32 passed, 0 failed'), result);
+    assert(result.includes('34 passed, 0 failed'), result);
   });
 
   await test('intro bubble anchors above the hero and transform uses all source frames', async () => {

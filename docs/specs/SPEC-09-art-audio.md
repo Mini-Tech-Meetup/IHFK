@@ -27,24 +27,27 @@ SPEC-00, SPEC-03, SPEC-04
 - [x] 음소거 해제 시 진행 중 BGM 자동 재개
 - [x] 이미지 생성은 필수 핵심 원본만 순차 1장씩 사용
 - [x] 공장 배경과 본체를 분리하고 본체를 5단계 래스터 파손 시트로 교체
+- [x] 키오스크 정상 화면에 레거시 B 로고와 메뉴 UI, 파손 단계별 UI 소실 표현
+- [x] hit/break/pickup/shotgun/saw/land/weaponBreak/factory 효과음 라우팅 자동 검증
 
 ## 인수 조건
 - [x] 기존 캐릭터 5배 오버레이 시 의도한 C급 스타일 유지
 - [x] 오디오가 공격 입력을 지연시키지 않음
 
 ## 테스트
-- [x] 자동: 이미지 크기·정적 에셋 경로
+- [x] 자동: 이미지 크기·정적 에셋 경로·8개 효과음 WebAudio voice 라우팅
 - [x] 데스크톱: 오디오 루프·mute·브라우저 unlock
 - [ ] 모바일: 오디오 unlock·mute 실기기
 - [x] 시각 검수: 16색·nearest-neighbor·opaque 배경
 
 ## 증거
 - 명령 및 결과: full campaign 및 endless에서 audio/render console error 0; 115ms layered MIDI voice scheduler test PASS
-- 스크린샷: FastFood, Street, Factory, broken Factory
+- 스크린샷: FastFood, [B/menu kiosk](../evidence/runtime-kiosk-menu-ui-1080x640.png), Street, Factory, broken Factory
 - 성능 수치: 3 backgrounds × 1080×640, ≤16 colors; 28 generated runtime frames use hard alpha and shared ≤16-color palettes; factory follow-up image generation 1 sequential call; two music steps schedule at least nine square/saw/sine voices
 - 알려진 제한: 모바일 오디오 정책 실기기 대기
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
 - 공장 에셋 상세: [targeting and factory follow-up](../evidence/2026-07-13-targeting-factory-followup.md)
+- 키오스크·사운드 상세: [DPS and share-card follow-up](../evidence/2026-07-13-dps-share-followup.md)
 
 ## 평가
 기능 정확성 38/40 · 게임 감각 19/20 · 시각·오디오 15/15 · 호환성·현지화 11/15 · 코드 품질 8/10 · 총점 91/100

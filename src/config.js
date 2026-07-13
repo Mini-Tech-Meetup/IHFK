@@ -25,9 +25,9 @@ export const BALANCE = Object.freeze({
   weaponDropChance: 0.15,
   attack: {
     fist: { cooldown: 100, damage: 12, factoryDamage: 12, range: 78, height: 58, offsetX: 18, offsetY: -60, maxTargets: 1, role: 'unlimited-single' },
-    bat: { cooldown: 180, damage: 38, factoryDamage: 26, range: 150, height: 112, offsetX: 12, offsetY: -62, maxTargets: Infinity, role: 'wide-cleave' },
-    chainsaw: { cooldown: 50, damage: 8, factoryDamage: 7, range: 108, height: 92, offsetX: 18, offsetY: -60, maxTargets: 1, role: 'rapid-focus' },
-    shotgun: { cooldown: 250, damage: 100, factoryDamage: 70, range: 430, height: 210, offsetX: 20, offsetY: -75, maxTargets: 3, role: 'long-burst' }
+    bat: { cooldown: 180, damage: 38, factoryDamage: 25, range: 150, height: 112, offsetX: 12, offsetY: -62, maxTargets: Infinity, role: 'wide-cleave' },
+    chainsaw: { cooldown: 50, damage: 12, factoryDamage: 8, range: 108, height: 92, offsetX: 18, offsetY: -60, maxTargets: 1, role: 'rapid-focus' },
+    shotgun: { cooldown: 250, damage: 100, factoryDamage: 60, range: 430, height: 210, offsetX: 20, offsetY: -75, maxTargets: 3, role: 'long-burst' }
   },
   grants: { bat: 10, chainsaw: 4000, shotgun: 6 },
   caps: { bat: 20, chainsaw: 8000, shotgun: 12 }

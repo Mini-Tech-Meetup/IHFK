@@ -92,6 +92,7 @@ runtime_captures = (
     "runtime-factory-raster-stage0-1080x640.png",
     "runtime-factory-raster-stage3-1080x640.png",
     "runtime-factory-raster-stage4-1080x640.png",
+    "runtime-kiosk-menu-ui-1080x640.png",
 )
 for filename in runtime_captures:
     path = Path("docs/evidence") / filename
