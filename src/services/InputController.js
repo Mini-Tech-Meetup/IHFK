@@ -38,13 +38,17 @@ export class InputController {
     document.querySelectorAll('[data-weapon]').forEach(button => {
       if (button.dataset.bound) return;
       button.dataset.bound = 'true';
-      button.addEventListener('click', event => { event.preventDefault(); activeController?.queueWeapon(button.dataset.weapon); });
+      button.addEventListener('pointerdown', event => {
+        event.preventDefault();
+        activeController?.queueWeapon(button.dataset.weapon);
+      });
     });
   }
 
   queueWeapon(key) {
-    sharedTouch.weapon = key;
-    this.scene.session?.selectWeapon(key);
+    const selected = this.scene.selectWeapon?.(key) ?? this.scene.session?.selectWeapon(key) ?? false;
+    if (selected) sharedTouch.weapon = null;
+    return selected;
   }
 
   bindHold(selector, key) {

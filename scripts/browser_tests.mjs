@@ -147,6 +147,27 @@ try {
     assert(state.audio.context==='running'&&state.audio.musicWanted&&state.audio.musicRunning,`title BGM not running: ${JSON.stringify(state.audio)}`);
   });
 
+  await test('real weapon pickup enables pointer selection on HUD and touch controls', async () => {
+    await page.setViewportSize({ width: 1080, height: 640 });
+    await page.goto(`${base}/?testMode&autoplay&previewPickup=bat`, { waitUntil: 'networkidle' });
+    await page.waitForFunction(() => document.body.dataset.scene === 'FastFood' && window.IHFK.scene.getScene('FastFood').pickupLabels.length === 1);
+    await page.evaluate(() => {
+      const scene=window.IHFK.scene.getScene('FastFood');
+      const pickup=scene.pickupLabels[0].pickup;
+      scene.player.setPosition(pickup.x,pickup.y).setVelocity(0,0);
+    });
+    await page.waitForFunction(() => {
+      const scene=window.IHFK.scene.getScene('FastFood');
+      return scene.session.weapons.bat > 0 && document.querySelector('.weapon-slot[data-weapon="bat"]')?.getAttribute('aria-disabled') === 'false';
+    });
+    await page.locator('.weapon-slot[data-weapon="bat"]').dispatchEvent('pointerdown');
+    await page.waitForFunction(() => document.body.dataset.weapon === 'bat' && document.querySelector('.weapon-slot[data-weapon="bat"]')?.classList.contains('selected'));
+    await page.locator('#weapon-buttons [data-weapon="fist"]').dispatchEvent('pointerdown');
+    await page.waitForFunction(() => document.body.dataset.weapon === 'fist');
+    await page.locator('#weapon-buttons [data-weapon="bat"]').dispatchEvent('pointerdown');
+    await page.waitForFunction(() => document.body.dataset.weapon === 'bat' && document.querySelector('#weapon-buttons [data-weapon="bat"]')?.classList.contains('selected'));
+  });
+
   await test('fist hits only the nearest front target with hand-sized reach', async () => {
     await page.goto(`${base}/?testMode&previewPickup=bat`, { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: 'English' }).click();

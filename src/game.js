@@ -1,5 +1,5 @@
 import { GAME_WIDTH, GAME_HEIGHT, BALANCE } from './config.js';
-import { GameSession } from './services/GameSession.js';
+import { GameSession } from './services/GameSession.js?v=30';
 import { I18n } from './services/I18n.js';
 import { AudioService } from './services/AudioService.js';
 import { GameUi } from './ui/GameUi.js';
@@ -7,9 +7,9 @@ import { BootScene } from './scenes/BootScene.js';
 import { LanguageScene } from './scenes/LanguageScene.js';
 import { TitleScene } from './scenes/TitleScene.js';
 import { IntroScene } from './scenes/IntroScene.js';
-import { FastFoodScene } from './scenes/FastFoodScene.js';
-import { StreetScene } from './scenes/StreetScene.js';
-import { FactoryScene } from './scenes/FactoryScene.js';
+import { FastFoodScene } from './scenes/FastFoodScene.js?v=30';
+import { StreetScene } from './scenes/StreetScene.js?v=30';
+import { FactoryScene } from './scenes/FactoryScene.js?v=30';
 import { ResultScene } from './scenes/ResultScene.js';
 
 if(!window.Phaser)throw new Error('Phaser 4.1 failed to load');

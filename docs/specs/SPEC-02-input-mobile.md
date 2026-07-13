@@ -20,7 +20,7 @@ SPEC-00
 - [x] 좌측 가상 스틱
 - [x] 점프·공격·무기 터치 버튼
 - [x] 모바일 전용 버튼과 데스크톱 HUD 무기 칸의 click/tap 즉시 선택
-- [x] 잔량 없는 무기 버튼 비활성 상태 표시
+- [x] 잔량 없는 무기 버튼 `aria-disabled` 상태 표시(입력은 세션 가드에서 차단)
 - [x] 세로 회전 안내
 - [x] 전체 화면·landscape lock 요청과 폴백
 - [x] WebKit fullscreen 폴백과 사용자 제스처 선행 호출
@@ -31,14 +31,14 @@ SPEC-00
 - [x] 데스크톱에서 터치 HUD 숨김
 
 ## 테스트
-- [x] 자동: 강제 터치 공격 탭 큐, click/tap 무기 즉시 선택과 빈 슬롯 disabled, fullscreen/orientation 성공·거부·WebKit 폴백, 시작 탭 fullscreen 호출, Android/iPhone 뷰포트 경계·겹침 0, Android Chromium/iPhone WebKit 실제 DOM 탭 무기 선택·공격
+- [x] 자동: 실제 물리 픽업 획득 후 HUD·모바일 `pointerdown` 선택 전환, 강제 터치 공격 탭 큐, 빈 슬롯 세션 가드, fullscreen/orientation 성공·거부·WebKit 폴백, 시작 탭 fullscreen 호출, Android/iPhone 뷰포트 경계·겹침 0, Android Chromium/iPhone WebKit 실제 DOM 탭 무기 선택·공격
 - [x] 데스크톱: 터치 HUD 숨김과 키보드 자동 주행
 - [ ] Android landscape/fullscreen
 - [ ] iOS manual rotate fallback
 - [x] 시각 검수: 844×390 가로 FIT, 얇은 메뉴 프레임, 내부 스크롤과 강제 터치 HUD
 
 ## 증거
-- 명령 및 결과: 강제 터치 공격 탭 전달, mobile API 성공·거부 무예외, 터치 시작 x=230 안전영역 자동검사 확인
+- 명령 및 결과: `npm test`에서 실제 픽업 후 `fist → bat → fist → bat` HUD/모바일 전환 포함 responsive/E2E 16/16, 강제 터치 공격 탭 전달, mobile API 성공·거부 무예외, 터치 시작 x=230 안전영역 자동검사 확인
 - 스크린샷: [1080×640 FastFood touch HUD](../evidence/runtime-fastfood-1080x640.png), [Android 844×390](../evidence/runtime-android-844x390.png), [iPhone 932×430](../evidence/runtime-ios-932x430.png), [selected mobile bat and disabled empty weapons](../evidence/runtime-webkit-iphone-touch-932x430.png), [portrait fallback](../evidence/runtime-mobile-portrait-390x844.png), [thin language menu](../evidence/runtime-mobile-menu-landscape-844x390.png), [landscape guide](../evidence/runtime-mobile-guide-landscape-844x390.png)
 - 성능 수치: 입력 상태 1개로 keyboard/touch 통합
 - 알려진 제한: Android/iOS 실기기 fullscreen·orientation 미검증

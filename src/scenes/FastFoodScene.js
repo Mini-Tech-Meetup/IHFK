@@ -1,4 +1,4 @@
-import { BasePlayScene } from './BasePlayScene.js';
+import { BasePlayScene } from './BasePlayScene.js?v=30';
 import { drawFastFood, addGoSign } from '../utils/visuals.js';
 import { TEST_MODE, PREVIEW_LANDING, PREVIEW_PICKUP } from '../config.js';
 

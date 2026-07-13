@@ -37,7 +37,7 @@ Phaser 4.1 기반의 정적 웹 게임으로 IHFK를 전면 리팩터링한다. 
 | [07](specs/SPEC-07-factory-endless.md) | Factory and endless | 구현 완료 | 93 | separate background, five damage stages and product-behind-target depth verified |
 | [08](specs/SPEC-08-result-share.md) | HUD, result and share | 구현 완료 | 93 | Result/export Canvas and native/fallback payload include the canonical Pages URL |
 | [09](specs/SPEC-09-art-audio.md) | Art and audio | 구현 완료 | 91 | louder title-onward BGM, nine SFX routes and hard-alpha moving clouds verified; physical-device listening pending |
-| [10](specs/SPEC-10-qa-deploy.md) | QA and deploy | 구현 완료 | 86 | 37/37 + 15 responsive/E2E + 6 cross-browser; 3-run collector verified, physical QA pending |
+| [10](specs/SPEC-10-qa-deploy.md) | QA and deploy | 구현 완료 | 86 | 37/37 + 16 responsive/E2E + 6 cross-browser; real-pickup pointer selection and 3-run collector verified, physical QA pending |
 
 ## Completion gate
 
