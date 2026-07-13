@@ -14,6 +14,7 @@ export class BootScene extends Phaser.Scene {
     this.load.image('strong-jump',`${base}Strong Guy Jumps/Strong_Guy_Jumps.png`);this.load.image('strong-fall',`${base}Strong Guy Falls/Strong_Guy_Falls.png`);
     this.load.spritesheet('strong-attack',`${base}Strong Guy Attacks/Strong_Guy_Attacks_Without_The_Repeated_Frames.png`,{frameWidth:27,frameHeight:24});
     for(let index=0;index<5;index++)this.load.image(`kiosk-v2-${index}`,`assets/kiosk/frames-v2/0${index+1}.png`);
+    for(let index=0;index<5;index++)this.load.image(`factory-v2-${index}`,`assets/factory/frames-v2/0${index+1}.png`);
     for(const weapon of weaponFrames){for(let index=0;index<6;index++)this.load.image(`weapon-${weapon}-${index}`,`assets/weapons/${weapon}/frames-v2/0${index+1}.png`);this.load.image(`pickup-${weapon}`,`assets/weapons/pickups/${weapon}.png`);}
     this.load.on('loaderror',file=>this.registry.set('loadError',file.key));
   }

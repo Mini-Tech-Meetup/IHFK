@@ -35,7 +35,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   attack(time) {
     const key=this.session.selectedWeapon;const data=BALANCE.attack[key];
-    this.playVisual(key==='fist'?'strong-attack':`weapon-${key}-attack`,key==='fist'?5:2);
+    this.playVisual(key==='fist'?'strong-attack':`weapon-${key}-attack`,key==='fist'?5:2.5);
     if(time<this.nextAttack)return;this.nextAttack=time+data.cooldown;
     let depleted=false;
     if(key!=='fist'&&!PREVIEW_WEAPON){
@@ -43,10 +43,31 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       depleted=this.session.weapons[key]<=0;
     }
     if(key==='shotgun')this.scene.audio?.sfx('shotgun');if(key==='chainsaw')this.scene.audio?.sfx('saw');
-    const direction=this.flipX?-1:1;const range=AUTO_PLAY?1080:data.range;const x=AUTO_PLAY?0:(direction>0?this.x:this.x-range);const rect=new Phaser.Geom.Rectangle(x,AUTO_PLAY?0:this.body.center.y-data.height/2,range,AUTO_PLAY?640:data.height);
-    if(!PREVIEW_WEAPON){const kioskDamage=PREVIEW_KIOSK?4:data.damage;this.scene.kiosks?.getChildren().forEach(kiosk=>{if(kiosk.active&&!kiosk.dead&&Phaser.Geom.Intersects.RectangleToRectangle(rect,kiosk.getBounds()))kiosk.takeDamage(kioskDamage,direction);});
-    const target=this.scene.factoryTarget;if(target?.active&&Phaser.Geom.Intersects.RectangleToRectangle(rect,target.bounds))target.takeDamage(data.factoryDamage,direction,key);}
+    const direction=this.flipX?-1:1;const rect=this.attackRectangle(data,direction);const targets=this.attackTargets(rect,direction);
+    document.body.dataset.attackRect=`${Math.round(rect.x)},${Math.round(rect.y)},${Math.round(rect.width)},${Math.round(rect.height)}`;document.body.dataset.attackTargets=String(key==='fist'?Math.min(1,targets.length):targets.length);
+    if(!PREVIEW_WEAPON){
+      const hits=key==='fist'?targets.slice(0,1):targets;const kioskDamage=PREVIEW_KIOSK?4:data.damage;
+      hits.forEach(target=>{if(target.kind==='kiosk')target.value.takeDamage(kioskDamage,direction);else target.value.takeDamage(data.factoryDamage,direction,key);});
+    }
     if(depleted)this.breakWeapon(key);
+  }
+
+  attackRectangle(data,direction){
+    if(AUTO_PLAY)return new Phaser.Geom.Rectangle(0,0,1080,640);
+    const edge=this.x+direction*(data.offsetX||0);const x=direction>0?edge:edge-data.range;const centerY=this.body.bottom+(data.offsetY||0);
+    return new Phaser.Geom.Rectangle(x,centerY-data.height/2,data.range,data.height);
+  }
+
+  attackTargets(rect,direction){
+    const targets=[];
+    this.scene.kiosks?.getChildren().forEach(kiosk=>{
+      if(!kiosk.active||kiosk.dead||!kiosk.body?.enable)return;
+      const bounds=new Phaser.Geom.Rectangle(kiosk.body.x,kiosk.body.y,kiosk.body.width,kiosk.body.height);
+      if(Phaser.Geom.Intersects.RectangleToRectangle(rect,bounds))targets.push({kind:'kiosk',value:kiosk,distance:direction>0?Math.max(0,bounds.left-this.x):Math.max(0,this.x-bounds.right)});
+    });
+    const factory=this.scene.factoryTarget;
+    if(factory?.active&&Phaser.Geom.Intersects.RectangleToRectangle(rect,factory.bounds))targets.push({kind:'factory',value:factory,distance:direction>0?Math.max(0,factory.bounds.left-this.x):Math.max(0,this.x-factory.bounds.right)});
+    return targets.sort((left,right)=>left.distance-right.distance||(left.kind===right.kind?0:left.kind==='kiosk'?-1:1));
   }
 
   breakWeapon(key) {

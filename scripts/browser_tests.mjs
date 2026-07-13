@@ -123,6 +123,65 @@ try {
     assert(state.frames === 27, `transform animation frames: ${state.frames}`);
   });
 
+  await test('title complaint bubble renders above the unclipped kiosk shell', async () => {
+    await page.goto(`${base}/?testMode`, { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: 'English' }).click();
+    await page.waitForFunction(() => document.body.dataset.scene === 'Title' && document.querySelector('.start-complaint')?.classList.contains('pop'));
+    const state = await page.evaluate(() => {
+      const bubble = document.querySelector('.start-complaint');const bounds = bubble.getBoundingClientRect();const shell = bubble.closest('.kiosk-shell').getBoundingClientRect();
+      return { parent:bubble.parentElement.className,bounds:{left:bounds.left,top:bounds.top,right:bounds.right,bottom:bounds.bottom},shell:{left:shell.left,top:shell.top,right:shell.right,bottom:shell.bottom},z:Number(getComputedStyle(bubble).zIndex),text:bubble.textContent };
+    });
+    assert(state.parent === 'kiosk-shell', `complaint parent: ${state.parent}`);
+    assert(state.z >= 80, `complaint z-index: ${state.z}`);
+    assert(state.bounds.left >= 0 && state.bounds.top >= 0 && state.bounds.right <= 1080 && state.bounds.bottom <= 640, 'title complaint clipped by viewport');
+    assert(state.bounds.left >= state.shell.left && state.bounds.right <= state.shell.right && state.bounds.top >= state.shell.top && state.bounds.bottom <= state.shell.bottom, 'title complaint outside kiosk shell');
+    assert(state.text.includes('F**KING'), `complaint text: ${state.text}`);
+  });
+
+  await test('fist hits only the nearest front target with hand-sized reach', async () => {
+    await page.goto(`${base}/?testMode&previewPickup=bat`, { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: 'English' }).click();
+    await page.locator('.service-list button').nth(1).click();
+    await page.getByRole('button', { name: 'GAME START' }).click();
+    await page.waitForFunction(() => document.body.dataset.scene === 'FastFood');
+    const state = await page.evaluate(() => {
+      const scene=window.IHFK.scene.getScene('FastFood');const pickup=scene.pickupLabels[0];const pickupBounds=pickup.pickup.getBounds();
+      const pickupState={offsetX:pickup.halo.x-pickup.pickup.x,offsetY:pickup.halo.y-pickup.pickup.y,halo:{width:pickup.halo.displayWidth,height:pickup.halo.displayHeight},image:{width:pickupBounds.width,height:pickupBounds.height}};
+      scene.kiosks.clear(true,true);scene.player.setPosition(200,526).setVelocity(0,0);scene.session.selectWeapon('fist');scene.player.nextAttack=0;
+      const first=scene.spawnKiosk(275,false,'attack-test');const second=scene.spawnKiosk(325,false,'attack-test');scene.player.attack(scene.time.now+1000);
+      const [x,y,width,height]=document.body.dataset.attackRect.split(',').map(Number);
+      const frontState={firstDead:first.dead,secondHp:second.hp,targets:Number(document.body.dataset.attackTargets)};scene.kiosks.clear(true,true);
+      const weaponScales={};for(const key of ['bat','chainsaw','shotgun']){scene.session.weapons[key]=9999;scene.session.selectWeapon(key);scene.player.nextAttack=0;scene.player.attack(scene.time.now+2000);weaponScales[key]=scene.player.visual.scaleX;}
+      return {...frontState,rect:{x,y,width,height},playerX:scene.player.x,weaponScales,pickupState};
+    });
+    assert(state.firstDead && state.secondHp > 0, `front/back damage: ${state.firstDead}/${state.secondHp}`);
+    assert(state.targets === 1, `fist targets: ${state.targets}`);
+    assert(state.rect.width === 78 && state.rect.height === 58 && state.rect.x === state.playerX + 18, `fist rect: ${JSON.stringify(state.rect)}`);
+    assert(Object.values(state.weaponScales).every(scale => scale === 2.5), `weapon scales: ${JSON.stringify(state.weaponScales)}`);
+    assert(state.pickupState.offsetX === 0 && state.pickupState.offsetY === 0, `pickup offset: ${state.pickupState.offsetX},${state.pickupState.offsetY}`);
+    assert(state.pickupState.halo.width >= state.pickupState.image.width && state.pickupState.halo.height >= state.pickupState.image.height, 'pickup image not contained by box');
+  });
+
+  await test('factory room and five raster damage stages are separate runtime images', async () => {
+    await page.goto(`${base}/?testMode&previewFactory`, { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: 'English' }).click();
+    await page.locator('.service-list button').nth(1).click();
+    await page.getByRole('button', { name: 'GAME START' }).click();
+    await page.waitForFunction(() => document.body.dataset.scene === 'Factory');
+    const state = await page.evaluate(() => {
+      const scene=window.IHFK.scene.getScene('Factory');const target=scene.factoryTarget;const stages=[];
+      for(const amount of [21,20,20,20]){target.takeDamage(amount,1,'fist');stages.push({state:target.damageState,key:target.visual.texture.key,bounds:{x:target.bounds.x,y:target.bounds.y,width:target.bounds.width,height:target.bounds.height}});}
+      const background=scene.children.list.find(child=>child.texture?.key==='bg-factory');
+      return {backgroundKey:background?.texture?.key,visualKey:target.visual.texture.key,visualType:target.visual.type,stages,legacyOverlays:['damage','flash','screen'].filter(key=>key in target)};
+    });
+    assert(state.backgroundKey === 'bg-factory' && state.visualKey === 'factory-v2-4', `${state.backgroundKey}/${state.visualKey}`);
+    assert(state.visualType === 'Image', `factory visual type: ${state.visualType}`);
+    assert(state.stages.map(stage=>stage.state).join(',') === '1,2,3,4', `factory stages: ${JSON.stringify(state.stages)}`);
+    assert(state.stages.every((stage,index)=>stage.key===`factory-v2-${index+1}`), `factory textures: ${JSON.stringify(state.stages)}`);
+    assert(state.stages[3].bounds.height < state.stages[0].bounds.height, 'destroyed factory hitbox did not shrink with sprite');
+    assert(state.legacyOverlays.length === 0, `legacy factory overlays: ${state.legacyOverlays.join(',')}`);
+  });
+
   await test('stage exit is blank until the designed GO sign appears', async () => {
     await page.goto(`${base}/?testMode&autoplay&previewPickup=bat`, { waitUntil: 'networkidle' });
     await page.waitForFunction(() => document.body.dataset.scene === 'FastFood');

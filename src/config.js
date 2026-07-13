@@ -24,10 +24,10 @@ export const BALANCE = Object.freeze({
   streetGoal: TEST_MODE ? 2 : 50,
   weaponDropChance: 0.15,
   attack: {
-    fist: { cooldown: 100, damage: 12, factoryDamage: 12, range: 95, height: 110 },
-    bat: { cooldown: 180, damage: 38, factoryDamage: 26, range: 150, height: 130 },
-    chainsaw: { cooldown: 50, damage: 8, factoryDamage: 6, range: 105, height: 100 },
-    shotgun: { cooldown: 250, damage: 100, factoryDamage: 70, range: 430, height: 240 }
+    fist: { cooldown: 100, damage: 12, factoryDamage: 12, range: 78, height: 58, offsetX: 18, offsetY: -60 },
+    bat: { cooldown: 180, damage: 38, factoryDamage: 26, range: 150, height: 112, offsetX: 12, offsetY: -62 },
+    chainsaw: { cooldown: 50, damage: 8, factoryDamage: 6, range: 108, height: 92, offsetX: 18, offsetY: -60 },
+    shotgun: { cooldown: 250, damage: 100, factoryDamage: 70, range: 430, height: 210, offsetX: 20, offsetY: -75 }
   },
   grants: { bat: 10, chainsaw: 4000, shotgun: 6 },
   caps: { bat: 20, chainsaw: 8000, shotgun: 12 }

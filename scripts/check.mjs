@@ -28,6 +28,7 @@ const requiredAssets=[
   'assets/character/Strong Guy Jumps/Strong_Guy_Jumps.png','assets/character/Strong Guy Falls/Strong_Guy_Falls.png',
   'assets/character/Strong Guy Attacks/Strong_Guy_Attacks_Without_The_Repeated_Frames.png',
   ...Array.from({length:5},(_,index)=>`assets/kiosk/frames-v2/0${index+1}.png`),
+  ...Array.from({length:5},(_,index)=>`assets/factory/frames-v2/0${index+1}.png`),
   ...['bat','chainsaw','shotgun'].flatMap(weapon=>Array.from({length:6},(_,index)=>`assets/weapons/${weapon}/frames-v2/0${index+1}.png`)),
   ...['bat','chainsaw','shotgun'].map(weapon=>`assets/weapons/pickups/${weapon}.png`),
   ...['fist','bat','chainsaw','shotgun'].map(icon=>`assets/ui/icons/${icon}.png`)

@@ -26,6 +26,7 @@ SPEC-00, SPEC-03, SPEC-04
 - [x] M·터치 mute
 - [x] 음소거 해제 시 진행 중 BGM 자동 재개
 - [x] 이미지 생성은 필수 핵심 원본만 순차 1장씩 사용
+- [x] 공장 배경과 본체를 분리하고 본체를 5단계 래스터 파손 시트로 교체
 
 ## 인수 조건
 - [x] 기존 캐릭터 5배 오버레이 시 의도한 C급 스타일 유지
@@ -40,9 +41,10 @@ SPEC-00, SPEC-03, SPEC-04
 ## 증거
 - 명령 및 결과: full campaign 및 endless에서 audio/render console error 0; 115ms layered MIDI voice scheduler test PASS
 - 스크린샷: FastFood, Street, Factory, broken Factory
-- 성능 수치: 3 backgrounds × 1080×640, 16-color preprocessing; 23 generated runtime frames use hard alpha and shared 16-color palettes; two music steps schedule at least nine square/saw/sine voices
+- 성능 수치: 3 backgrounds × 1080×640, ≤16 colors; 28 generated runtime frames use hard alpha and shared ≤16-color palettes; factory follow-up image generation 1 sequential call; two music steps schedule at least nine square/saw/sine voices
 - 알려진 제한: 모바일 오디오 정책 실기기 대기
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
+- 공장 에셋 상세: [targeting and factory follow-up](../evidence/2026-07-13-targeting-factory-followup.md)
 
 ## 평가
 기능 정확성 38/40 · 게임 감각 19/20 · 시각·오디오 15/15 · 호환성·현지화 11/15 · 코드 품질 8/10 · 총점 91/100

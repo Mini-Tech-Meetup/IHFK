@@ -20,7 +20,7 @@ Generated pixel assets additionally require a shared palette of at most 16 opaqu
 | Normal Guy Walk, 30×40 | 2×2 grid with six sequential 15×20 cells across source layout | inspected, not currently loaded |
 | Normal Guy Air, 15×20 | one populated frame | inspected, not currently loaded |
 | Normal Guy Drinks, 60×60 | 4×3, 12 populated 15×20 cells | inspected, not currently loaded |
-| Normal Guy Transforms, 145×150 | 5×5; frames 0–21 form the animation, cells 22–24 contain only stray top pixels | use frames 0–21 only, bottom-origin in Intro |
+| Normal Guy Transforms, 145×150 | 5×6 grid of 29×25 cells; frames 0–26 match the supplied GIF pixel-for-pixel, cells 27–29 are empty | use frames 0–26, bottom-origin in Intro |
 | Strong Guy Idle, 36×23 | 2 populated 18×23 cells | use both frames |
 | Strong Guy Runs, 54×72 | 3×3; 8 populated 18×24 cells, last cell empty | use frames 0–7 only |
 | Strong Guy Jumps, 19×21 | one populated frame | use real jump texture |
@@ -38,7 +38,8 @@ Source previews live in `docs/evidence/sprites/`.
 |---|---|---|
 | fastfood.png | 1080×640, 16 colors, opaque | retain |
 | street.png | 1080×640, 15 colors, opaque | retain |
-| factory.png | 1080×640, 16 colors, opaque | retain |
+| factory composite v1 | 1080×640, 16 colors, opaque, factory body baked into room | preserve under `assets/factory/source/`; do not load at runtime |
+| factory.png | 1080×640, 14 colors, opaque, room/background only | runtime background; factory body is a separate image |
 | legacy kiosk.png | 340×128, five readable 68×128 damage cells but overly simple | reference only; replaced by v2 raster frames |
 | legacy shop.png | 304×180 low-resolution store strip | reference only |
 | legacy start/credit/bubble assets | readable original C-grade type but incomplete UI hierarchy | visual reference only; replaced by themed DOM UI |
@@ -54,6 +55,7 @@ Built-in `imagegen` was used with the legacy kiosk, original strong-guy attack a
 | baseball-bat attack v2 | 6 × 64×64 | each frame inspected; safe margins; shared 16-color palette; hard alpha |
 | chainsaw attack v2 | 6 × 64×64 | initial edge contact rejected; all frames inset to 90%; reinspected; shared 16-color palette; hard alpha |
 | shotgun attack v2 | 6 × 64×64 | each frame inspected; recoil/muzzle/casing readable; safe margins; shared 16-color palette; hard alpha |
+| factory damage v2 | 5 × 680×576 | all five frames inspected individually; shared bottom-center anchor; normal → damaged → collapsed progression; shared 16-color palette; hard alpha |
 
 Final previews:
 
@@ -61,6 +63,7 @@ Final previews:
 - `docs/evidence/sprites/bat_v2_preview.png`
 - `docs/evidence/sprites/chainsaw_v2_preview.png`
 - `docs/evidence/sprites/shotgun_v2_preview.png`
+- `docs/evidence/sprites/factory_damage_v2_preview.png`
 
 ## Image-generation prompt record
 
@@ -68,5 +71,6 @@ Final previews:
 - Bat: one horizontal six-slot full-character strip; ready, backswing, swing, impact arc, overswing, recovery; exact strong-guy identity and right-facing direction; uniform `#ff00ff` chroma background.
 - Chainsaw: one horizontal six-slot full-character strip; brace, pullback, thrust, contact sparks, vibration, recovery; stable red/gray chainsaw and right-facing character; uniform `#ff00ff` chroma background.
 - Shotgun: one horizontal six-slot full-character strip; aim, fire, muzzle flash, recoil, pump/casing, re-aim; stable short shotgun and right-facing character; uniform `#ff00ff` chroma background.
+- Factory: one horizontal five-slot strip derived from the existing factory composite; same right-facing kiosk assembly/launch machine from intact through crushed wreckage; no room, wall, floor, text, logo or UI; uniform `#ff00ff` chroma background.
 
-All four were generated through the built-in image tool, then chroma-removed locally, normalized with the game-studio sprite pipeline, inset with nearest-neighbor scaling where required, quantized as a whole animation and inspected again.
+The factory follow-up used exactly one sequential built-in image-generation call. It was chroma-removed locally, split into five connected subjects, normalized with one shared scale and bottom-center anchor, quantized as one animation, and inspected frame-by-frame. No parallel generation or variant retry was used.

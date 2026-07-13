@@ -23,10 +23,16 @@ export class BasePlayScene extends Phaser.Scene {
     document.body.dataset.playerImpactCount=String((Number(document.body.dataset.playerImpactCount)||0)+1);
   }
   onKioskDestroyed(kiosk){this.session.recordKiosk(kiosk.stage);if(this.allowDrops&&Math.random()<BALANCE.weaponDropChance)this.dropWeapon(kiosk.x,kiosk.y);}
-  dropWeapon(x,y,forcedKey=null){const key=forcedKey||Phaser.Utils.Array.GetRandom(['bat','chainsaw','shotgun']);const label={bat:'2',chainsaw:'3',shotgun:'4'}[key];const halo=this.add.rectangle(x,y+13,86,28,0xf4c338,.72).setStrokeStyle(4,0x111111).setDepth(11);const pickup=this.add.image(x,y,`pickup-${key}`).setDepth(13);const badge=this.add.text(x-36,y-22,label,{font:'bold 17px Consolas',color:'#111111',backgroundColor:'#fff9dd',padding:{x:5,y:2}}).setOrigin(.5).setDepth(14);const entry={pickup,halo,badge,active:true};this.pickupLabels.push(entry);const remove=()=>{if(!entry.active)return;entry.active=false;pickup.destroy();halo.destroy();badge.destroy();};this.physics.add.existing(pickup);pickup.body.setSize(64,38).setBounce(.15).setCollideWorldBounds(true);this.physics.add.collider(pickup,this.ground);this.physics.add.overlap(this.player,pickup,()=>{if(!entry.active)return;this.session.addWeapon(key);this.audio.sfx('pickup');remove();});this.time.delayedCall(12000,remove);}
+  dropWeapon(x,y,forcedKey=null){
+    const key=forcedKey||Phaser.Utils.Array.GetRandom(['bat','chainsaw','shotgun']);const label={bat:'2',chainsaw:'3',shotgun:'4'}[key];
+    const halo=this.add.rectangle(x,y,88,52,0xf4c338,.78).setStrokeStyle(4,0x111111).setDepth(11);const pickup=this.add.image(x,y,`pickup-${key}`).setDepth(13);const badge=this.add.text(x-34,y-32,label,{font:'bold 17px Consolas',color:'#111111',backgroundColor:'#fff9dd',padding:{x:5,y:2}}).setOrigin(.5).setDepth(14);
+    const entry={pickup,halo,badge,active:true};const sync=()=>{if(!entry.active)return;halo.setPosition(pickup.x,pickup.y);badge.setPosition(pickup.x-34,pickup.y-32);};entry.sync=sync;this.pickupLabels.push(entry);this.events.on('postupdate',sync);
+    const remove=()=>{if(!entry.active)return;entry.active=false;this.events.off('postupdate',sync);pickup.destroy();halo.destroy();badge.destroy();};
+    this.physics.add.existing(pickup);pickup.body.setSize(68,40).setBounce(.15).setCollideWorldBounds(true);this.physics.add.collider(pickup,this.ground);this.physics.add.overlap(this.player,pickup,()=>{if(!entry.active)return;this.session.addWeapon(key);this.audio.sfx('pickup');remove();});this.time.delayedCall(12000,remove);
+  }
   update(time){
     this.player?.update(time);if(this.inputController?.consumeMute())this.audio.toggleMute();this.hud?.update(this.getProgress?.()||'');const muteButton=document.querySelector('#touch-mute');if(muteButton){muteButton.textContent=this.audio.muted?'×':'♪';muteButton.classList.toggle('muted',this.audio.muted);}
-    this.pickupLabels=this.pickupLabels?.filter(entry=>{if(!entry.active)return false;entry.halo.setPosition(entry.pickup.x,entry.pickup.y+13);entry.badge.setPosition(entry.pickup.x-36,entry.pickup.y-22);return true;})||[];
+    this.pickupLabels=this.pickupLabels?.filter(entry=>entry.active)||[];
     document.body.dataset.weapon=this.session.selectedWeapon;document.body.dataset.playerX=String(Math.round(this.player?.x||0));document.body.dataset.activeKiosks=String(this.kiosks?.countActive(true)||0);
     document.body.dataset.destroyedTotal=String(this.session.destroyedTotal);document.body.dataset.endlessDestroyed=String(this.session.endlessDestroyed);document.body.dataset.streetDestroyed=String(this.session.streetDestroyed);
     const inspectedKiosk=this.kiosks?.getChildren().find(kiosk=>kiosk.active&&!kiosk.dead);

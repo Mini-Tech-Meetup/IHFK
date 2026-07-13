@@ -14,9 +14,8 @@ export class ShareCardService {
     const factorySource=factoryTexture?.getSourceImage?.();
     if(factorySource){
       context.drawImage(factorySource,0,0,factorySource.width,factorySource.height,0,168,1080,640);
-      context.fillStyle='rgba(20,10,12,.38)';context.fillRect(545,168,535,640);
-      context.strokeStyle='#17151a';context.lineWidth=26;context.beginPath();context.moveTo(600,225);context.lineTo(1010,750);context.moveTo(1010,215);context.lineTo(610,750);context.stroke();
-      context.strokeStyle='#f4c338';context.lineWidth=8;context.strokeRect(565,190,490,585);
+      const wreckTexture=this.textures?.get?.('factory-v2-4');const wreck=wreckTexture?.getSourceImage?.();
+      if(wreck)context.drawImage(wreck,0,0,wreck.width,wreck.height,400,168,680,576);
       return;
     }
     context.fillStyle='#777';context.fillRect(540,250,430,475);context.strokeStyle='#111';context.lineWidth=20;context.strokeRect(540,250,430,475);

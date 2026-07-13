@@ -62,7 +62,9 @@ export class GameUi {
       this.button(this.i18n.t('guide'), onGuide, 'service-button featured-service'),
       this.button(this.i18n.t('credits'), onCredits, 'service-button')
     );
-    return shell.querySelector('.start-complaint');
+    const complaint = shell.querySelector('.start-complaint');
+    shell.append(complaint);
+    return complaint;
   }
 
   setComplaint(element, text) {
