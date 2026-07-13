@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+    <meta name="theme-color" content="#111111" />
+    <title>IHFK Device QA</title>
+    <link rel="stylesheet" href="device.css" />
+  </head>
+  <body>
+    <main>
+      <h1>IHFK DEVICE QA</h1>
+      <p>실제 모바일 브라우저에서 실행하세요. 결과는 저장되거나 전송되지 않습니다.</p>
+
+      <section>
+        <h2>환경</h2>
+        <dl id="environment"></dl>
+      </section>
+
+      <section>
+        <h2>수동 기능 검사</h2>
+        <div class="actions">
+          <button id="display-test">1. 전체화면·가로 잠금</button>
+          <button id="audio-test">2. 오디오 재생</button>
+          <button id="share-test">3. Native Share</button>
+          <button id="fps-test">4. 30대 스트레스 FPS</button>
+          <a class="stress-link" href="../?testMode&touchMode&previewStress=15">5. 실제 게임 캠페인 15대 스트레스</a>
+          <a class="stress-link" href="../?testMode&touchMode&previewStress=30">6. 실제 게임 무한 30대 스트레스</a>
+          <a class="stress-link" href="../?playtest">7. 실제 밸런스 3회 플레이 시간 측정</a>
+        </div>
+        <p class="hint">공유 시트가 뜨면 성공입니다. 실제 전송은 취소해도 됩니다. 5·6번은 실제 Phaser FPS를 측정하고, 7번은 같은 페이지에서 3회 기록과 평균 보고서를 만듭니다.</p>
+      </section>
+
+      <section>
+        <h2>30대 스트레스 화면</h2>
+        <canvas id="stress" width="1080" height="640"></canvas>
+      </section>
+
+      <section>
+        <h2>보고서</h2>
+        <pre id="report"></pre>
+        <button id="copy-report">보고서 복사</button>
+      </section>
+
+      <a class="game-link" href="../">게임으로 돌아가기</a>
+    </main>
+    <script type="module" src="device.js"></script>
+  </body>
+</html>
