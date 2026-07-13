@@ -121,6 +121,8 @@ responsive_captures = {
     "runtime-chromium-android-stress-844x390.png": (844, 390),
     "runtime-webkit-iphone-stress-932x430.png": (932, 430),
     "runtime-playtest-report-844x390.png": (844, 390),
+    "runtime-mobile-menu-landscape-844x390.png": (844, 390),
+    "runtime-mobile-guide-landscape-844x390.png": (844, 390),
 }
 for filename, expected in responsive_captures.items():
     path = Path("docs/evidence") / filename

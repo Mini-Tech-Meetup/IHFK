@@ -43,7 +43,7 @@ export class GameUi {
     const shell = this.kioskShell(`
       <div class="screen-heading"><span>01</span><h1>${escapeHtml(this.i18n.t('languageTitle'))}</h1></div>
       <p class="screen-subtitle">TOUCH A LANGUAGE / 언어를 선택하세요</p>
-      <div class="language-grid"></div>`, { status: 'SELECT LANGUAGE' });
+      <div class="language-grid"></div>`, { status: 'SELECT LANGUAGE', className: 'language-shell' });
     const grid = shell.querySelector('.language-grid');
     Object.entries(localeNames).forEach(([locale, name], index) => {
       const control = this.button(name, () => onSelect(locale), 'language-button');
@@ -81,7 +81,7 @@ export class GameUi {
     const shell = this.kioskShell(`
       <div class="screen-heading"><span>02</span><h1>${escapeHtml(this.i18n.t('guide'))}</h1></div>
       <div class="guide-panel"><div class="control-diagram"><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><span>MOVE / JUMP</span></div><div class="control-diagram"><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd><span>WEAPON</span></div><div class="control-diagram wide"><kbd>SPACE</kbd><span>HOLD TO DESTROY</span></div></div>
-      <div class="guide-actions"></div>`, { status: 'INFORMATION' });
+      <div class="guide-actions"></div>`, { status: 'INFORMATION', className: 'guide-shell' });
     const actions = shell.querySelector('.guide-actions');
     actions.append(this.button(this.i18n.t('back'), onBack, 'secondary-button'), this.button(this.i18n.t('start'), onStart, 'start-button'));
   }
@@ -90,7 +90,7 @@ export class GameUi {
     const shell = this.kioskShell(`
       <div class="screen-heading"><span>03</span><h1>${escapeHtml(this.i18n.t('credits'))}</h1></div>
       <div class="credit-receipt"><p><b>ORIGINAL GAME</b><br>JHyunB / Lee-WonJun</p><p><b>CHARACTER</b><br>KALANN</p><p><b>ENGINE</b><br>PHASER 4.1</p><small>THANK YOU FOR USING<br>OUR EXTREMELY CONVENIENT SERVICE</small></div>
-      <div class="guide-actions single"></div>`, { status: 'CREDITS / RECEIPT' });
+      <div class="guide-actions single"></div>`, { status: 'CREDITS / RECEIPT', className: 'credits-shell' });
     shell.querySelector('.guide-actions').append(this.button(this.i18n.t('back'), onBack, 'secondary-button'));
   }
 

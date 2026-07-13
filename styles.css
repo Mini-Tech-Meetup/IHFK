@@ -13,11 +13,12 @@
   font-family: Consolas, "Courier New", monospace;
 }
 * { box-sizing: border-box; }
-html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #111; touch-action: none; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #111; touch-action: manipulation; }
+body.gameplay { touch-action: none; }
 #game-shell, #game { width: 100%; height: 100%; position: relative; }
-#game canvas { display: block; margin: auto; image-rendering: pixelated; image-rendering: crisp-edges; }
+#game canvas { display: block; margin: auto; image-rendering: pixelated; image-rendering: crisp-edges; touch-action:none; }
 #ui-layer { position: fixed; inset: 0; z-index: 30; pointer-events: none; overflow: hidden; }
-#ui-layer.menu-ui { display: grid; place-items: center; pointer-events: auto; padding: 18px; background: radial-gradient(circle at 50% 35%, rgba(244,195,56,.14), transparent 42%); }
+#ui-layer.menu-ui { display: grid; place-items: center; pointer-events: auto; padding: 18px; background: radial-gradient(circle at 50% 35%, rgba(244,195,56,.14), transparent 42%); touch-action:pan-y; }
 .kiosk-shell { position: relative; width: min(870px, 94vw); height: min(650px, 94vh); padding: 56px 62px 72px; border: 12px solid var(--ink); border-radius: 24px 24px 42px 42px; background: linear-gradient(110deg, var(--bezel-hi), var(--bezel) 22%, #212025 80%); box-shadow: 0 0 0 6px #666, 18px 22px 0 rgba(0,0,0,.42); color: var(--ink); }
 .kiosk-shell::before, .kiosk-shell::after { content:"+"; position:absolute; top:18px; width:22px; height:22px; border:3px solid #111; border-radius:50%; background:#777; color:#222; font:bold 17px Arial; text-align:center; line-height:17px; }
 .kiosk-shell::before { left:20px; } .kiosk-shell::after { right:20px; }
@@ -27,7 +28,10 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
 .kiosk-bezel { height:100%; padding:18px; border:8px solid #111; background:#09090b; box-shadow:inset 0 0 0 4px #626167; }
 .kiosk-status { height:30px; display:flex; align-items:center; gap:8px; padding:0 10px; color:#b7e9bb; background:#102219; font-size:12px; letter-spacing:1.2px; border-bottom:3px solid #111; }
 .status-code { margin-left:auto; color:#789884; }
-.kiosk-screen { position:relative; height:calc(100% - 30px); overflow:hidden; padding:20px 26px; background:var(--screen); box-shadow:inset 0 0 26px rgba(24,58,43,.28); }
+.kiosk-screen { position:relative; height:calc(100% - 30px); min-height:0; overflow-x:hidden; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; touch-action:pan-y; scrollbar-color:var(--screen-dark) #b5c1ad; scrollbar-width:auto; padding:20px 26px; background:var(--screen); box-shadow:inset 0 0 26px rgba(24,58,43,.28); }
+.kiosk-screen::-webkit-scrollbar { width:14px; }
+.kiosk-screen::-webkit-scrollbar-track { background:#b5c1ad; border-left:3px solid var(--ink); }
+.kiosk-screen::-webkit-scrollbar-thumb { background:var(--screen-dark); border:3px solid #b5c1ad; }
 .kiosk-screen::after { content:""; pointer-events:none; position:absolute; inset:0; background:repeating-linear-gradient(0deg, transparent 0 3px, rgba(20,40,25,.055) 3px 4px); mix-blend-mode:multiply; }
 .kiosk-hardware { position:absolute; left:70px; right:70px; bottom:17px; height:40px; }
 .card-reader { position:absolute; left:0; width:58px; height:34px; border:5px solid #111; background:#3e3d43; box-shadow:inset -9px 0 #18171b; }
@@ -191,6 +195,45 @@ body.touch-device .weapon-rack { display:none; }
   body.touch-device #game, body.touch-device #touch-controls { visibility: hidden; }
 }
 @media (max-height:560px) and (orientation:landscape) {
+  #ui-layer.menu-ui { padding:max(3px,env(safe-area-inset-top)) max(5px,env(safe-area-inset-right)) max(3px,env(safe-area-inset-bottom)) max(5px,env(safe-area-inset-left)); }
+  .kiosk-shell { width:min(980px,calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right) - 10px)); height:min(520px,calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 6px)); padding:31px 20px 19px; border-width:6px; border-radius:12px 12px 18px 18px; box-shadow:0 0 0 3px #666,7px 8px 0 rgba(0,0,0,.42); }
+  .kiosk-shell::before,.kiosk-shell::after { top:7px; width:13px; height:13px; border-width:2px; font-size:10px; line-height:9px; }
+  .kiosk-shell::before { left:8px; }.kiosk-shell::after { right:8px; }
+  .kiosk-brand-strip { left:20px; right:20px; top:3px; height:25px; gap:8px; border-width:3px; font-size:clamp(10px,2.2vw,14px); letter-spacing:.8px; }
+  .kiosk-brand-strip .status-lamp { width:9px; height:9px; border-width:2px; }
+  .kiosk-bezel { padding:5px; border-width:4px; box-shadow:inset 0 0 0 2px #626167; }
+  .kiosk-status { height:23px; padding:0 7px; gap:6px; border-bottom-width:2px; font-size:9px; letter-spacing:.7px; }
+  .kiosk-status .status-lamp { width:9px; height:9px; border-width:2px; }
+  .kiosk-screen { height:calc(100% - 23px); padding:7px 11px 9px; }
+  .kiosk-screen::-webkit-scrollbar { width:11px; }
+  .kiosk-hardware { left:26px; right:26px; bottom:2px; height:14px; transform:none; }
+  .card-reader { width:34px; height:15px; border-width:3px; box-shadow:inset -5px 0 #18171b; }
+  .card-reader::after { right:2px; bottom:1px; width:3px; height:3px; box-shadow:0 -5px #f4c338; }
+  .receipt-slot { top:2px; width:125px; height:10px; border-width:3px; box-shadow:inset 0 2px #555; }
+  .speaker-grill { top:0; width:45px; height:14px; background-size:8px 8px; }
+  .screen-heading { gap:8px; margin-bottom:5px; padding-bottom:4px; border-bottom-width:4px; }
+  .screen-heading span { flex-basis:34px; height:28px; border-width:3px; font-size:12px; }
+  .screen-heading h1 { font-size:clamp(18px,5.8vh,24px); }
+  .screen-subtitle { margin-bottom:5px; font-size:9px; }
+  .language-grid { grid-template-columns:repeat(5,minmax(0,1fr)); gap:5px; }
+  .language-button { min-height:48px; padding:4px 4px 4px 29px; font-size:clamp(10px,1.65vw,14px); line-height:1.05; overflow-wrap:anywhere; }
+  .language-button::before { width:25px; border-right-width:3px; font-size:9px; }
+  .title-lockup { grid-template-columns:minmax(0,1fr) 70px; margin-bottom:6px; border-bottom-width:4px; }
+  .tiny-label { font-size:8px; letter-spacing:.8px; }
+  .title-lockup h1 { margin:1px 0 4px; font-size:clamp(25px,9.4vh,37px); letter-spacing:-2px; }
+  .title-rule { width:65px; height:36px; margin-bottom:4px; border-bottom-width:7px; background-size:9px 100%; }
+  .service-list { grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; }
+  .service-button { min-height:48px; padding:6px 22px 6px 8px; font-size:clamp(11px,2vw,16px); text-align:center; }
+  .service-button::after { right:7px; font-size:21px; }
+  .start-complaint { right:18px; bottom:30px; max-width:min(480px,72vw); min-height:42px; padding:8px 12px 9px; border-width:4px; box-shadow:4px 5px 0 #111; font-size:clamp(11px,2vw,16px); }
+  .guide-panel { grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; margin:5px 0; }
+  .control-diagram,.control-diagram.wide { grid-column:auto; min-height:82px; padding:5px; border-width:4px; gap:4px; font-size:10px; }
+  kbd { min-width:27px; padding:4px; border-width:3px; box-shadow:2px 2px 0 #111; font-size:12px; }
+  .guide-actions { position:sticky; bottom:0; z-index:3; margin-top:6px; padding:5px 0 2px; background:linear-gradient(transparent,#dfe8d0 22%); }
+  .guide-actions .kiosk-button { min-width:120px; min-height:45px; font-size:clamp(11px,2vw,15px); }
+  .credit-receipt { width:min(640px,95%); margin:4px auto; padding:8px 14px 15px; font-size:11px; }
+  .credit-receipt p { display:inline-block; width:32%; margin:2px 0 7px; vertical-align:top; }
+  .credit-receipt small { padding-top:5px; }
   #weapon-buttons { top:max(10px,env(safe-area-inset-top)); left:50%; right:auto; bottom:auto; flex-direction:row; transform:translateX(-50%); }
   #weapon-buttons button.selected { transform:translateY(5px); }
 }

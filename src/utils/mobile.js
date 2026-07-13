@@ -1,9 +1,14 @@
 export async function requestLandscape(root = document.documentElement, orientation = globalThis.screen?.orientation) {
   let fullscreen = false;
   let locked = false;
+  const ownerDocument = root?.ownerDocument || globalThis.document;
+  const fullscreenElement = ownerDocument?.fullscreenElement || ownerDocument?.webkitFullscreenElement;
   try {
-    if (root?.requestFullscreen) {
-      await root.requestFullscreen();
+    const requestFullscreen = root?.requestFullscreen || root?.webkitRequestFullscreen;
+    if (fullscreenElement) {
+      fullscreen = true;
+    } else if (requestFullscreen) {
+      await requestFullscreen.call(root);
       fullscreen = true;
     }
   } catch {}

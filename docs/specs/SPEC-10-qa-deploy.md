@@ -34,13 +34,13 @@ SPEC-00~09
 - [x] 알려진 P0/P1 없음
 
 ## 테스트
-- [x] 자동: `npm run check`, browser 36/36, headless responsive/E2E 14그룹, cross-browser 6환경
+- [x] 자동: `npm run check`, browser 37/37, headless responsive/E2E 15그룹, cross-browser 6환경
 - [x] 데스크톱: 로컬 HTTP와 Pages-equivalent 경로
 - [ ] 모바일: Android/iOS fullscreen·orientation·share
-- [x] 시각 검수: 844×390 FIT와 touch HUD
+- [x] 시각 검수: 844×390 FIT, 얇은 키오스크 메뉴, 내부 스크롤과 touch HUD
 
 ## 증거
-- 명령 및 결과: `npm run check`; browser 36/36; responsive/E2E 14/14; cross-browser 6/6; 10/10 locale containment; accelerated campaign→Result→Endless; synthetic 3-run collector boundary 2:30/3:00/3:30 → 3:00 PASS; exact 1080×640 result/share and Android/iPhone responsive captures; GitHub Actions static validation
+- 명령 및 결과: `npm run check`; browser 37/37; responsive/E2E 15/15; cross-browser 6/6; 10/10 locale containment; 844×390 menu scroll/start/fullscreen gesture flow; accelerated campaign→Result→Endless; synthetic 3-run collector boundary 2:30/3:00/3:30 → 3:00 PASS; exact 1080×640 result/share and Android/iPhone responsive captures; GitHub Actions static validation
 - 스크린샷: Language, Title, 각 stage, Result, touch landscape
 - 성능 수치: prior 50-kiosk automated lower bound 124.265s; current street goal 25 requires human remeasurement; factory fist 41.7s/full-reserve 36.9s; 30 active desktop min 60 / avg 60.75 / max 61 FPS; Android Chromium emulation campaign15 avg 61.5/p05 59.5; iPhone WebKit emulation endless30 avg 61.3/p05 33.3 FPS
 - 알려진 제한: physical-device/native-share, human average, and post-merge live Pages verification

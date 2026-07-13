@@ -82,7 +82,7 @@ try {
     await page.goto(`${base}/tests/`, { waitUntil: 'networkidle' });
     await page.waitForFunction(() => document.title.endsWith('PASSED'));
     const result = await page.locator('#out').textContent();
-    assert(result.includes('36 passed, 0 failed'), result);
+    assert(result.includes('37 passed, 0 failed'), result);
   });
 
   await test('intro bubble anchors above the hero and transform uses all source frames', async () => {
@@ -260,6 +260,57 @@ try {
     const after = await page.evaluate(() => window.IHFK.scene.getScene('Street').clouds.map(cloud=>cloud.x));
     assert(before.xs.every((x,index)=>after[index]>x), `clouds did not move continuously: ${before.xs} -> ${after}`);
     assert(before.depths.every(depth=>depth>before.background&&depth<0), `cloud layer depths: bg=${before.background}, clouds=${before.depths}`);
+  });
+
+  await test('mobile landscape kiosk menus are thin, scrollable, and selectable', async () => {
+    await page.setViewportSize({ width: 844, height: 390 });
+    await page.addInitScript(() => {
+      Element.prototype.requestFullscreen = function requestFullscreenForQa() {
+        document.body.dataset.fullscreenApiCalled = 'true';
+        return Promise.resolve();
+      };
+    });
+    await page.goto(`${base}/?testMode&touchMode`, { waitUntil: 'networkidle' });
+    await page.waitForFunction(() => document.body.dataset.scene === 'Language');
+    const languageLayout = await page.evaluate(() => {
+      const shell=document.querySelector('.kiosk-shell');
+      const screen=document.querySelector('.kiosk-screen');
+      const buttons=[...document.querySelectorAll('.language-button')];
+      screen.scrollTop=screen.scrollHeight;
+      const shellBounds=shell.getBoundingClientRect(),screenBounds=screen.getBoundingClientRect(),lastBounds=buttons.at(-1).getBoundingClientRect(),style=getComputedStyle(screen);
+      return {
+        count:buttons.length,
+        overflowY:style.overflowY,
+        touchAction:style.touchAction,
+        horizontalFrame:(shellBounds.width-screenBounds.width)/2,
+        shell:{left:shellBounds.left,top:shellBounds.top,right:shellBounds.right,bottom:shellBounds.bottom},
+        screen:{left:screenBounds.left,top:screenBounds.top,right:screenBounds.right,bottom:screenBounds.bottom},
+        last:{left:lastBounds.left,top:lastBounds.top,right:lastBounds.right,bottom:lastBounds.bottom},
+      };
+    });
+    assert(languageLayout.count===10,`language count: ${languageLayout.count}`);
+    assert(languageLayout.overflowY==='auto'&&languageLayout.touchAction==='pan-y',`menu scrolling: ${JSON.stringify(languageLayout)}`);
+    assert(languageLayout.horizontalFrame<=36,`mobile kiosk frame too thick: ${languageLayout.horizontalFrame}`);
+    assert(languageLayout.shell.left>=0&&languageLayout.shell.top>=0&&languageLayout.shell.right<=844&&languageLayout.shell.bottom<=390,`mobile kiosk shell clipped: ${JSON.stringify(languageLayout.shell)}`);
+    assert(languageLayout.last.top>=languageLayout.screen.top&&languageLayout.last.bottom<=languageLayout.screen.bottom+1,`last language unreachable: ${JSON.stringify(languageLayout)}`);
+    if(process.env.IHFK_CAPTURE_MOBILE_MENU)await page.screenshot({path:'docs/evidence/runtime-mobile-menu-landscape-844x390.png'});
+    await page.locator('.language-button').last().click();
+    await page.waitForFunction(() => document.body.dataset.scene === 'Title');
+    await page.locator('.featured-service').click();
+    await page.waitForSelector('.guide-shell .start-button');
+    const guideLayout=await page.evaluate(()=>{
+      const shellElement=document.querySelector('.kiosk-shell'),screenElement=document.querySelector('.kiosk-screen'),start=document.querySelector('.guide-shell .start-button');
+      screenElement.scrollTop=screenElement.scrollHeight;
+      const shell=shellElement.getBoundingClientRect(),screen=screenElement.getBoundingClientRect(),button=start.getBoundingClientRect();
+      return{shell:{top:shell.top,bottom:shell.bottom,left:shell.left,right:shell.right},screen:{top:screen.top,bottom:screen.bottom,left:screen.left,right:screen.right},button:{top:button.top,bottom:button.bottom,left:button.left,right:button.right},viewport:{width:innerWidth,height:innerHeight},windowScroll:{x:scrollX,y:scrollY}};
+    });
+    assert(guideLayout.button.top>=guideLayout.screen.top&&guideLayout.button.bottom<=guideLayout.screen.bottom+1&&guideLayout.button.left>=guideLayout.screen.left&&guideLayout.button.right<=guideLayout.screen.right,`game start unreachable: ${JSON.stringify(guideLayout)}`);
+    assert(guideLayout.shell.left>=0&&guideLayout.shell.top>=0&&guideLayout.shell.right<=guideLayout.viewport.width&&guideLayout.shell.bottom<=guideLayout.viewport.height&&guideLayout.windowScroll.x===0&&guideLayout.windowScroll.y===0,`guide shell escaped viewport: ${JSON.stringify(guideLayout)}`);
+    if(process.env.IHFK_CAPTURE_MOBILE_MENU)await page.screenshot({path:'docs/evidence/runtime-mobile-guide-landscape-844x390.png'});
+    await page.locator('.guide-shell .start-button').click();
+    await page.waitForFunction(() => ['Intro','FastFood'].includes(document.body.dataset.scene), null, {timeout:10_000});
+    const fullscreen=await page.evaluate(()=>({called:document.body.dataset.fullscreenApiCalled,state:document.body.dataset.fullscreen}));
+    assert(fullscreen.called==='true'&&fullscreen.state==='true',`fullscreen did not run from start gesture: ${JSON.stringify(fullscreen)}`);
   });
 
   for (const [name, width, height] of [['Android', 844, 390], ['iPhone', 932, 430]]) {

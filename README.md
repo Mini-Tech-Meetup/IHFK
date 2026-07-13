@@ -38,7 +38,7 @@ Open `http://<PC IPv4 address>:4173/qa/device.html` on the phone. Windows Firewa
 
 ## Mobile
 
-Play in landscape orientation. After Game Start, the game requests fullscreen and a landscape lock where the browser supports them. On iOS or when those requests are rejected, rotate the device manually. Touch controls provide a left joystick, jump/attack buttons, weapon slots 1–4, and mute.
+Play in landscape orientation. Game Start requests fullscreen and a landscape lock directly from the tap gesture where the browser supports them, including the WebKit fullscreen fallback. On iOS or when those requests are rejected, rotate the device manually. The mobile kiosk uses a thin landscape bezel and its screen scrolls independently, so every language, guide action, and Game Start remains selectable even while browser chrome is visible. Touch controls provide a left joystick, jump/attack buttons, weapon slots 1–4, and mute.
 
 For release-device verification, open [`qa/device.html`](qa/device.html) on the deployed host. It tests fullscreen/orientation requests, audio unlock, native PNG sharing, 10-second 15/30-kiosk real-game FPS loads, and three real campaign completions without storing or transmitting the report. The timing shortcut can also be opened directly with `?playtest`; after the third result it marks the 2:30–3:30 average target pass or retest and offers a copyable JSON report.
 

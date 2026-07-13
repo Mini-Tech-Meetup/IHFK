@@ -14,8 +14,15 @@ export class TitleScene extends Phaser.Scene {
   renderGuide(){this.clear();this.ui.showGuide({onStart:()=>this.startGame(),onBack:()=>this.renderMenu()});}
   renderCredits(){this.clear();this.ui.showCredits({onBack:()=>this.renderMenu()});}
   async startGame(){
-    this.audio.startMusic();try{await this.audio.unlock();this.audio.sfx('pickup');}catch{}
-    if(FORCE_TOUCH||matchMedia('(pointer: coarse)').matches)await requestLandscape();
+    const mobile=FORCE_TOUCH||matchMedia('(pointer: coarse)').matches;
+    const displayRequest=mobile?requestLandscape():Promise.resolve({fullscreen:false,locked:false});
+    const audioRequest=this.audio.unlock();
+    this.audio.startMusic();
+    const [display]=await Promise.allSettled([displayRequest,audioRequest]);
+    const displayState=display.status==='fulfilled'?display.value:{fullscreen:false,locked:false};
+    document.body.dataset.fullscreen=String(displayState.fullscreen);
+    document.body.dataset.orientationLocked=String(displayState.locked);
+    try{this.audio.sfx('pickup');}catch{}
     this.session.resetRun();this.ui.clear();this.scene.start('Intro');
   }
 }
