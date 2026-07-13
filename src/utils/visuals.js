@@ -8,6 +8,24 @@ export function button(scene,x,y,label,onClick,width=300) {
   bg.on('pointerover',()=>bg.setFillStyle(0xffd53d)); bg.on('pointerout',()=>bg.setFillStyle(0xf5f1df)); bg.on('pointerdown',onClick);
   return {bg,text,destroy(){bg.destroy();text.destroy();}};
 }
+export function addGoSign(scene,x,y) {
+  const outer=scene.add.rectangle(0,0,118,66,0x111111);
+  const face=scene.add.rectangle(0,-3,104,50,0xf4c338).setStrokeStyle(4,0xffffff);
+  const label=scene.add.text(0,-4,'GO',{fontFamily:'Arial Black, Arial, sans-serif',fontSize:'34px',fontStyle:'bold',color:'#111111'}).setOrigin(.5);
+  const lamps=[-46,46].map(lampX=>scene.add.rectangle(lampX,24,8,8,0xd73e32).setStrokeStyle(2,0x111111));
+  const sign=scene.add.container(x,y,[outer,face,label,...lamps]).setDepth(24).setVisible(false).setScale(.8);
+  let pulse=null;
+  return {
+    sign,
+    show(){
+      if(sign.visible)return;
+      sign.setVisible(true).setScale(.8).setAlpha(1);
+      scene.tweens.add({targets:sign,scale:1,duration:130,ease:'Back.easeOut'});
+      pulse=scene.tweens.add({targets:[face,...lamps],alpha:{from:1,to:.55},duration:330,yoyo:true,repeat:-1,ease:'Stepped'});
+    },
+    destroy(){pulse?.stop();sign.destroy(true);}
+  };
+}
 export function drawFastFood(scene) {
   scene.cameras.main.setBackgroundColor('#f4f0df');
   if(scene.textures.exists('bg-fastfood'))return scene.add.image(540,320,'bg-fastfood').setDepth(-10);

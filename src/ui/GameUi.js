@@ -90,7 +90,7 @@ export class GameUi {
     shell.querySelector('.guide-actions').append(this.button(this.i18n.t('back'), onBack, 'secondary-button'));
   }
 
-  showIntroBubble(text) {
+  showIntroBubble(text, { x = 50, y = 69 } = {}) {
     let bubble = this.root.querySelector('.cutscene-bubble');
     if (!bubble) {
       this.clear('cutscene-ui');
@@ -98,6 +98,8 @@ export class GameUi {
       bubble.className = 'cutscene-bubble';
       this.root.append(bubble);
     }
+    bubble.style.setProperty('--bubble-x', `${x}%`);
+    bubble.style.setProperty('--bubble-y', `${y}%`);
     bubble.classList.remove('pop'); void bubble.offsetWidth;
     bubble.textContent = text; bubble.classList.add('pop');
   }

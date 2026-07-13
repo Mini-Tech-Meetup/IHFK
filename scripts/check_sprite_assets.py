@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from PIL import Image
+from PIL import Image, ImageChops
 
 
 def rgba(path: Path) -> Image.Image:
@@ -34,6 +34,25 @@ def grid_content(path: Path, frame_width: int, frame_height: int) -> list[bool]:
     return [image.crop(((index % columns) * frame_width, (index // columns) * frame_height, (index % columns + 1) * frame_width, (index // columns + 1) * frame_height)).getchannel("A").getbbox() is not None for index in range(columns * rows)]
 
 
+def validate_transform_sheet() -> None:
+    sheet_path = Path("assets/character/Normal Guy Transforms/Normal_Guy_Transforms_SpriteSheet.png")
+    gif_path = Path("assets/character/Normal Guy Transforms/Normal_Guy_Transforms_GIF.gif")
+    sheet = Image.open(sheet_path).convert("RGBA")
+    animation = Image.open(gif_path)
+    if sheet.size != (145, 150): raise SystemExit(f"{sheet_path}: expected 145x150, got {sheet.size}")
+    if animation.size != (29, 25) or animation.n_frames != 27: raise SystemExit(f"{gif_path}: expected 27 frames at 29x25")
+    for index in range(animation.n_frames):
+        x = (index % 5) * 29; y = (index // 5) * 25
+        cell = sheet.crop((x, y, x + 29, y + 25))
+        animation.seek(index)
+        if ImageChops.difference(cell, animation.convert("RGBA")).getbbox() is not None:
+            raise SystemExit(f"Transform frame {index}: sheet/GIF pixel mismatch")
+    for index in range(27, 30):
+        x = (index % 5) * 29; y = (index // 5) * 25
+        if sheet.crop((x, y, x + 29, y + 25)).getchannel("A").getbbox() is not None:
+            raise SystemExit(f"Transform tail cell {index}: expected empty")
+
+
 for background in Path("assets/background").glob("*.png"):
     image = Image.open(background).convert("RGBA")
     if image.size != (1080, 640): raise SystemExit(f"{background}: wrong size {image.size}")
@@ -57,6 +76,9 @@ runtime_captures = (
     "runtime-title-1080x640.png",
     "runtime-howto-1080x640.png",
     "runtime-fastfood-1080x640.png",
+    "runtime-fastfood-go-1080x640.png",
+    "runtime-intro-dialogue-1080x640.png",
+    "runtime-intro-transform-1080x640.png",
     "runtime-factory-stress-1080x640.png",
     "runtime-result-1080x640.png",
 )
@@ -77,12 +99,14 @@ for filename, expected in responsive_captures.items():
 
 run = grid_content(Path("assets/character/Strong Guy Runs/Strong_Guy_Rung_SpriteSheet.png"), 18, 24)
 attack = grid_content(Path("assets/character/Strong Guy Attacks/Strong_Guy_Attacks_Without_The_Repeated_Frames.png"), 27, 24)
+validate_transform_sheet()
 if run[:8] != [True] * 8 or run[8]: raise SystemExit("Strong-run source population changed")
 if attack[:15] != [True] * 15 or attack[15]: raise SystemExit("Strong-attack source population changed")
 
 print("PASS 3 backgrounds are 1080x640, opaque, and at most 16 colors")
 print("PASS 23 generated runtime frames use hard alpha, safe bounds, and shared 16-color palettes")
 print("PASS 3 derived weapon pickups are 80x48 hard-alpha pixel sprites")
-print("PASS 5 runtime evidence captures are exactly 1080x640")
+print(f"PASS {len(runtime_captures)} runtime evidence captures are exactly 1080x640")
 print("PASS 3 responsive evidence captures retain their exact device viewports")
 print("PASS inspected source sheets retain 8 run and 15 attack frames with expected empty tail cells")
+print("PASS all 27 transform frames match the supplied 29x25 GIF pixel-for-pixel")

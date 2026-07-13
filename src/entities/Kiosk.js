@@ -4,7 +4,7 @@ import { hitStop, scatterRectangles } from '../utils/effects.js';
 export class Kiosk extends Phaser.Physics.Arcade.Sprite {
   constructor(scene,x,y,{stage='global',falling=false}={}) {
     super(scene,x,y,'kiosk-v2-0');scene.add.existing(this);scene.physics.add.existing(this);
-    this.stage=stage;this.hp=BALANCE.kioskHp;this.dead=false;this.wasFalling=falling;this.landed=!falling;this.damageState=0;this.nextAmbientFlicker=0;this.spawnedAt=scene.game.loop.time;this.landingMs=falling?null:0;
+    this.stage=stage;this.hp=BALANCE.kioskHp;this.dead=false;this.wasFalling=falling;this.landed=!falling;this.damageState=0;this.nextAmbientFlicker=0;this.spawnedAt=scene.game.loop.time;this.landingMs=falling?null:0;this.lastFallSpeed=0;this.lastFallingAt=-Infinity;this.lastPlayerImpactAt=-Infinity;
     this.setScale(1.15).setDepth(7).setPushable(false).setCollideWorldBounds(true);this.body.setSize(54,116).setOffset(37,8).setMaxVelocity(220,2400);
     this.screenGlow=scene.add.rectangle(x,y-38,25,43,0x0b6b35,.2).setDepth(8).setBlendMode(Phaser.BlendModes.ADD);
     if(falling)this.body.setGravityY(BALANCE.kioskFallGravity-BALANCE.gravity);else this.lockToGround();
@@ -14,7 +14,9 @@ export class Kiosk extends Phaser.Physics.Arcade.Sprite {
 
   preUpdate(time,delta) {
     super.preUpdate(time,delta);this.syncScreen();
-    if(this.wasFalling&&!this.landed&&this.body.blocked.down){this.lockToGround();this.scene.audio?.sfx('land');this.scene.cameras.main.shake(55,.006);}
+    if(this.wasFalling&&!this.landed&&this.body.velocity.y>0){this.lastFallSpeed=this.body.velocity.y;this.lastFallingAt=time;}
+    const touchesFloor=this.body.blocked.down&&this.body.bottom>=GROUND_Y-2;
+    if(this.wasFalling&&!this.landed&&touchesFloor){this.lockToGround();this.scene.audio?.sfx('land');this.scene.cameras.main.shake(55,.006);}
     if(!this.dead&&this.damageState>=2&&time>=this.nextAmbientFlicker){this.nextAmbientFlicker=time+Phaser.Math.Between(450,1200);this.flickerScreen(false,2);}
   }
 
@@ -26,7 +28,7 @@ export class Kiosk extends Phaser.Physics.Arcade.Sprite {
   }
 
   takeDamage(amount,direction=1) {
-    if(this.dead)return;this.hp-=amount;this.scene.audio?.sfx('hit');if(!this.landed)this.setVelocityX(direction*30);else this.setVelocityX(0);
+    if(this.dead)return;this.hp-=amount;this.scene.audio?.sfx('hit');this.setVelocityX(0);
     this.setTint(0xffffff);this.scene.time.delayedCall(24,()=>{if(this.active)this.clearTint();});this.flickerScreen(false,3);this.spawnHitPixels(direction);
     const ratio=Math.max(0,this.hp/BALANCE.kioskHp);const nextState=ratio<=.2?4:ratio<=.4?3:ratio<=.6?2:ratio<=.8?1:0;
     if(nextState!==this.damageState){this.damageState=nextState;this.setTexture(`kiosk-v2-${nextState}`);this.scene.cameras.main.shake(45+nextState*10,.004+nextState*.001);}

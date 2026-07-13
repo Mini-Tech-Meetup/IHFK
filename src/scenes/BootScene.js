@@ -8,7 +8,7 @@ export class BootScene extends Phaser.Scene {
     const base='assets/character/';
     this.load.image('bg-fastfood','assets/background/fastfood.png');this.load.image('bg-street','assets/background/street.png');this.load.image('bg-factory','assets/background/factory.png');
     this.load.spritesheet('normal-idle',`${base}Normal Guy Idle/Normal_Guy_Idle_SpriteSheet.png`,{frameWidth:15,frameHeight:20});
-    this.load.spritesheet('normal-transform',`${base}Normal Guy Transforms/Normal_Guy_Transforms_SpriteSheet.png`,{frameWidth:29,frameHeight:30});
+    this.load.spritesheet('normal-transform',`${base}Normal Guy Transforms/Normal_Guy_Transforms_SpriteSheet.png`,{frameWidth:29,frameHeight:25});
     this.load.spritesheet('strong-idle',`${base}Strong Guy Idle/Strong_Guy_Idle_SpriteSheet.png`,{frameWidth:18,frameHeight:23});
     this.load.spritesheet('strong-run',`${base}Strong Guy Runs/Strong_Guy_Rung_SpriteSheet.png`,{frameWidth:18,frameHeight:24});
     this.load.image('strong-jump',`${base}Strong Guy Jumps/Strong_Guy_Jumps.png`);this.load.image('strong-fall',`${base}Strong Guy Falls/Strong_Guy_Falls.png`);
@@ -19,8 +19,9 @@ export class BootScene extends Phaser.Scene {
   }
   create(){
     this.anims.create({key:'normal-idle',frames:this.anims.generateFrameNumbers('normal-idle',{start:0,end:8}),frameRate:10,repeat:-1});
-    // Frames 22-24 contain only stray pixels; the inspected transformation ends at frame 21.
-    this.anims.create({key:'normal-transform',frames:this.anims.generateFrameNumbers('normal-transform',{start:0,end:21}),frameRate:30,repeat:0});
+    // The 145x150 source is a 5x6 grid of 29x25 cells. Frames 0-26 match the
+    // supplied GIF pixel-for-pixel; cells 27-29 are intentionally empty.
+    this.anims.create({key:'normal-transform',frames:this.anims.generateFrameNumbers('normal-transform',{start:0,end:26}),frameRate:30,repeat:0});
     this.anims.create({key:'strong-idle',frames:this.anims.generateFrameNumbers('strong-idle',{start:0,end:1}),frameRate:7,repeat:-1});
     // The ninth cell is empty in the source sheet.
     this.anims.create({key:'strong-run',frames:this.anims.generateFrameNumbers('strong-run',{start:0,end:7}),frameRate:50,repeat:-1});

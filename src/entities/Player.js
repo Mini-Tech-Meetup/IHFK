@@ -4,18 +4,24 @@ import { scatterRectangles } from '../utils/effects.js';
 export class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene,x,y,session,input) {
     super(scene,x,y,'strong-run',0);scene.add.existing(this);scene.physics.add.existing(this);
-    this.session=session;this.inputController=input;this.nextAttack=0;
+    this.session=session;this.inputController=input;this.nextAttack=0;this.knockbackUntil=0;this.knockbackDirection=0;
     if(PREVIEW_WEAPON&&PREVIEW_WEAPON!=='fist'){this.session.weapons[PREVIEW_WEAPON]=BALANCE.caps[PREVIEW_WEAPON];this.session.selectWeapon(PREVIEW_WEAPON);}
-    this.setVisible(false).setCollideWorldBounds(true);this.body.setSize(15,22).setOffset(2,2);this.body.setMaxVelocity(500,900);
+    this.setVisible(false).setCollideWorldBounds(true);this.body.setSize(42,88,true);this.body.setMaxVelocity(500,1100);
     this.visual=scene.add.sprite(x,y,'strong-idle',0).setOrigin(.5,1).setScale(5).setDepth(10).play('strong-idle');
   }
 
   update(time) {
     const input=this.inputController;const selected=input.consumeWeapon();if(selected)this.session.selectWeapon(selected);
+    if(time<this.knockbackUntil){this.syncVisual();this.visual.stop().setScale(5).setTexture('strong-fall').setAngle(this.knockbackDirection*12);return;}
+    this.visual.setAngle(0);
     if(input.left){this.setVelocityX(-BALANCE.playerSpeed);this.flipX=true;}else if(input.right){this.setVelocityX(BALANCE.playerSpeed);this.flipX=false;}else this.setVelocityX(0);
     if(input.jump&&this.body.blocked.down)this.setVelocityY(BALANCE.jumpVelocity);
     this.syncVisual();
     if(input.attack)this.attack(time);else this.updateMovementAnimation();
+  }
+
+  applyKnockback(velocityX,velocityY,time,duration=260){
+    this.knockbackDirection=Math.sign(velocityX)||1;this.knockbackUntil=Math.max(this.knockbackUntil,time+duration);this.setVelocity(velocityX,velocityY);
   }
 
   syncVisual(){this.visual.setPosition(this.x,this.body.bottom+2).setFlipX(this.flipX);}

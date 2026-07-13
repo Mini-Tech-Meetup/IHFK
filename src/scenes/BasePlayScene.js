@@ -10,10 +10,18 @@ export class BasePlayScene extends Phaser.Scene {
     this.inputController=new InputController(this);this.inputController.setGameplay(true);this.kiosks=this.physics.add.group({runChildUpdate:true});this.pickupLabels=[];this.events.off('kiosk-destroyed');
     this.ground=this.add.rectangle(GAME_WIDTH/2,GROUND_Y+35,GAME_WIDTH,70,0x333333);this.physics.add.existing(this.ground,true);
     const safeSpawnX=safePlayerSpawn(playerX,document.body.classList.contains('touch-device'));
-    this.player=new Player(this,safeSpawnX,GROUND_Y-80,this.session,this.inputController);this.physics.add.collider(this.player,this.ground);this.physics.add.collider(this.player,this.kiosks);this.physics.add.collider(this.kiosks,this.ground);this.physics.add.collider(this.kiosks,this.kiosks);
+    this.player=new Player(this,safeSpawnX,GROUND_Y-80,this.session,this.inputController);this.physics.add.collider(this.player,this.ground);this.physics.add.collider(this.player,this.kiosks,this.onPlayerKioskCollision,null,this);this.physics.add.collider(this.kiosks,this.ground);this.physics.add.collider(this.kiosks,this.kiosks);
     this.hud=new Hud(this,this.session,this.i18n,targetKey);this.events.on('kiosk-destroyed',this.onKioskDestroyed,this);document.querySelector('#touch-mute').onclick=()=>this.audio.toggleMute();
   }
   spawnKiosk(x=Phaser.Math.Between(90,990),falling=true,stage='global') {const kiosk=new Kiosk(this,x,falling?-100:GROUND_Y-70,{stage,falling});this.kiosks.add(kiosk);return kiosk;}
+  onPlayerKioskCollision(player,kiosk){
+    const now=this.time.now;const impactSpeed=kiosk.lastFallSpeed||kiosk.body?.velocity.y||0;
+    if(kiosk.dead||!kiosk.wasFalling||kiosk.landed||impactSpeed<420||now-kiosk.lastFallingAt>100||now-kiosk.lastPlayerImpactAt<420)return;
+    kiosk.lastPlayerImpactAt=now;
+    const direction=player.x<=kiosk.x?-1:1;const horizontal=Phaser.Math.Clamp(impactSpeed*.32,280,500);const vertical=-Phaser.Math.Clamp(impactSpeed*.2,210,340);
+    player.applyKnockback(direction*horizontal,vertical,now);this.cameras.main.shake(85,.011);this.audio?.sfx('land');
+    document.body.dataset.playerImpactCount=String((Number(document.body.dataset.playerImpactCount)||0)+1);
+  }
   onKioskDestroyed(kiosk){this.session.recordKiosk(kiosk.stage);if(this.allowDrops&&Math.random()<BALANCE.weaponDropChance)this.dropWeapon(kiosk.x,kiosk.y);}
   dropWeapon(x,y,forcedKey=null){const key=forcedKey||Phaser.Utils.Array.GetRandom(['bat','chainsaw','shotgun']);const label={bat:'2',chainsaw:'3',shotgun:'4'}[key];const halo=this.add.rectangle(x,y+13,86,28,0xf4c338,.72).setStrokeStyle(4,0x111111).setDepth(11);const pickup=this.add.image(x,y,`pickup-${key}`).setDepth(13);const badge=this.add.text(x-36,y-22,label,{font:'bold 17px Consolas',color:'#111111',backgroundColor:'#fff9dd',padding:{x:5,y:2}}).setOrigin(.5).setDepth(14);const entry={pickup,halo,badge,active:true};this.pickupLabels.push(entry);const remove=()=>{if(!entry.active)return;entry.active=false;pickup.destroy();halo.destroy();badge.destroy();};this.physics.add.existing(pickup);pickup.body.setSize(64,38).setBounce(.15).setCollideWorldBounds(true);this.physics.add.collider(pickup,this.ground);this.physics.add.overlap(this.player,pickup,()=>{if(!entry.active)return;this.session.addWeapon(key);this.audio.sfx('pickup');remove();});this.time.delayedCall(12000,remove);}
   update(time){
@@ -28,6 +36,8 @@ export class BasePlayScene extends Phaser.Scene {
     document.body.dataset.kioskVelocityX=inspectedKiosk?String(Math.round(inspectedKiosk.body?.velocity.x||0)):'0';
     document.body.dataset.kioskVelocityY=inspectedKiosk?String(Math.round(inspectedKiosk.body?.velocity.y||0)):'0';
     document.body.dataset.kioskLandingMs=inspectedKiosk?.landingMs==null?'pending':String(inspectedKiosk.landingMs);
+    document.body.dataset.playerVelocityX=String(Math.round(this.player?.body?.velocity.x||0));document.body.dataset.playerVelocityY=String(Math.round(this.player?.body?.velocity.y||0));
+    document.body.dataset.playerHitbox=this.player?.body?`${Math.round(this.player.body.width)}x${Math.round(this.player.body.height)}`:'none';document.body.dataset.kioskHitbox=inspectedKiosk?.body?`${Math.round(inspectedKiosk.body.width)}x${Math.round(inspectedKiosk.body.height)}`:'none';
     const touchAmounts={fist:'∞',bat:String(Math.ceil(this.session.weapons.bat)),chainsaw:`${(this.session.weapons.chainsaw/1000).toFixed(1)}s`,shotgun:String(Math.ceil(this.session.weapons.shotgun))};
     document.querySelectorAll('#weapon-buttons [data-weapon]').forEach(button=>{button.classList.toggle('selected',button.dataset.weapon===this.session.selectedWeapon);button.dataset.amount=touchAmounts[button.dataset.weapon];});
   }

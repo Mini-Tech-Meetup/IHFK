@@ -14,7 +14,7 @@ This pass validates the post-prototype overhaul requested for the kiosk UI, tran
 
 ## Visual and animation inspection
 
-- Every populated source cell was extracted and inspected. Transform uses animation positions 1–22 only; the three trailing stray-pixel cells are excluded.
+- Every populated source cell was extracted and inspected. The corrected transform uses all 27 populated `29×25` cells; every cell matches the supplied GIF pixel-for-pixel and the three tail cells are empty.
 - Strong run uses eight populated cells; fist uses all fifteen populated cells.
 - Bat, chainsaw and shotgun use six full-character 64×64 hard-alpha frames each. Isolated rear-generation debris was removed while front sparks, muzzle flash and casing were retained.
 - Weapon drops now use weapon-only 80×48 hard-alpha raster sprites derived from those approved frames instead of prototype color rectangles.

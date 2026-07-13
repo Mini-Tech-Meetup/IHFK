@@ -19,24 +19,27 @@ SPEC-03, SPEC-04, SPEC-09
 - [x] 카운터·메뉴판·키오스크 2대·출입문
 - [x] 첫 대 자동 파괴, 두 번째 직접 파괴
 - [x] 문 개방과 우측 출구 전환
+- [x] 클리어 전 출구 글자 없음, 클리어 후 디자인된 `GO`만 표시
 - [x] 무기 드롭 비활성
 
 ## 인수 조건
 - [x] 총 파괴 수 2에서 길거리 진입 가능
 - [x] 두 번째 파괴 전 출구 통과 불가
+- [x] `LOCKED`/`EXIT` 플레이스홀더 문구가 화면에 없음
 
 ## 테스트
 - [x] 자동: E2E 진행 차단·해제
 - [x] 데스크톱: Intro → FastFood → Street 전환
 - [ ] 모바일: 출구 조작 실기기
-- [x] 시각 검수: 배경과 5× 캐릭터 크기
+- [x] 시각 검수: 배경과 5× 캐릭터 크기·GO 표지
 
 ## 증거
 - 명령 및 결과: accelerated 및 normal E2E 통과
-- 스크린샷: [1080×640 FastFood touch HUD](../evidence/runtime-fastfood-1080x640.png)
+- 스크린샷: [1080×640 FastFood GO state](../evidence/runtime-fastfood-go-1080x640.png)
 - 성능 수치: 맨주먹 kiosk 100 HP / 12 damage / 100ms
 - 알려진 제한: 모바일 실기기 조작 대기
 - 상세: [polish validation](../evidence/2026-07-13-polish-validation.md)
+- 후속 검증: [intro and physics follow-up](../evidence/2026-07-13-intro-physics-followup.md)
 
 ## 평가
 기능 정확성 38/40 · 게임 감각 18/20 · 시각·오디오 13/15 · 호환성·현지화 12/15 · 코드 품질 9/10 · 총점 90/100
