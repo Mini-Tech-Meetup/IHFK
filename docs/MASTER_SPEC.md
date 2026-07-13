@@ -55,6 +55,7 @@ Phaser 4.1 기반의 정적 웹 게임으로 IHFK를 전면 리팩터링한다. 
 - Current provisional unweighted score is 90.5/100; the visual overhaul and desktop stress gate now pass.
 - Release gate is not met: SPEC-02, SPEC-09, and SPEC-10 still require Android/iOS/native-share, final listening and human play-session evidence.
 - Current defects: P0 0, P1 0; remaining evidence gaps are classified P3.
+- Draft PR #1 and `main` run the same static/runtime-asset QA through GitHub Actions before merge.
 - Pages-equivalent `/IHFK/` relative-path campaign passed at full 50-kiosk/5,000-HP balance in 124.265 seconds automated lower-bound time.
 - GitHub Pages is correctly configured from `main` `/` with HTTPS. The refactor is pushed on `codex/ihfk-phaser4-refactor` in draft PR [#1](https://github.com/Mini-Tech-Meetup/IHFK/pull/1); the live site remains the pre-refactor build until the remaining physical-device gates pass and the PR is merged.
 - External validation handoff: run `/qa/device.html` on Android Chrome and iOS Safari, then paste both reports into [DEVICE_QA_TEMPLATE.md](evidence/DEVICE_QA_TEMPLATE.md). A human timing sample is also required before the Goal can be marked complete.

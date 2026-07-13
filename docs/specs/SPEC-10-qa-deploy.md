@@ -13,7 +13,7 @@
 SPEC-00~09
 
 ## 제외 범위
-실제 GitHub 배포 작업, 서버 모니터링, CI 구축
+서버 모니터링
 
 ## 구현 체크리스트
 - [x] 브라우저 단위 테스트
@@ -22,6 +22,7 @@ SPEC-00~09
 - [x] 무한 30대 데스크톱 FPS 측정
 - [ ] 캠페인 15대/무한 30대 모바일 FPS 측정
 - [x] README와 크레딧
+- [x] PR/main 정적 검증 GitHub Actions
 
 ## 인수 조건
 - [ ] human 평균 2:30~3:30
@@ -36,7 +37,7 @@ SPEC-00~09
 - [x] 시각 검수: 844×390 FIT와 touch HUD
 
 ## 증거
-- 명령 및 결과: `npm run check`; browser 29/29; 10/10 locale containment; accelerated campaign→Result→Endless; Result PNG fallback; exact 1080×640 title/guide/FastFood/stress/result captures
+- 명령 및 결과: `npm run check`; browser 29/29; 10/10 locale containment; accelerated campaign→Result→Endless; Result PNG fallback; exact 1080×640 title/guide/FastFood/stress/result captures; `.github/workflows/qa.yml` PR/main gate
 - 스크린샷: Language, Title, 각 stage, Result, touch landscape
 - 성능 수치: normal-balance automated lower bound 124.265s; factory fist 41.7s/full-reserve 36.9s; 30 active desktop samples min 60 / avg 60.75 / max 61 FPS
 - 알려진 제한: physical-device/native-share, human average, and post-merge live Pages verification

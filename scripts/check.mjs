@@ -33,7 +33,7 @@ const requiredAssets=[
   ...['fist','bat','chainsaw','shotgun'].map(icon=>`assets/ui/icons/${icon}.png`)
 ];
 for(const asset of requiredAssets)await access(asset).catch(()=>{throw new Error(`Missing asset: ${asset}`);});
-const requiredStaticFiles=['index.html','styles.css','qa/device.html','qa/device.css','qa/device.js','qa/share-card.html','qa/share-card.js','docs/MASTER_SPEC.md','docs/evidence/DEVICE_QA_TEMPLATE.md'];
+const requiredStaticFiles=['index.html','styles.css','qa/device.html','qa/device.css','qa/device.js','qa/share-card.html','qa/share-card.js','docs/MASTER_SPEC.md','docs/evidence/DEVICE_QA_TEMPLATE.md','.github/workflows/qa.yml'];
 for(const file of requiredStaticFiles)await access(file).catch(()=>{throw new Error(`Missing static deliverable: ${file}`);});
 const keys=Object.keys(LOCALES.en);const missing=[];
 for(const [locale,data] of Object.entries(LOCALES))for(const key of keys)if(!(key in data))missing.push(`${locale}:${key}`);
