@@ -3,9 +3,10 @@ const escapeHtml = value => String(value).replace(/[&<>'"]/g, character => ({
 }[character]));
 
 export class GameUi {
-  constructor(session, i18n) {
+  constructor(session, i18n, audio = null) {
     this.session = session;
     this.i18n = i18n;
+    this.audio = audio;
     this.root = document.querySelector('#ui-layer');
   }
 
@@ -73,6 +74,7 @@ export class GameUi {
     void element.offsetWidth;
     element.textContent = text;
     element.classList.add('pop');
+    this.audio?.sfx('dialogue');
   }
 
   showGuide({ onStart, onBack }) {
@@ -103,7 +105,7 @@ export class GameUi {
     bubble.style.setProperty('--bubble-x', `${x}%`);
     bubble.style.setProperty('--bubble-y', `${y}%`);
     bubble.classList.remove('pop'); void bubble.offsetWidth;
-    bubble.textContent = text; bubble.classList.add('pop');
+    bubble.textContent = text; bubble.classList.add('pop');this.audio?.sfx('dialogue');
   }
 
   showResult({ time, destroyed, previewUrl, playtest = null, onRetry, onEndless, onShare }) {

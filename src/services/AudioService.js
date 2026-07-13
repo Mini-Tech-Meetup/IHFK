@@ -3,6 +3,7 @@ export class AudioService {
   async unlock() {
     this.context ||= new (window.AudioContext || window.webkitAudioContext)();
     if (this.context.state === 'suspended') await this.context.resume();
+    if (this.musicWanted && !this.muted) this.beginMusicLoop();
   }
   toggleMute() {
     this.muted = !this.muted;
@@ -19,7 +20,8 @@ export class AudioService {
   }
   sfx(name) {
     const pitch = .9 + Math.random()*.2;
-    if (name==='hit') this.tone(95*pitch,.035,'square',.025,-35);
+    if (name==='hit') { this.tone(68*pitch,.09,'sine',.08,-34); this.tone(108*pitch,.055,'square',.04,-68); }
+    if (name==='dialogue') { this.tone(245*pitch,.04,'square',.026,55); this.tone(122*pitch,.06,'triangle',.018,-24); }
     if (name==='break') { this.tone(70,.14,'sawtooth',.07,-35); this.tone(210,.08,'square',.04,-150); }
     if (name==='pickup') this.tone(660,.09,'square',.045,330);
     if (name==='shotgun') this.tone(55,.18,'sawtooth',.12,-20);
@@ -38,13 +40,13 @@ export class AudioService {
     const lead=[330,392,440,392,494,440,392,294];
     this.musicTimer=setInterval(()=>{
       const i=this.step++%8,root=roots[i];
-      this.tone(root,.12,'square',.018);
-      this.tone(root*2,.09,'sawtooth',.009);
-      this.tone(root*3,.075,'square',.006);
-      if(i%2===0)this.tone(lead[i],.085,'square',.012,i===6?-55:18);
-      if(i===0||i===4)this.tone(58,.055,'sine',.05,-24);
-      if(i===2||i===6)this.tone(185,.045,'sawtooth',.025,-120);
-      if(i%2===1)this.tone(1350,.018,'square',.008,-500);
+      this.tone(root,.12,'square',.032);
+      this.tone(root*2,.09,'sawtooth',.016);
+      this.tone(root*3,.075,'square',.011);
+      if(i%2===0)this.tone(lead[i],.085,'square',.021,i===6?-55:18);
+      if(i===0||i===4)this.tone(58,.055,'sine',.075,-24);
+      if(i===2||i===6)this.tone(185,.045,'sawtooth',.038,-120);
+      if(i%2===1)this.tone(1350,.018,'square',.012,-500);
     },115);
   }
   clearMusicTimer() { if (this.musicTimer) clearInterval(this.musicTimer); this.musicTimer=null; }

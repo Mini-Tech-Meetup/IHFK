@@ -29,7 +29,7 @@ Both target types now satisfy `fist < bat < chainsaw < shotgun`. The full-reserv
 
 ## Audio present in the current build
 
-- Music: fast 115ms-step square/saw/sine synthesized MIDI-rock loop, started after the transformation cutscene and stopped on factory destruction.
+- Music baseline at this checkpoint: fast 115ms-step square/saw/sine synthesized MIDI-rock loop. It was subsequently moved to the first language-selection gesture and remixed louder; see [early music and impact audio](2026-07-13-early-music-impact-audio.md).
 - Effects: hit, kiosk break, weapon pickup, shotgun, chainsaw, kiosk landing, weapon break and factory explosion.
 - Browser unlock: requested by the Game Start click; `M` and the mobile music button toggle mute.
 - The unit suite asserts that all eight effect names schedule at least one WebAudio voice.

@@ -23,5 +23,5 @@ This synthetic boundary proof validates the collector, not the game-length accep
 - Desktop report: [runtime-playtest-report-1080x640.png](runtime-playtest-report-1080x640.png)
 - Android landscape-sized report: [runtime-playtest-report-844x390.png](runtime-playtest-report-844x390.png)
 - Commands: `npm run check` PASS; `npm test` PASS
-- Automated totals: 35 browser unit tests, 14 responsive/E2E groups, 6 cross-browser environments
+- Automated totals: 36 browser unit tests, 14 responsive/E2E groups, 6 cross-browser environments
 - Known limitation: physical fullscreen, orientation, native share, audio listening, and real human campaign timing remain external release gates.

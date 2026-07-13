@@ -9,7 +9,7 @@ The implementation is not yet eligible for `검증 완료` or Goal completion. A
 - Head: `d363ec20bc83046875d7afa303a610f9bd9d2651` on `codex/ihfk-phaser4-refactor`.
 - Draft PR [#1](https://github.com/Mini-Tech-Meetup/IHFK/pull/1) is open and mergeable into `main`.
 - Remote run [29248742662](https://github.com/Mini-Tech-Meetup/IHFK/actions/runs/29248742662) passed the complete static, raster, unit, responsive/E2E, and six-environment browser matrix.
-- Local proof: `npm run check` PASS; `npm test` PASS; 35 browser unit tests, 14 responsive/E2E groups, and 6 cross-browser environments.
+- Local proof: `npm run check` PASS; `npm test` PASS; 36 browser unit tests, 14 responsive/E2E groups, and 6 cross-browser environments.
 - GitHub Pages is built from `main` `/` with HTTPS, so the draft branch is intentionally not the public build yet.
 - Worktree is clean except for the user-owned untracked `Super Strong Normal Guy (1).zip`, which is outside the implementation and must remain untouched.
 
@@ -26,7 +26,7 @@ The implementation is not yet eligible for `검증 완료` or Goal completion. A
 | 06 Street | 50 goal, fall/stack physics, active cap, emulated 15-unit performance | Target-device 12/15-unit FPS report |
 | 07 Factory/endless | 5-stage raster damage, depth, 5,000 HP, endless scaling, emulated 30-unit performance | Target-device 30-unit endless FPS report |
 | 08 Result/share | Exact 1080×1080 card, preview/export identity, fallback | Native PNG share sheet or documented cancellation on both platforms |
-| 09 Art/audio | Palette/alpha validators, screenshots, moving clouds, eight SFX routes, MIDI scheduling | Audible music/SFX/mute confirmation on both devices |
+| 09 Art/audio | Palette/alpha validators, screenshots, moving clouds, nine SFX routes, louder title-onward MIDI scheduling | Audible music/SFX/mute confirmation on both devices |
 | 10 Integration | Full automated matrix, zero known P0/P1, 3-run collector boundary proof | Three unaccelerated human runs per platform, combined target average, physical reports, post-merge Pages smoke |
 
 The score threshold is already met provisionally (90.5 overall and every SPEC at least 85), but status and evidence gates are conjunctive. A score cannot replace missing physical proof.

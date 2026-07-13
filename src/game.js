@@ -13,7 +13,7 @@ import { FactoryScene } from './scenes/FactoryScene.js';
 import { ResultScene } from './scenes/ResultScene.js';
 
 if(!window.Phaser)throw new Error('Phaser 4.1 failed to load');
-const session=new GameSession();const i18n=new I18n(session);const audio=new AudioService();const ui=new GameUi(session,i18n);
+const session=new GameSession();const i18n=new I18n(session);const audio=new AudioService();const ui=new GameUi(session,i18n,audio);
 Object.defineProperties(Phaser.Scene.prototype,{
   session:{get(){return session;}},i18n:{get(){return i18n;}},audio:{get(){return audio;}},ui:{get(){return ui;}}
 });

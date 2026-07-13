@@ -82,7 +82,7 @@ try {
     await page.goto(`${base}/tests/`, { waitUntil: 'networkidle' });
     await page.waitForFunction(() => document.title.endsWith('PASSED'));
     const result = await page.locator('#out').textContent();
-    assert(result.includes('35 passed, 0 failed'), result);
+    assert(result.includes('36 passed, 0 failed'), result);
   });
 
   await test('intro bubble anchors above the hero and transform uses all source frames', async () => {
@@ -129,13 +129,15 @@ try {
     await page.waitForFunction(() => document.body.dataset.scene === 'Title' && document.querySelector('.start-complaint')?.classList.contains('pop'));
     const state = await page.evaluate(() => {
       const bubble = document.querySelector('.start-complaint');const bounds = bubble.getBoundingClientRect();const shell = bubble.closest('.kiosk-shell').getBoundingClientRect();
-      return { parent:bubble.parentElement.className,bounds:{left:bounds.left,top:bounds.top,right:bounds.right,bottom:bounds.bottom},shell:{left:shell.left,top:shell.top,right:shell.right,bottom:shell.bottom},z:Number(getComputedStyle(bubble).zIndex),text:bubble.textContent };
+      const audio=window.IHFK.scene.getScene('Title').audio;
+      return { parent:bubble.parentElement.className,bounds:{left:bounds.left,top:bounds.top,right:bounds.right,bottom:bounds.bottom},shell:{left:shell.left,top:shell.top,right:shell.right,bottom:shell.bottom},z:Number(getComputedStyle(bubble).zIndex),text:bubble.textContent,audio:{context:audio.context?.state,musicWanted:audio.musicWanted,musicRunning:audio.musicTimer!==null} };
     });
     assert(state.parent === 'kiosk-shell', `complaint parent: ${state.parent}`);
     assert(state.z >= 80, `complaint z-index: ${state.z}`);
     assert(state.bounds.left >= 0 && state.bounds.top >= 0 && state.bounds.right <= 1080 && state.bounds.bottom <= 640, 'title complaint clipped by viewport');
     assert(state.bounds.left >= state.shell.left && state.bounds.right <= state.shell.right && state.bounds.top >= state.shell.top && state.bounds.bottom <= state.shell.bottom, 'title complaint outside kiosk shell');
     assert(state.text.includes('F**KING'), `complaint text: ${state.text}`);
+    assert(state.audio.context==='running'&&state.audio.musicWanted&&state.audio.musicRunning,`title BGM not running: ${JSON.stringify(state.audio)}`);
   });
 
   await test('fist hits only the nearest front target with hand-sized reach', async () => {
@@ -147,15 +149,16 @@ try {
     const state = await page.evaluate(() => {
       const scene=window.IHFK.scene.getScene('FastFood');const pickup=scene.pickupLabels[0];const pickupBounds=pickup.pickup.getBounds();
       const pickupState={offsetX:pickup.halo.x-pickup.pickup.x,offsetY:pickup.halo.y-pickup.pickup.y,halo:{width:pickup.halo.displayWidth,height:pickup.halo.displayHeight},image:{width:pickupBounds.width,height:pickupBounds.height}};
-      scene.kiosks.clear(true,true);scene.player.setPosition(200,526).setVelocity(0,0);scene.session.selectWeapon('fist');scene.player.nextAttack=0;
+      scene.kiosks.clear(true,true);scene.player.setPosition(200,526).setVelocity(0,0);scene.session.selectWeapon('fist');scene.player.nextAttack=0;const audioEvents=[];scene.audio.sfx=name=>audioEvents.push(name);
       const first=scene.spawnKiosk(275,false,'attack-test');const second=scene.spawnKiosk(325,false,'attack-test');scene.player.attack(scene.time.now+1000);
       const [x,y,width,height]=document.body.dataset.attackRect.split(',').map(Number);
-      const frontState={firstDead:first.dead,secondHp:second.hp,targets:Number(document.body.dataset.attackTargets)};scene.kiosks.clear(true,true);
+      const frontState={firstDead:first.dead,secondHp:second.hp,targets:Number(document.body.dataset.attackTargets),audioEvents:[...audioEvents]};scene.kiosks.clear(true,true);
       const weaponScales={},targetProfiles={};for(const key of ['bat','chainsaw','shotgun']){const samples=[255,280,305,330].map(position=>scene.spawnKiosk(position,false,'profile-test'));scene.session.weapons[key]=9999;scene.session.selectWeapon(key);scene.player.nextAttack=0;scene.player.attack(scene.time.now+2000);weaponScales[key]=scene.player.visual.scaleX;targetProfiles[key]=samples.filter(kiosk=>kiosk.hp<12).length;scene.kiosks.clear(true,true);}
       return {...frontState,rect:{x,y,width,height},playerX:scene.player.x,weaponScales,targetProfiles,pickupState};
     });
     assert(state.firstDead && state.secondHp > 0, `front/back damage: ${state.firstDead}/${state.secondHp}`);
     assert(state.targets === 1, `fist targets: ${state.targets}`);
+    assert(state.audioEvents.filter(name=>name==='hit').length===1,`connected fist hit SFX: ${state.audioEvents.join(',')}`);
     assert(state.rect.width === 78 && state.rect.height === 58 && state.rect.x === state.playerX + 18, `fist rect: ${JSON.stringify(state.rect)}`);
     assert(Object.values(state.weaponScales).every(scale => scale === 2.5), `weapon scales: ${JSON.stringify(state.weaponScales)}`);
     assert(state.targetProfiles.bat === 4 && state.targetProfiles.chainsaw === 1 && state.targetProfiles.shotgun === 3, `weapon target profiles: ${JSON.stringify(state.targetProfiles)}`);

@@ -36,8 +36,8 @@ Phaser 4.1 기반의 정적 웹 게임으로 IHFK를 전면 리팩터링한다. 
 | [06](specs/SPEC-06-street.md) | Street stage | 구현 완료 | 88 | knockback, stacked gravity and moving cloud layer verified |
 | [07](specs/SPEC-07-factory-endless.md) | Factory and endless | 구현 완료 | 93 | separate background, five damage stages and product-behind-target depth verified |
 | [08](specs/SPEC-08-result-share.md) | HUD, result and share | 구현 완료 | 91 | in-result preview uses the exact share/export canvas |
-| [09](specs/SPEC-09-art-audio.md) | Art and audio | 구현 완료 | 91 | kiosk UI, eight SFX routes and hard-alpha moving clouds verified; physical-device listening pending |
-| [10](specs/SPEC-10-qa-deploy.md) | QA and deploy | 구현 완료 | 86 | 35/35 + 14 responsive/E2E + 6 cross-browser; 3-run collector verified, physical QA pending |
+| [09](specs/SPEC-09-art-audio.md) | Art and audio | 구현 완료 | 91 | louder title-onward BGM, nine SFX routes and hard-alpha moving clouds verified; physical-device listening pending |
+| [10](specs/SPEC-10-qa-deploy.md) | QA and deploy | 구현 완료 | 86 | 36/36 + 14 responsive/E2E + 6 cross-browser; 3-run collector verified, physical QA pending |
 
 ## Completion gate
 
