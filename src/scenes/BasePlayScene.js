@@ -1,8 +1,8 @@
 import { BALANCE, GAME_WIDTH, GROUND_Y } from '../config.js';
-import { InputController } from '../services/InputController.js';
+import { InputController } from '../services/InputController.js?v=30';
 import { Player } from '../entities/Player.js';
 import { Kiosk } from '../entities/Kiosk.js';
-import { Hud } from '../ui/Hud.js';
+import { Hud } from '../ui/Hud.js?v=30';
 import { safePlayerSpawn } from '../utils/mobile.js';
 
 export class BasePlayScene extends Phaser.Scene {
@@ -23,15 +23,21 @@ export class BasePlayScene extends Phaser.Scene {
     document.body.dataset.playerImpactCount=String((Number(document.body.dataset.playerImpactCount)||0)+1);
   }
   onKioskDestroyed(kiosk){this.session.recordKiosk(kiosk.stage);if(this.allowDrops&&Math.random()<BALANCE.weaponDropChance)this.dropWeapon(kiosk.x,kiosk.y);}
+  selectWeapon(key){const selected=this.session.selectWeapon(key);if(selected)this.refreshWeaponUi();return selected;}
+  refreshWeaponUi(){
+    this.hud?.update(this.getProgress?.()||'');
+    const amounts={fist:'∞',bat:String(Math.ceil(this.session.weapons.bat)),chainsaw:`${(this.session.weapons.chainsaw/1000).toFixed(1)}s`,shotgun:String(Math.ceil(this.session.weapons.shotgun))};
+    document.querySelectorAll('#weapon-buttons [data-weapon]').forEach(button=>{const key=button.dataset.weapon;const empty=key!=='fist'&&this.session.weapons[key]<=0;button.classList.toggle('selected',key===this.session.selectedWeapon);button.classList.toggle('empty',empty);button.setAttribute('aria-disabled',String(empty));button.dataset.amount=amounts[key];});
+  }
   dropWeapon(x,y,forcedKey=null){
     const key=forcedKey||Phaser.Utils.Array.GetRandom(['bat','chainsaw','shotgun']);const label={bat:'2',chainsaw:'3',shotgun:'4'}[key];
     const halo=this.add.rectangle(x,y,88,52,0xf4c338,.78).setStrokeStyle(4,0x111111).setDepth(11);const pickup=this.add.image(x,y,`pickup-${key}`).setDepth(13);const badge=this.add.text(x-34,y-32,label,{font:'bold 17px Consolas',color:'#111111',backgroundColor:'#fff9dd',padding:{x:5,y:2}}).setOrigin(.5).setDepth(14);
     const entry={pickup,halo,badge,active:true};const sync=()=>{if(!entry.active)return;halo.setPosition(pickup.x,pickup.y);badge.setPosition(pickup.x-34,pickup.y-32);};entry.sync=sync;this.pickupLabels.push(entry);this.events.on('postupdate',sync);
     const remove=()=>{if(!entry.active)return;entry.active=false;this.events.off('postupdate',sync);pickup.destroy();halo.destroy();badge.destroy();};
-    this.physics.add.existing(pickup);pickup.body.setSize(68,40).setBounce(.15).setCollideWorldBounds(true);this.physics.add.collider(pickup,this.ground);this.physics.add.overlap(this.player,pickup,()=>{if(!entry.active)return;this.session.addWeapon(key);this.audio.sfx('pickup');remove();});this.time.delayedCall(12000,remove);
+    this.physics.add.existing(pickup);pickup.body.setSize(68,40).setBounce(.15).setCollideWorldBounds(true);this.physics.add.collider(pickup,this.ground);this.physics.add.overlap(this.player,pickup,()=>{if(!entry.active)return;this.session.addWeapon(key);this.refreshWeaponUi();this.audio.sfx('pickup');remove();});this.time.delayedCall(12000,remove);
   }
   update(time){
-    this.player?.update(time);if(this.inputController?.consumeMute())this.audio.toggleMute();this.hud?.update(this.getProgress?.()||'');const muteButton=document.querySelector('#touch-mute');if(muteButton){muteButton.textContent=this.audio.muted?'×':'♪';muteButton.classList.toggle('muted',this.audio.muted);}
+    this.player?.update(time);if(this.inputController?.consumeMute())this.audio.toggleMute();const muteButton=document.querySelector('#touch-mute');if(muteButton){muteButton.textContent=this.audio.muted?'×':'♪';muteButton.classList.toggle('muted',this.audio.muted);}
     this.pickupLabels=this.pickupLabels?.filter(entry=>entry.active)||[];
     document.body.dataset.weapon=this.session.selectedWeapon;document.body.dataset.playerX=String(Math.round(this.player?.x||0));document.body.dataset.activeKiosks=String(this.kiosks?.countActive(true)||0);
     document.body.dataset.destroyedTotal=String(this.session.destroyedTotal);document.body.dataset.endlessDestroyed=String(this.session.endlessDestroyed);document.body.dataset.streetDestroyed=String(this.session.streetDestroyed);
@@ -44,8 +50,7 @@ export class BasePlayScene extends Phaser.Scene {
     document.body.dataset.kioskLandingMs=inspectedKiosk?.landingMs==null?'pending':String(inspectedKiosk.landingMs);
     document.body.dataset.playerVelocityX=String(Math.round(this.player?.body?.velocity.x||0));document.body.dataset.playerVelocityY=String(Math.round(this.player?.body?.velocity.y||0));
     document.body.dataset.playerHitbox=this.player?.body?`${Math.round(this.player.body.width)}x${Math.round(this.player.body.height)}`:'none';document.body.dataset.kioskHitbox=inspectedKiosk?.body?`${Math.round(inspectedKiosk.body.width)}x${Math.round(inspectedKiosk.body.height)}`:'none';
-    const touchAmounts={fist:'∞',bat:String(Math.ceil(this.session.weapons.bat)),chainsaw:`${(this.session.weapons.chainsaw/1000).toFixed(1)}s`,shotgun:String(Math.ceil(this.session.weapons.shotgun))};
-    document.querySelectorAll('#weapon-buttons [data-weapon]').forEach(button=>{const key=button.dataset.weapon;const empty=key!=='fist'&&this.session.weapons[key]<=0;button.classList.toggle('selected',key===this.session.selectedWeapon);button.classList.toggle('empty',empty);button.disabled=empty;button.dataset.amount=touchAmounts[key];});
+    this.refreshWeaponUi();
   }
   shutdownPlay(){this.inputController?.setGameplay(false);this.hud?.destroy();}
 }

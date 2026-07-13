@@ -31,7 +31,10 @@ export class Hud {
       slot.className = 'weapon-slot'; slot.dataset.weapon = key;
       slot.setAttribute('aria-label', `Select weapon ${number}: ${key}`);
       slot.innerHTML = `<b>${number}</b><img src="assets/ui/icons/${icon}" alt=""><span>0</span>`;
-      slot.addEventListener('click', () => onWeaponSelect?.(key));
+      slot.addEventListener('pointerdown', event => {
+        event.preventDefault();
+        onWeaponSelect?.(key);
+      });
       this.rack.append(slot); this.slots.set(key, slot);
     });
   }
@@ -51,7 +54,7 @@ export class Hud {
       const empty = key !== 'fist' && this.session.weapons[key] <= 0;
       slot.classList.toggle('selected', key === this.session.selectedWeapon);
       slot.classList.toggle('empty', empty);
-      slot.disabled = empty;
+      slot.setAttribute('aria-disabled', String(empty));
       slot.querySelector('span').textContent = values[key];
     });
   }

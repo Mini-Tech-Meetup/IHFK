@@ -9,7 +9,7 @@ The implementation is not yet eligible for `검증 완료` or Goal completion. A
 - Current weapon/share/dialogue implementation commit: `f4cd390af23fab618eeb4aed6e797c91ca2f6779` on `codex/ihfk-phaser4-refactor`.
 - Rebuild PR [#1](https://github.com/Mini-Tech-Meetup/IHFK/pull/1) and mobile fullscreen/menu PR [#2](https://github.com/Mini-Tech-Meetup/IHFK/pull/2) are merged. Follow-up Draft PR [#3](https://github.com/Mini-Tech-Meetup/IHFK/pull/3) targets `main` with the weapon/share/dialogue fixes.
 - Remote run [29261566180](https://github.com/Mini-Tech-Meetup/IHFK/actions/runs/29261566180) validates PR #3; final status is tracked by the PR check.
-- Local proof: `npm run check` PASS; `npm test` PASS; 37 browser unit tests, 15 responsive/E2E groups, and 6 cross-browser environments.
+- Local proof: `npm run check` PASS; `npm test` PASS; 37 browser unit tests, 16 responsive/E2E groups, and 6 cross-browser environments.
 - GitHub Pages is built from `main` `/` with HTTPS; PR #3 is intentionally not public until merged.
 - Worktree is clean except for the user-owned untracked `Super Strong Normal Guy (1).zip`, which is outside the implementation and must remain untouched.
 
@@ -27,7 +27,7 @@ The implementation is not yet eligible for `검증 완료` or Goal completion. A
 | 07 Factory/endless | 5-stage raster damage, depth, 5,000 HP, endless scaling, emulated 30-unit performance | Target-device 30-unit endless FPS report |
 | 08 Result/share | Exact button-free 1080×640 Result card, preview/export identity, canonical Pages URL in Canvas/native payload/clipboard fallback | Native PNG share sheet or documented cancellation on both platforms |
 | 09 Art/audio | Palette/alpha validators, screenshots, moving clouds, nine SFX routes, louder title-onward MIDI scheduling | Audible music/SFX/mute confirmation on both devices |
-| 10 Integration | 37/37 unit, 15/15 responsive/E2E and 6/6 browser matrix, zero known P0/P1, 3-run collector boundary proof | Three unaccelerated human runs per platform, combined target average, physical reports, post-merge Pages smoke |
+| 10 Integration | 37/37 unit, 16/16 responsive/E2E and 6/6 browser matrix, zero known P0/P1, real-pickup pointer-selection proof, 3-run collector boundary proof | Three unaccelerated human runs per platform, combined target average, physical reports, post-merge Pages smoke |
 
 The score threshold is already met provisionally (90.5 overall and every SPEC at least 85), but status and evidence gates are conjunctive. A score cannot replace missing physical proof.
 

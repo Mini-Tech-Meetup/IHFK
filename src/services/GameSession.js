@@ -43,8 +43,9 @@ export class GameSession {
   }
 
   selectWeapon(key) {
-    if (key === 'fist') this.selectedWeapon = key;
-    else if ((this.weapons[key] ?? 0) > 0) this.selectedWeapon = key;
+    const available = key === 'fist' || (key in this.weapons && this.weapons[key] > 0);
+    if (available) this.selectedWeapon = key;
+    return available;
   }
   addWeapon(key) {
     if (!(key in this.weapons)) return;
