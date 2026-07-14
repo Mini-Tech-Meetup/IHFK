@@ -1,5 +1,9 @@
 # I HATE F**KING KIOSK
 
+
+https://github.com/user-attachments/assets/710ac96c-0307-4fe6-b65e-74b45bfa0bba
+
+
 A deliberately rough pixel-art destruction game built with Phaser 4.1.
 
 ## Play
